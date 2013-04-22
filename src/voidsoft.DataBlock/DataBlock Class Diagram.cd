@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="voidsoft.DataBlock.Configuration" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Configuration\Configuration.cs</FileName>
+      <HashCode>AAAEIAAAIAAAQigAAAAACAgAAAAAACQAACCACAAAADA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.ExecutionEngine" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ExecutionEngine\ExecutionEngine.cs</FileName>
+      <HashCode>AACAEIAAACNAAChAEBAxCEAAIQQAAABBAkAAAEAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.Log" Collapsed="true">
+    <Position X="8" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DataBlockLog\Log.cs</FileName>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.DataConvertor" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DataConvertor.cs</FileName>
+      <HashCode>AAAgAAAAIAAAAAECAgBEgAAgAAAQAAgAAAIIgAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.DataFactory" Collapsed="true">
+    <Position X="6.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DataFactory.cs</FileName>
+      <HashCode>EAAAAIAAAAAIEAMAAkAAAgICAAABAgBCAgAAAAAAAAw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.TableMetadata" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Mapping\TableMetadata.cs</FileName>
+      <HashCode>AACAAEAQgAAgAAAESBgQAQgAACiIAAAKAAAAASAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.PersistentObject" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Persistance\PersistentObject.cs</FileName>
+      <HashCode>AgYMAAABIjAAAAhAkABAAAQAAAEAAkAAAAAQAEAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.QueryCriteria" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria.cs</FileName>
+      <HashCode>AAKAAAABAABAAAIAAAEQRAAAAAAAAAABAAAAAQAAoAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.AccessQueryCriteriaGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteriaGenerators\AccessQueryCriteriaGenerator.cs</FileName>
+      <HashCode>AAAABAEAAAAAAAAAAAAACAAAwAAAAAQBAAAAAAAAAAw=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.MySqlQueryCriteriaGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteriaGenerators\MySqlQueryCriteriaGenerator.cs</FileName>
+      <HashCode>AAAABAEAAAAAAAAAAAAACAAAwAAAAAQBAAAAAAAAAAw=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.SqlServerQueryCriteriaGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteriaGenerators\SqlServerQueryCriteriaGenerator.cs</FileName>
+      <HashCode>AAAABAEAAAAAAAAAAAAACAAAwAAAAAQBAAAAAAAAAAw=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.Session" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Session.cs</FileName>
+      <HashCode>AAAAAEAJAGAACChCAAAAAgAAAAAAACQAASAAAACAgAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.AccessGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SqlGenerator\Database Specific SqlGenerator\AccessGenerator.cs</FileName>
+      <HashCode>AAAAAAIAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.MySqlGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SqlGenerator\Database Specific SqlGenerator\MySqlGenerator.cs</FileName>
+      <HashCode>AAAAAAIAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.SqlServerGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SqlGenerator\Database Specific SqlGenerator\SqlServerGenerator.cs</FileName>
+      <HashCode>AAAAAAIAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="voidsoft.DataBlock.SqlGenerator" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SqlGenerator\SqlGenerator.cs</FileName>
+      <HashCode>BAggAAEAAAAAIAAIABgYAAAAQAQIAAQAAAEAAAAAAAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="voidsoft.DataBlock.Properties.Settings" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="voidsoft.DataBlock.DatabaseField" Collapsed="true">
+    <Position X="4" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DatabaseField.cs</FileName>
+      <HashCode>AEAAAAAAAIAAAAAAAAAAAIAAAAAAAAAAAAIAAAAAABA=</HashCode>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="voidsoft.DataBlock.CriteriaAlias" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\CriteriaAlias.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAABAACAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="voidsoft.DataBlock.CriteriaCondition" Collapsed="true">
+    <Position X="2.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\CriteriaCondition.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAgAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="voidsoft.DataBlock.JoinCriteriaCondition" Collapsed="true">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\JoinCriteriaCondition.cs</FileName>
+      <HashCode>AAAAEEAAAAAAAAgAAAAAAAAAAAJAAAAAAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="voidsoft.DataBlock.IQueryCriteriaGenerator" Collapsed="true">
+    <Position X="0.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\IQueryCriteriaGenerator.cs</FileName>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAg=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="voidsoft.DataBlock.ISqlGenerator" Collapsed="true">
+    <Position X="2.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SqlGenerator\Database Specific SqlGenerator\ISqlGenerator.cs</FileName>
+      <HashCode>AAAAAAIAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="voidsoft.DataBlock.DatabaseServer" Collapsed="true">
+    <Position X="2.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DatabaseServer.cs</FileName>
+      <HashCode>AAIAAAAAAAAAAEAABAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.TableRelationCardinality" Collapsed="true">
+    <Position X="2.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Mapping\TableRelationCardinality.cs</FileName>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAACAAAQAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.TableRelationMode" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Mapping\TableRelationMode.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.Operation" Collapsed="true">
+    <Position X="7.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Operation.cs</FileName>
+      <HashCode>AAQAAAAgAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.CriteriaOperator" Collapsed="true">
+    <Position X="0.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\CriteriaOperator.cs</FileName>
+      <HashCode>AIAgEEAAABAACAAAEAAAAGQAACAAAAAoAAAEEABBgAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.JoinType" Collapsed="true">
+    <Position X="5.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\JoinType.cs</FileName>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="voidsoft.DataBlock.QueryCriteriaGeneratorType" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>QueryCriteria\QueryCriteria Internal Objects\QueryCriteriaGeneratorType.cs</FileName>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAQAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+</ClassDiagram>

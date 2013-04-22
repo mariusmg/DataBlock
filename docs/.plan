@@ -1,0 +1,33 @@
+
+- introduce support for stored procs calls in PersistentObject. This means
+that any operation made with TableMetadata can also be made with a stored procedure.  [not implemented]
+
+
+   NOTE : need to check the transaction compliance (if i can match both stored procs and
+sql queries into the same transaction before implementing that).
+
+
+
+- add support for multiple deletes/updates using a QueryCriteria in PersistentObject.
+This must be done in order to allow the user to generate queries like :
+"Update Person SET Name = 'Gogu' WHERE Age > 43;
+                								(DONE)	
+
+
+- add support (in PersistentObject) for saving/loading graphs of objects (this will sooooooooo tricky).
+
+
+- add support for external file configuration. This will be done to avoid
+passing the connection string and database server type all over. This is 
+useful when the user wants to connect to a single database. 
+								(DONE)
+
+
+//- integrate the caching mechanism.  (not a priority for now)
+
+
+
+- add support for TRACE mode. 
+								(DONE)
+
+

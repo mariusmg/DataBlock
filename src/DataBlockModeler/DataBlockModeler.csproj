@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{205E69C0-F776-485D-A67D-C06C15470F46}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>voidsoft.DataBlockModeler</RootNamespace>
+    <AssemblyName>DataBlockModeler</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <StartupObject>
+    </StartupObject>
+    <ApplicationIcon>blockdevice.ico</ApplicationIcon>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeGenerators\BusinessObjects\CSharpBusinessObjectGenerator.cs" />
+    <Compile Include="CodeGenerators\BusinessObjects\IBusinessObjectGenerator.cs" />
+    <Compile Include="CodeGenerators\DomainObjects\BooTableMetadataGenerator.cs" />
+    <Compile Include="Context\GeneratorContext.cs" />
+    <Compile Include="Dialogs\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CodeGenerators\DomainObjects\CSharpTableMetadataGenerator.cs" />
+    <Compile Include="CodeGenerators\DomainObjects\ITableMetadataGenerator.cs" />
+    <Compile Include="CodeGenerators\DomainObjects\VBTableMetadataGenerator.cs" />
+    <Compile Include="CodeGenerators\DataAccess\IDataAccessObjectGenerator.cs" />
+    <Compile Include="CodeGenerators\DataAccess\VbPersistentObjectGenerator.cs" />
+    <Compile Include="CodeGenerators\DataAccess\CSharpDataAccessObjectGenerator.cs" />
+    <Compile Include="CodeGenerators\SilverChalice\AspnetCodeGeneratorEdit.cs" />
+    <Compile Include="CodeGenerators\SilverChalice\AspnetCodeGeneratorView.cs" />
+    <Compile Include="Database Schema\AccessSchemaLoader.cs" />
+    <Compile Include="Database Schema\MySqlSchemaLoader.cs" />
+    <Compile Include="Database Schema\PostgreSqlSchemaLoader.cs" />
+    <Compile Include="Database Schema\SqlServerSchemaLoader.cs" />
+    <Compile Include="Dialogs\AspnetCodeGenerationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AspnetCodeGenerationDialog.Designer.cs">
+      <DependentUpon>AspnetCodeGenerationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ChooseRelationsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ChooseRelationsDialog.Designer.cs">
+      <DependentUpon>ChooseRelationsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TableRelationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\TableRelationDialog.Designer.cs">
+      <DependentUpon>TableRelationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="RelationTableFileImporter.cs" />
+    <Compile Include="RootWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RootWindow.Designer.cs">
+      <DependentUpon>RootWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RootWindowPresenter.cs" />
+    <Compile Include="Structures\DatabaseColumn.cs" />
+    <Compile Include="Structures\DatabaseTable.cs" />
+    <Compile Include="Database Schema\ISchemaLoader.cs" />
+    <Compile Include="Structures\RelationCardinality.cs" />
+    <Compile Include="Structures\RelationType.cs" />
+    <Compile Include="Structures\TableRelations\ChildTableRelation.cs" />
+    <Compile Include="Structures\TableRelations\ManyToManyTableRelation.cs" />
+    <Compile Include="Structures\TableRelations\ParentTableRelation.cs" />
+    <Compile Include="Structures\TableRelations\TableRelation.cs" />
+    <Compile Include="DatabaseServers.cs" />
+    <Compile Include="Dialogs\CodeGeneratorMappingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ColumnInfoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ConnectionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DatabaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Dialogs\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AspnetCodeGenerationDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AspnetCodeGenerationDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ChooseRelationsDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChooseRelationsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\CodeGeneratorMappingsDialog.resx">
+      <DependentUpon>CodeGeneratorMappingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\TableRelationDialog.resx">
+      <DependentUpon>TableRelationDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ColumnInfoDialog.resx">
+      <DependentUpon>ColumnInfoDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ConnectionDialog.resx">
+      <DependentUpon>ConnectionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DatabaseDialog.resx">
+      <DependentUpon>DatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RootWindow.resx">
+      <DependentUpon>RootWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Database Schema\Schema.cs" />
+    <Compile Include="Utilies.cs" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="blockdevice.ico" />
+    <Content Include="Resources\16-1-002.ico" />
+    <Content Include="Resources\16-1-007.ico" />
+    <Content Include="Resources\16-1-021.ico" />
+    <Content Include="Resources\16-1-056.ico" />
+    <Content Include="Resources\16-1-1020.ico" />
+    <Content Include="Resources\16-1-1027.ico" />
+    <Content Include="Resources\16-1-1172.ico" />
+    <Content Include="Resources\16-1-1190.ico" />
+    <Content Include="Resources\16-1-128.ico" />
+    <Content Include="Resources\16-1-256.ico" />
+    <Content Include="Resources\16-1-274.ico" />
+    <Content Include="Resources\16-1-411.ico" />
+    <Content Include="Resources\16-1-418.ico" />
+    <Content Include="Resources\32-1-018.ico" />
+    <Content Include="Resources\32-1-1022.ico" />
+    <Content Include="Resources\32-1-187.ico" />
+    <Content Include="Resources\access.png" />
+    <Content Include="Resources\mysql.png" />
+    <Content Include="Resources\s-460.ico" />
+    <Content Include="Resources\s-906.ico" />
+    <Content Include="Resources\source_s.ico" />
+    <None Include="Resources\spreadsheet.png" />
+    <Content Include="Resources\Write.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

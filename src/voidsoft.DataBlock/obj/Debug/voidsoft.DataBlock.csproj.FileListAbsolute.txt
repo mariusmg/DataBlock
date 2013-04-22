@@ -1,0 +1,5 @@
+c:\9\dblock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.XML
+c:\9\dblock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.dll
+c:\9\dblock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.pdb
+c:\9\dblock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.dll
+c:\9\dblock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.pdb

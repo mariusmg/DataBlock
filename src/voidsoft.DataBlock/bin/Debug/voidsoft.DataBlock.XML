@@ -1,0 +1,3017 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>voidsoft.DataBlock</name>
+    </assembly>
+    <members>
+        <member name="T:voidsoft.DataBlock.ConstraintManager">
+            <summary>
+                Manages constraints
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.GeneratePrimaryKeyConstraint(System.String,System.String,System.String)">
+            <summary>
+                Modifies a SQL query to include a PK constraint
+            </summary>
+            <param name="primaryKeyFieldName">Name of the primary key field.</param>
+            <param name="tableName">Name of the table.</param>
+            <param name="sqlQuery">The SQL query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.StripPrimaryKeyConstraint(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Strips the primary key constraint.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.ParseForeignKeyConstraint(System.String)">
+            <summary>
+                Parses the foreign key constraint.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.ParseForeignKeyConstraint(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Parses the foreign key constraint.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.ParsePrimaryKeyConstraint(System.String)">
+            <summary>
+                Parses the primary key constraint.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ConstraintManager.ParsePrimaryKeyConstraint(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Parses the primary key constraint.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngineLogger.LogContext(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Logs the execution context.
+            </summary>
+            <param name="storedProcedureName">Name of the stored procedure.</param>
+            <param name="dataParameters">The data parameters.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngineLogger.LogContext(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Logs the execution context.
+            </summary>
+            <param name="query">The query.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngineLogger.LogContext(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Logs the execution context.
+            </summary>
+            <param name="listQueries">The list queries.</param>
+        </member>
+        <member name="P:voidsoft.DataBlock.PrimaryKeyConstraint.TableName">
+            <summary>
+                Gets or sets the name of the table.
+            </summary>
+            <value>The name of the table.</value>
+        </member>
+        <member name="P:voidsoft.DataBlock.PrimaryKeyConstraint.PrimaryKeyFieldName">
+            <summary>
+                Gets or sets the name of the primary key field.
+            </summary>
+            <value>The name of the primary key field.</value>
+        </member>
+        <member name="M:voidsoft.DataBlock.MetadataManager.GetParentRelations(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Returns a list with the relations in which the specified table is Parent.
+            </summary>
+            <param name="mainTable">The table from which we return the relations</param>
+            <returns>A list with the Parent table relations</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MetadataManager.GetForeignKeyField(voidsoft.DataBlock.TableMetadata,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Returns the foreignKey DatabaseField from the child table based
+                on the relations between 2 tables
+            </summary>
+            <param name="parentEntity">ParentTable which contains the list of relations.</param>
+            <param name="childEntity">Child table from which the DatabaseField is returned</param>
+            <returns>DatabaseField foreign key</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MetadataManager.GetForeignKeyName(voidsoft.DataBlock.TableMetadata,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Returns the name of the foreign key from the child table based on the relation between the 2 tables.
+            </summary>
+            <param name="parentTable">Parent TableMetadata</param>
+            <param name="childTable">Child TableMetadata</param>
+            <returns>Name of the foreign key field</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.Configuration">
+            <summary>
+                Contains configuration details for DataBlock
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.#cctor">
+            <summary>
+                Initializes the <see cref="T:voidsoft.DataBlock.Configuration"/> class.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.ReadConfigurationFromConfigFile">
+            <summary>
+                Read the configuration data from the application config file
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.ConfigureDatabaseServerType(System.String)">
+            <summary>
+                Configure the database server type.
+            </summary>
+            <param name="value">Value based on which the server type is configured</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.ConfigureTransactionIsolationLevel(System.String)">
+            <summary>
+                Configure the TransactionIsolation level.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.GetValue(System.String)">
+            <summary>
+                Returns the value
+            </summary>
+            <param name="line">Configuration line</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.Configuration.RaiseQueryLoggingEvent(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Raises the query logging event.
+            </summary>
+            <param name="list">The list.</param>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.LogFilePath">
+            <summary>
+                Get or set the path to the log file
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.LogEnabled">
+            <summary>
+                Enable or disable logging
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.ConnectionString">
+            <summary>
+                Get or set the database connection string
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.DatabaseServerType">
+            <summary>
+                Get or set the database server type
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.DefaultTransactionIsolationLevel">
+            <summary>
+                Get or set the default isolation level for transactions
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Configuration.CommandTimeout">
+            <summary>
+                Get or set the default commmand timeout
+            </summary>
+        </member>
+        <member name="E:voidsoft.DataBlock.Configuration.OnQueryLogging">
+            <summary>
+                Occurs for query logging
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.Configuration.QueryLoggingEventHandler">
+            <summary>
+                Delegate for query logging
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.ForeignKeyConstraint">
+            <summary>
+                Represents a foreign key constraint with the associated data.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ForeignKeyConstraint.NameOfPrimaryKeyField">
+            <summary>
+                PK field name
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ForeignKeyConstraint.NumerOfRunningQueries">
+            <summary>
+                Holds the numebr of queries to be executed
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ForeignKeyConstraint.TableName">
+            <summary>
+                Table name
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.DatabaseField">
+            <summary>
+                This struct represents a database field with associated name, data type and value.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseField.fieldName">
+            <summary>
+                The field's  name
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseField.fieldType">
+            <summary>
+                The field's  data type
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseField.fieldValue">
+            <summary>
+                The field's  value
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseField.isPrimaryKey">
+            <summary>
+                Flag to know if this is the table's primary key.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseField.isValueAutogenerated">
+            <summary>
+                Flag to know if the value is autogenerated/autoincremented for this field.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DatabaseField.#ctor(System.Data.DbType,System.String,System.Boolean,System.Boolean,System.Object)">
+            <summary>
+                DatabaseField Constructor
+            </summary>
+            <param name="fieldType">The database field dataType.</param>
+            <param name="fieldName">The field's name.</param>
+            <param name="isPrimaryKey">Boolean value if this field is a PK</param>
+            <param name="isValueAutogenerated">Boolean value if this field's value is autogenerated by the RDBMS. Is used only if the field is PK</param>
+            <param name="fieldValue">The field's current value.</param>
+        </member>
+        <member name="T:voidsoft.DataBlock.Log">
+            <summary>
+                File based logging and formatting.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.#ctor">
+            <summary>
+                Constructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.LogMessage(System.Object)">
+            <summary>
+                Logs the specified data
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.LogMessage(System.String,System.String[])">
+            <summary>
+                Logs the strings
+            </summary>
+            <param name="header">The header.</param>
+            <param name="lines">The lines.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.LogMessage(System.Exception)">
+            <summary>
+                Logs the message.
+            </summary>
+            <param name="ex">The exception</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.LogMessage(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Logs the message.
+            </summary>
+            <param name="listQueries">The list queries.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.FormatExceptionForLogging(System.Exception)">
+            <summary>
+                Formats the exception for logging.
+            </summary>
+            <param name="ex">The exception to be formatted</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.Log.FormatQueryListForLogging(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Formats the query list for logging.
+            </summary>
+            <param name="listQueries">The list queries.</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.DataConvertor">
+            <summary>
+                Contains conversion methods
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataParameter(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Converts the fields of TableMetadata to IDataParameters
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="mainTable">TableMetadata from which the conversion is made</param>
+            <returns>IDataParameter array </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataParameter(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Converts the fields to IDataParameter
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="fields">Fields to be converted</param>
+            <returns>Array of IDataParameter</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataParameter(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Converts the fields to IDataParameter. The name of the parameter will also include
+                the name of the table.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="tableName">Name of the database table</param>
+            <param name="field">Field to be converted</param>
+            <returns>The IDataParameter</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataParameter(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField,System.Collections.Generic.List{System.String}@)">
+            <summary>
+                Converts the specified DataField into a IDataParameter. This ensures that the
+                name of the parameter is unique by comparing with a list of specified used names
+            </summary>
+            <param name="database">Database server</param>
+            <param name="tableName">Name of the table to which the field belongs</param>
+            <param name="field">DatabaseField which will be converted</param>
+            <param name="listUsedParameterNames">List with used names of a parameter. When the name of the parameter is given it is checked against the values in this list. If the name if found then it is changed to be unique</param>
+            <returns>The IDataParameter</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertTypeToTableMetadata``1(``0)">
+            <summary>
+                Converts the type to table metadata.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t">The t.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToTableMatadata(System.Data.DataTable,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Converts data from a DataTable to TableMetadata array. The scheme of the DataTable
+                must be the same with that of the TableMetadata.
+            </summary>
+            <param name="table">DataTable which contains the data </param>
+            <param name="metadata">Type of TableMetadata</param>
+            <returns>TableMetadata array which holds the converted items</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToTableMetadata(System.Int32,System.Data.DataTable,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Converts data to TableMetadata
+            </summary>
+            <param name="rowIndex">Index of the row</param>
+            <param name="table">DataTable</param>
+            <param name="mainTable">TableMetadata on which we map the contents of the specified DataTable</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.GetValue(System.String,System.Data.DataTable,System.Int32)">
+            <summary>
+                Return the value form the specified index in a DataTable.
+            </summary>
+            <param name="fieldName">Name of the field</param>
+            <param name="table">Data source</param>
+            <param name="rowIndex">Index of the row</param>
+            <returns>The value</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertTypeToDataTable``1(``0[],System.String[])">
+            <summary>
+                Converts to data table.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t">The t.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataTable(voidsoft.DataBlock.TableMetadata[])">
+            <summary>
+                Converts the specified TableMetadata array into a DataTable
+            </summary>
+            <param name="data">TableMetadata array from which the conversion is made</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToDataTable(voidsoft.DataBlock.TableMetadata[],voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Converts the specified TableMetadata's fields into a DataTable.
+            </summary>
+            <param name="data">TableMetadata array from which the conversion is made</param>
+            <param name="fields">List of fields to be included</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToHashtable(voidsoft.DataBlock.TableMetadata[],voidsoft.DataBlock.DatabaseField,voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Converts the specified 2 DatabaseFields to a hashtable. The first field cannot
+                have duplicates.
+            </summary>
+            <param name="data">TableMetdata array from which we make the conversion</param>
+            <param name="keyField">First field. This will be the key in the hashtable</param>
+            <param name="valueField">Second field. This will be the value in the hashtable</param>
+            <returns>Resulting hashtable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToHashtable(System.Data.DataTable,System.Int32,System.Int32)">
+            <summary>
+                Converts the data from a DataTable into a Hashtable.
+            </summary>
+            <param name="table">DataTable from which we convert the data</param>
+            <param name="keyColumnIndex">Index of the key column</param>
+            <param name="valueColumnIndex">Index of the value column</param>
+            <returns>Resulting hashtable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToStringCollection(voidsoft.DataBlock.TableMetadata[],voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Converts the specified field from a TableMetadata array into a string collection.
+            </summary>
+            <param name="data">TableMetdata array from which we make the conversion</param>
+            <param name="field">The database field which is added to the string collection</param>
+            <returns>String Collection</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToStringCollection(System.Data.DataTable,System.Int32)">
+            <summary>
+                Converts the specified data from DataTable to StringCollection
+            </summary>
+            <param name="table">DataTable from which we read data</param>
+            <param name="columnIndex">DataTable column index</param>
+            <returns>String Collection</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToArrayList(System.Data.DataTable,System.Int32)">
+            <summary>
+                Converts the contents of a DataColumn to a ArrayList
+            </summary>
+            <param name="table">DataTable from which we read the values</param>
+            <param name="columnIndex">Index of the DataColumn</param>
+            <returns>ArrayList which contains the items read from data table</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataConvertor.ConvertToList(System.Data.DataTable,System.Int32)">
+            <summary>
+                Toes the list.
+            </summary>
+            <param name="table">The table.</param>
+            <param name="columnIndex">Index of the column.</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.DataFactory">
+            <summary>
+                This is a factory class for provider specific objects.
+                Most of the object are initialized based on the DatabaseServer enumeration.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DataFactory.ODBC_DRIVER">
+            <summary>
+                Flag which describes the ODBC driver
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DataFactory.loadedProviders">
+            <summary>
+                Dictionary which hold the providers
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.#cctor">
+            <summary>
+                Static ctor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.LoadCustomProviders">
+            <summary>
+                Loads the custom providers information from the config file
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCDataParameter(System.Data.IDataParameter@)">
+            <summary>
+                Initializes the ODBC data parameter
+            </summary>
+            <param name="iparam">IDataParameter to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCDataAdapter(System.Data.IDbDataAdapter@,System.Data.IDbCommand)">
+            <summary>
+                Initializes the ODBC data adapter
+            </summary>
+            <param name="iadapter">IDbDataAdapter to be initialized</param>
+            <param name="icommand">Command to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCDbDataAdapter(System.Data.Common.DbDataAdapter@,System.Data.Common.DbCommand)">
+            <summary>
+                Initializes the ODBC db data adapter
+            </summary>
+            <param name="adapter">DbDataAdapter to be initialized</param>
+            <param name="command">DbCommand to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCDbCommand(System.Data.Common.DbCommand@)">
+            <summary>
+                Initializes the ODBC db command
+            </summary>
+            <param name="icommand">DBCommand  to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCCommand(System.Data.IDbCommand@)">
+            <summary>
+                Initializes the ODBC command
+            </summary>
+            <param name="icommand">IDbcommand to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCConnection(System.Data.IDbConnection@)">
+            <summary>
+                Initializes the ODBC connection
+            </summary>
+            <param name="iconnection">IDbConnection to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeODBCDbConnection(System.Data.Common.DbConnection@)">
+            <summary>
+                Initializes the ODBC DBConnection
+            </summary>
+            <param name="iconnection">DbConnection to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataParameter(voidsoft.DataBlock.DatabaseServer,System.Data.IDataParameter@)">
+            <summary>
+                Initializes a DataParameter.
+            </summary>
+            <param name="database">Database servert type</param>
+            <param name="iparam">DataParameter which will be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataAdapter(voidsoft.DataBlock.DatabaseServer,System.Data.IDbDataAdapter@,System.Data.IDbCommand)">
+            <summary>
+                Initializes a DataAdapter.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="idap">The IDbDataAdapter interface which will be initialized.</param>
+            <param name="icmd">Data Command associated with this Data Adapter</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbDataAdapter(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbDataAdapter@,System.Data.Common.DbCommand)">
+            <summary>
+                Initializes the DbDataAdapter
+            </summary>
+            <param name="database">The database.</param>
+            <param name="adapter">The adapter.</param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeCommand(voidsoft.DataBlock.DatabaseServer,System.Data.IDbCommand@)">
+            <summary>
+                Initializes a Data Command.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="icmd">IDBcommand which will be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbCommand(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbCommand@)">
+            <summary>
+                Initializes a DbCommand
+            </summary>
+            <param name="database">The database.</param>
+            <param name="icmd">The icmd.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeConnection(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbConnection@)">
+            <summary>
+                Initializes a Database Connection.
+            </summary>
+            <param name="database">Database server dataType</param>
+            <param name="icon">IDbConnection interface</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbConnection(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbConnection@)">
+            <summary>
+                Initializes the db connection.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="icon">DbConnection to be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.GetParameterChar(voidsoft.DataBlock.DatabaseServer)">
+            <summary>
+                Returns the char used as a prefix for parameters.
+            </summary>
+            <param name="database"></param>
+            <returns>The char used for sql parameters</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataParameter(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.IDataParameter@)">
+            <summary>
+                Initializes a IDataParameter
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="filePath">Path to the assembly which contains the provider </param>
+            <param name="idp">IDataParameter which will be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeConnection(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.IDbConnection@)">
+            <summary>
+                Initializes a IDdbConnection
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="filePath">Path to the assembly which contains the provider</param>
+            <param name="icon">IDbConnection which will be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbConnection(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.Common.DbConnection@)">
+            <summary>
+                Initializes the connection.
+            </summary>
+            <param name="database">The database.</param>
+            <param name="filePath">The file path.</param>
+            <param name="icon">The icon.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeCommand(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.IDbCommand@)">
+            <summary>
+                Initializes a IDbCommand
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="filePath">Path to the assembly which contains the provider</param>
+            <param name="icmd">IDbCommand which will be initialized</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbCommand(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.Common.DbCommand@)">
+            <summary>
+                Initializes the db data command.
+            </summary>
+            <param name="database">The database.</param>
+            <param name="filePath">The file path.</param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataAdapter(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.IDbDataAdapter@,System.Data.IDbCommand)">
+            <summary>
+                Initializes a new IDbDataAdapter
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="filePath">Path to the assembly which contains the provider</param>
+            <param name="idap">IDBDataAdapter which will be initialized</param>
+            <param name="icmd">IDbCommand associated with IDbDataAdapter </param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDbDataAdapter(voidsoft.DataBlock.DatabaseServer,System.String,System.Data.Common.DbDataAdapter@,System.Data.Common.DbCommand)">
+            <summary>
+                Initializes the db data adapter.
+            </summary>
+            <param name="server">The server.</param>
+            <param name="filePath">The file path.</param>
+            <param name="adapter">The adapter.</param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataType(System.Data.DbType)">
+            <summary>
+                Converts a DbType into a Type.
+            </summary>
+            <param name="type"></param>
+            <returns>Returns the new type</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeDataType(System.Type)">
+            <summary>
+                Converts a type into a DbType
+            </summary>
+            <param name="tip"></param>
+            <returns>DbType value</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeQueryCriteriaGenerator(voidsoft.DataBlock.DatabaseServer)">
+            <summary>
+                Creates a new IQueryCriteriaGenerator
+            </summary>
+            <param name="database">Database server type</param>
+            <returns>Returns a new IQueryCriteriaGenerator</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataFactory.InitializeSqlGenerator(voidsoft.DataBlock.DatabaseServer)">
+            <summary>
+                Initializes a ISqlGenerator based on the DatabaseServer.
+            </summary>
+            <param name="database">Database server type</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.DatabaseServer">
+            <summary>
+                Supported database servers
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseServer.Access">
+            <summary>
+                Microsoft Access 97 and higher
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseServer.SqlServer">
+            <summary>
+                Microsoft SQL Server 7.0 and higher
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseServer.MySQL">
+            <summary>
+                MySQL 4.0 or higher
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseServer.PostgreSql">
+            <summary>
+                PostgreSql 8.0 and higher
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.DatabaseServer.Oracle">
+            <summary>
+                Oracle
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.DataBlockException">
+            <summary>
+                Exception thrown by the persistent object operations
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataBlockException.#ctor">
+            <summary>
+                PersistentObjectException constructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataBlockException.#ctor(System.String)">
+            <summary>
+                PersistentObjectException constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.DataBlockException.#ctor(System.String,System.Exception)">
+            <summary>
+                PersistentObjectException constructor
+            </summary>
+            <param name="message"></param>
+            <param name="ex"></param>
+        </member>
+        <member name="T:voidsoft.DataBlock.TableRelationCardinality">
+            <summary>
+                Enum which represents a database table relation type.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableRelationCardinality.OneToOne">
+            <summary>
+                Represents a One to One relation
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableRelationCardinality.OneToMany">
+            <summary>
+                Represents a One to Many table relation
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableRelationCardinality.ManyToMany">
+            <summary>
+                Many to Many relation. This can be used ONLY in ManyToManyTableRelations
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.TableMetadata">
+            <summary>
+                Describes the metadata for a database table mapped object
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.START_INDEX_FIELD">
+            <summary>
+                Constant which represents the start index
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.currentTableName">
+            <summary>
+                Table name field.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.fields">
+            <summary>
+                Table fields
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.listAttachedData">
+            <summary>
+                List with attached related table data.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.listRelations">
+            <summary>
+                List with table defined relations.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableMetadata.listRemovedData">
+            <summary>
+                List with removed related data.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.#ctor">
+            <summary>
+                Constructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.Clone``1">
+            <summary>
+                Creates a new object that is a copy of the current instance (shallow copy).
+            </summary>
+            <returns>
+                A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.IsNull(System.String)">
+            <summary>
+                Returns true if the specified DatabaseField has a null fieldValue
+            </summary>
+            <param name="fieldName">Field name</param>
+            <returns>Boolean fieldValue which is true if the field has a null fieldValue. </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.IsNull(System.Int32)">
+            <summary>
+                Returns true if the specified DatabaseField has a null fieldValue.
+            </summary>
+            <param name="index">Field index</param>
+            <returns>Boolean fieldValue which is true if the field has a null fieldValue</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.SetNullValue(System.Int32)">
+            <summary>
+                Set the null fieldValue for the specified field
+            </summary>
+            <param name="index">Field index</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.SetNullValue(System.String)">
+            <summary>
+                Set the null fieldValue for the specified field
+            </summary>
+            <param name="fieldName">Field's name</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetPrimaryKeyField">
+            <summary>
+                Returns the primary key field
+            </summary>
+            <returns>DatabaseField which is the primary key</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetField(System.String)">
+            <summary>
+                Returns the specified database field.
+            </summary>
+            <param name="fieldName">The name of the DatabseField</param>
+            <returns>DatabaseField</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetField(System.Int32)">
+            <summary>
+                Returns the specified database field.
+            </summary>
+            <param name="index">The index of the database field</param>
+            <returns>DatbaseField</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.SetFieldValue(System.String,System.Object)">
+            <summary>
+                Sets a database field's fieldValue
+            </summary>
+            <param name="fieldName">The field name</param>
+            <param name="fieldValue">The Value to be set.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.SetFieldValue(System.Int32,System.Object)">
+            <summary>
+                Sets a database field's fieldValue.
+            </summary>
+            <param name="fieldIndex">The field name</param>
+            <param name="fieldValue">The Value to be set.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.ToString">
+            <summary>
+                Shows the contents as a string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetRelatedTableData(System.Type)">
+            <summary>
+                Returns data from a related table in Parent -> Child relationship. This is
+                the underlying implementation of the generated GetXXX tables.
+            </summary>
+            <param name="childTableType">Type of the related entity</param>
+            <returns>Array with the result</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetChildRelatedTableData(System.Type,voidsoft.DataBlock.ChildTableRelation)">
+            <summary>
+                Gets the child related data.
+            </summary>
+            <param name="childTableType">Type of the child table.</param>
+            <param name="relation">The relation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.GetRelatedTableData(System.Type,System.Type)">
+            <summary>
+                Gets the data from a related table in a ManyToMany relation.
+            </summary>
+            <param name="relatedTableType">Type of the related entity</param>
+            <param name="intermediaryRelatedTableType">Type of the intermediary table</param>
+            <returns>TableMetadata array which contains the results</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.AttachTableMetadata(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Attach related data (based on the table relations) to the table.
+            </summary>
+            <param name="table"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.TableMetadata.RemoveTableMetadata(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Remove the associated data
+            </summary>
+            <param name="table"></param>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.Item(System.Enum)">
+            <summary>
+                Gets the <see cref="T:voidsoft.DataBlock.DatabaseField"/> by the specified enum value.
+            </summary>
+            <value>The specified DatabaseField</value>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.Item(System.Int32)">
+            <summary>
+                Gets the <see cref="T:voidsoft.DataBlock.DatabaseField"/> at the specified index.
+            </summary>
+            <param name="index">Index of the DatabaseField</param>
+            <returns>The specified DatabaseField</returns>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.TableFields">
+            <summary>
+                Gets or sets the database fields
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.TableName">
+            <summary>
+                Gets or sets the name of the table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.Relations">
+            <summary>
+                Get the table relations
+            </summary>
+            <fieldValue></fieldValue>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.AttachedData">
+            <summary>
+                Gets the attached data of the current table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableMetadata.RemovedData">
+            <summary>
+                Gets a array with the removed data
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.ManyToManyTableRelation">
+            <summary>
+                Represents a ManyToMany relation between two entities
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.TableRelation">
+            <summary>
+                Base class which represents a table relation
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableRelation.RelationCardinality">
+            <summary>
+                The cardinality with the related tabel
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.TableRelation.RelatedTableName">
+            <summary>
+                The name of the related table
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ManyToManyTableRelation.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+                Constructor
+            </summary>
+            <param name="relatedTableName">Name of the related table</param>
+            <param name="intermediaryTableName">Name of the intermediary table</param>
+            <param name="intermediaryKeyFieldFromParentTable">Name of the intermediary field from the parent table</param>
+            <param name="intermediaryKeyFieldFromChildTable">Name of the intermediary field from the child table</param>
+        </member>
+        <member name="P:voidsoft.DataBlock.ManyToManyTableRelation.RelatedTableName">
+            <summary>
+                Name of the related table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ManyToManyTableRelation.RelationCardinality">
+            <summary>
+                Type of relation cardinality. In this case it's always ManyToMany
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ManyToManyTableRelation.IntermediaryTableName">
+            <summary>
+                Name of the intermediary table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ManyToManyTableRelation.IntermediaryKeyFieldFromParentTable">
+            <summary>
+                Name of the foreign key field from the parent table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ManyToManyTableRelation.IntermediaryKeyFieldFromChildTable">
+            <summary>
+                Name of the foreign key field from the child table
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.TableRelationMode">
+            <summary>
+                Enum which describes the relation mode of a table
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableRelationMode.Parent">
+            <summary>
+                Parent entity
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.TableRelationMode.Child">
+            <summary>
+                Child entity
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.ChildTableRelation">
+            <summary>
+                Represents a Child - Parent relation between two entities
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ChildTableRelation.#ctor(System.String,voidsoft.DataBlock.TableRelationCardinality,System.String,System.String)">
+            <summary>
+                Constructor.Creates a new instance of ChildTableRelation.
+            </summary>
+            <param name="relatedTableName"></param>
+            <param name="tableCardinality"></param>
+            <param name="relatedTableKeyName"></param>
+            <param name="foreignKeyName"></param>
+        </member>
+        <member name="P:voidsoft.DataBlock.ChildTableRelation.RelatedTableName">
+            <summary>
+                Get the name of the related table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ChildTableRelation.RelationCardinality">
+            <summary>
+                Gets the relation cardinality
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ChildTableRelation.RelatedTableKeyName">
+            <summary>
+                Gets the name of the primary key from the parent table
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ChildTableRelation.ForeignKeyName">
+            <summary>
+                Gets the name of the foreign key from the child table
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.ParentTableRelation">
+            <summary>
+                This is a Parent -> Child relationship. Note that the type of the fields on which
+                the 2 tables are related must be the same so the type of the foreign key is inferred
+                from the Primary Key of the parent table.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ParentTableRelation.#ctor(System.String,System.String,voidsoft.DataBlock.TableRelationCardinality,System.Boolean)">
+            <summary>
+                Constructor. Creates a new instance of ChildTableRealtion
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ParentTableRelation.RelatedTableName">
+            <summary>
+                The name of the related table.
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ParentTableRelation.RelationCardinality">
+            <summary>
+                The cardinality with the related table.
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ParentTableRelation.ForeignKeyName">
+            <summary>
+                The name of the foreign key.
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.ParentTableRelation.CascadeDeleteChildren">
+            <summary>
+                Flag to know if the data from the related tables is deleted when
+                we delete data from the main table.
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.Operation">
+            <summary>
+                Represents a list of operations supported by the
+                PersistentObject
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.Operation.Create">
+            <summary>
+                Create operation
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.Operation.Delete">
+            <summary>
+                Delete operation
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.Operation.Update">
+            <summary>
+                Update operation
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.Operation.Custom">
+            <summary>
+                Custom business operation
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.PersistentObject">
+            <summary>
+                Object persistence
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.PersistentObject.connectionString">
+            <summary>
+                Connection string used to connect to the database.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.PersistentObject.contextSession">
+            <summary>
+                Current context session.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.PersistentObject.database">
+            <summary>
+                The dataType of the database server.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.PersistentObject.execEngine">
+            <summary>
+                Execution Engine instance.This is valid only when the PersistentObject is instantiated with a Session.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.PersistentObject.mappedObject">
+            <summary>
+                TableMetadata associated with a instance of this class
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.#ctor(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Initialize a new PersistentObject
+            </summary>
+            <param name="database">Database server dataType</param>
+            <param name="connectionString">Connection string</param>
+            <param name="mainTable">TableMetadata associated to this PersistentObject</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.#ctor(voidsoft.DataBlock.Session,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Initialize a new PersistentObject
+            </summary>
+            <param name="contextSession">Session in the context of which the PersistentObject is initialized</param>
+            <param name="mainTable">TableMetadata associated to this PersistentObject</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.#ctor(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Initialize a new PersistentObject
+            </summary>
+            <param name="mainTable"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Finalize">
+            <summary>
+                Destructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Dispose">
+            <summary>
+                Dispose
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataTable(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Gets a DataTable by running the specified criteria
+            </summary>
+            <param name="criteria">Specified criteria</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataTable">
+            <summary>
+                Gets a DataTable which contains all the data for current TableMetadata
+            </summary>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataTable(voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Gets the data set which contains the data for the specified fields
+            </summary>
+            <param name="fields">The fields</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataTablePaginated(System.Int32,System.Int32)">
+            <summary>
+                Gets the data table paginated
+            </summary>
+            <param name="numberOfItems">The number of items.</param>
+            <param name="pageNumber">The page number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataSet(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Returns a dataset which contains data specified in the criteria query
+            </summary>
+            <param name="criteria">QueryCriteria based upon which the data is selected</param>
+            <returns>DataSet containing the selected data</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataSet">
+            <summary>
+                Returns a dataset with all the data from our business object
+            </summary>
+            <returns>DataSet containing all the data</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataSet(System.String,System.Object)">
+            <summary>
+                Returns a DataSet which contains data from the related table
+            </summary>
+            <param name="relatedTableName">Name of the related table</param>
+            <param name="foreignKeyValue">Value of the foreign key</param>
+            <returns>DataSet containing data from the related table</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetDataSet(voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Returns a dataset with the data from the specified fields.
+            </summary>
+            <param name="fields">DatabaseFields which will be included in the select</param>
+            <returns>DataSet with results</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetTableMetadata(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Get data as a TableMetadata array
+            </summary>
+            <param name="criteria">QueryCriteria based upon which data is selected</param>
+            <returns>A TableMetadata array containing all the data</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetTableMetadata">
+            <summary>
+                Get data as a TableMetadata array
+            </summary>
+            <returns>TableMetadata Array</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetSingleTableMetadata(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Gets a single table metadata based on a QueryCriteria
+            </summary>
+            <param name="criteria">The criteria.</param>
+            <returns>The selected TableMetadata</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetTableMetadata(System.Object)">
+            <summary>
+                Get data from a child table based on the relation name and the primary key's fieldValue from the parent table.
+            </summary>
+            <param name="primaryKeyValue">The fieldValue of the primary key</param>
+            <returns>The selected TableMetadata </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetTableMetadata(System.String,System.Type,System.Object)">
+            <summary>
+                Get data from a related table (doen't matter if parent of child) based
+                on the relation name and the primary key's fieldValue from the related table.
+            </summary>
+            <param name="relatedTableName">The name of the related table class name</param>
+            <param name="classType">Class type of the related TableMetadata entity</param>
+            <param name="foreignKeyValue">Foreign key's fieldValue</param>
+            <returns>TableMetadata array which contains the specified data </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetFieldList(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Returns a ArraList with the data from the specified field using the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which data is selected</param>
+            <returns>ArrayList which contains the selected result</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetFieldList(voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Returns a list with all the data from the specified field
+            </summary>
+            <param name="field">DatabaseField based upon which data is selected</param>
+            <returns>ArrayList which contains the selected data</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetFieldList(voidsoft.DataBlock.DatabaseField,voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Return a sorted list with all the data from the specified 2 fields
+            </summary>
+            <param name="idField">First field</param>
+            <param name="descriptionField">Second field.</param>
+            <returns>StringDictionary which contains the selected data</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetValue(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Returns a single value from the database using the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which data is selected</param>
+            <returns>The selected fieldValue</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.IsUnique(voidsoft.DataBlock.DatabaseField,System.Object)">
+            <summary>
+                Checks if the specified fieldValue exists in the database. Returns true if the
+                fieldValue doesn't exists in the database and false if it exists
+            </summary>
+            <param name="field">The field to which the specified fieldValue belongs</param>
+            <param name="value">Value to search for</param>
+            <returns>Returns true if a field with the specified fieldValue is found</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetMax(voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Max
+            </summary>
+            <param name="field">The field.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetMin(voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Min
+            </summary>
+            <param name="field">The field.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetCount">
+            <summary>
+                Count
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Create(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Inserts a new object into the database.
+            </summary>
+            <param name="metaTable">TableMatadata from which the object is created</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Update(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Updates the specified entity
+            </summary>
+            <param name="mainTable"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Update(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Updates the specified entities using the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which data is updated</param>
+            <returns>Number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Delete(System.Object)">
+            <summary>
+                Deletes the row by the specified primary key value.
+            </summary>
+            <param name="primaryKeyValue">The primary key value.</param>
+            <returns>Number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Delete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Delete multiple rows from the table using the specified criteria from a QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based on which data is deleted</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.Delete(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Deletes the specified data and data from related child tables.
+            </summary>
+            <param name="mainTable">TableMetadata to be deleted</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.BeforeExecutingQueries(voidsoft.DataBlock.Operation,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery}@,System.Object[])">
+            <summary>
+                This method is called before executing the queries. By overriding it in the derived
+                classes you have runtime access to the list of queries which will be executed
+            </summary>
+            <param name="operation">Type of operation</param>
+            <param name="listQueries">List of queries which will be executed</param>
+            <param name="args">Various contextual arguments</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.RunIntrinsecFunction(voidsoft.DataBlock.CriteriaOperator,voidsoft.DataBlock.DatabaseField)">
+            <summary>
+                Executes a intrinsec function.
+            </summary>
+            <param name="criteria">The criteria.</param>
+            <param name="field">The field.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.MapDataReaderToTableMetadata(voidsoft.DataBlock.ExecutionQuery,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Maps a DataReader to a TableMetadata implementation.
+            </summary>
+            <param name="selectQuery">The ExecutionQuery</param>
+            <param name="table">TableMetadata on which the query results will be mapped </param>
+            <returns>ArrayList with TableMetadata results</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PersistentObject.GetTableMetadata(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Maps a select query on a TableMetadata[]
+            </summary>
+            <param name="selectQuery">Select query</param>
+            <returns>TableMetadata[]</returns>
+        </member>
+        <member name="P:voidsoft.DataBlock.PersistentObject.IsInSession">
+            <summary>
+                Gets a value indicating whether this instance is running in a session.
+            </summary>
+            <value>
+                <c>True</c> if this instance is in session; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:voidsoft.DataBlock.PersistentObject.SessionExecutionEngine">
+            <summary>
+                Gets the session execution engine. This is available only if the current object runs in a session.
+            </summary>
+            <value>The session execution engine.</value>
+        </member>
+        <member name="T:voidsoft.DataBlock.CriteriaAlias">
+            <summary>
+                Structure used to hold field aliases.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaAlias.aliasName">
+            <summary>
+                The field alias
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaAlias.fieldName">
+            <summary>
+                Name of the field
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaAlias.tableName">
+            <summary>
+                Name of the table to which the field belongs
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.CriteriaAlias.#ctor(System.String,System.String,System.String)">
+            <summary>
+                Constructor
+            </summary>
+            <param name="fieldName">Name of the field</param>
+            <param name="aliasName">The alias</param>
+            <param name="tableName">Name of the table to which the field belongs</param>
+        </member>
+        <member name="T:voidsoft.DataBlock.CriteriaOperator">
+            <summary>
+                QueryCriteria operators
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.OrderBy">
+            <summary>
+                Order By operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Distinct">
+            <summary>
+                DISTINCT operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Between">
+            <summary>
+                BETWEEN operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Not">
+            <summary>
+                NOT operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Like">
+            <summary>
+                LIKE operator. This generated the code : Field = %value%
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.LikeStart">
+            <summary>
+                Like operator. This generates the code : Field = value%
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.LikeEnd">
+            <summary>
+                Like operator. This generates the code : Field = %value
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Equality">
+            <summary>
+                Equality operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Different">
+            <summary>
+                Different operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.IsNull">
+            <summary>
+                IsNull operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.IsNotNull">
+            <summary>
+                IsnotNull operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Or">
+            <summary>
+                Or operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Smaller">
+            <summary>
+                Smaller operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.SmallerOrEqual">
+            <summary>
+                SmallerOrEqual operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Higher">
+            <summary>
+                Higher operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.HigherOrEqual">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Max">
+            <summary>
+                MAX operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Min">
+            <summary>
+                MIN operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaOperator.Count">
+            <summary>
+                Count operator
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.CriteriaCondition">
+            <summary>
+                Represents a condition which is added to a QueryCriteria
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaCondition.CriteriaOperator">
+            <summary>
+                Condition's criteria operator
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaCondition.Field">
+            <summary>
+                Condition's Field
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.CriteriaCondition.Values">
+            <summary>
+                Condition's values
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.CriteriaCondition.#ctor(voidsoft.DataBlock.CriteriaOperator,voidsoft.DataBlock.DatabaseField,System.Object[])">
+            <summary>
+                Constructor
+            </summary>
+            <param name="criteriaOperator">Condition's criteria operator</param>
+            <param name="field">Condition's Field</param>
+            <param name="values">Condition's values</param>
+        </member>
+        <member name="T:voidsoft.DataBlock.IQueryCriteriaGenerator">
+            <summary>
+                Interface which defines the operations supported by the
+                QueryCriteriaGenerators
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.IQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a SELECT sql query based on the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which the query is generated</param>
+            <returns>The resulting ExecutionQuery</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.IQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a UPDATE query based on the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which the query is generated</param>
+            <returns>The resulting ExecutionQuery</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.IQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a DELETE sql query based on the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which the query is generated</param>
+            <returns>The resulting ExecutionQuery</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.JoinCriteriaCondition">
+            <summary>
+                Represents a Join Condition which is added to a QueryCriteria
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.Criteria">
+            <summary>
+                The QueryCriteria with which we join
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.ForeignKey">
+            <summary>
+                The foreign key used in join
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.ForeignKeyFieldTableName">
+            <summary>
+                Name of the table to which the foreign key belongs
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.Join">
+            <summary>
+                The Join type
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.PrimaryKey">
+            <summary>
+                The primary key used in the join
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinCriteriaCondition.PrimaryKeyFieldTableName">
+            <summary>
+                Name of the table to which the primary key field belongs
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.JoinCriteriaCondition.#ctor(voidsoft.DataBlock.JoinType,System.String,voidsoft.DataBlock.DatabaseField,System.String,voidsoft.DataBlock.DatabaseField,voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Constructor
+            </summary>
+            <param name="joinType">The Join type</param>
+            <param name="primaryKeyFieldTableName"> Name of the table to which the primary key field belongs</param>
+            <param name="primaryKey">The primary key used in the join</param>
+            <param name="foreignKeyFieldTableName">Name of the table to which the foreign key belongs</param>
+            <param name="foreignKey">The foreign key used in join</param>
+            <param name="criteria">The QueryCriteria with which we join</param>
+        </member>
+        <member name="T:voidsoft.DataBlock.JoinType">
+            <summary>
+                Join types
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinType.Inner">
+            <summary>
+                Inner join
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinType.Left">
+            <summary>
+                Left join
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.JoinType.Right">
+            <summary>
+                Right join
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.QueryCriteria">
+            <summary>
+                QueryCriteria is a object oriented method of writing RDBMS independent queries
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.QueryCriteria.fields">
+            <summary>
+                Selected database fields in the query
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.QueryCriteria.listAliases">
+            <summary>
+                List with field aliasese
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.QueryCriteria.listCriterias">
+            <summary>
+                List which holds the current criterias
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.QueryCriteria.listJoinCriterias">
+            <summary>
+                ArrayList which holds the join criterias
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.QueryCriteria.tableName">
+            <summary>
+                Table name
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteria.#ctor(voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Creates a new instance of QueryCriteria
+            </summary>
+            <param name="mainTable"></param>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteria.#ctor(System.String,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Create a new instance of QueryCriteria
+            </summary>
+            <param name="tableName">The name of the table</param>
+            <param name="fields">DatabaseFields included in the query</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteria.Add(voidsoft.DataBlock.CriteriaOperator,voidsoft.DataBlock.DatabaseField,System.Object[])">
+            <summary>
+                Add a new criteria condition to the QueryCriteria
+            </summary>
+            <param name="criteriaOperator">Specified criteria operator</param>
+            <param name="field">The DatabaseField to which we add the criteria operator</param>
+            <param name="values">The value(s)</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteria.AddJoin(voidsoft.DataBlock.JoinType,System.String,voidsoft.DataBlock.DatabaseField,System.String,voidsoft.DataBlock.DatabaseField,voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Add a new join to the QueryCriteria
+            </summary>
+            <param name="joinType">The join type</param>
+            <param name="primaryKeyFieldTableName">Name of the table to which the primary key belongs</param>
+            <param name="primaryKey">The Primary key field</param>
+            <param name="foreignKeyFieldTableName">Name of the table to which the foreign key belongs</param>
+            <param name="foreignKey">The foreign key field</param>
+            <param name="criteria">The query criteria with which we join</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteria.AddAlias(System.String,System.String)">
+            <summary>
+                Add an column alias to the query criteria
+            </summary>
+            <param name="fieldName">The name of the field</param>
+            <param name="aliasName">The alias</param>
+        </member>
+        <member name="P:voidsoft.DataBlock.QueryCriteria.TableName">
+            <summary>
+                The name of the database table associated with this criteria
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.QueryCriteria.Fields">
+            <summary>
+                The DatabaseFields which will be selected in the QueryCriteria
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.QueryCriteria.CriteriaConditions">
+            <summary>
+                Criteria Conditions
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.QueryCriteria.JoinCriteriaConditions">
+            <summary>
+                JoinCriteriaConditions
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.QueryCriteria.Aliases">
+            <summary>
+                Aliases.
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.QueryCriteriaGeneratorType">
+            <summary>
+                Supported query generator types for QueryCriteria
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.AccessQueryCriteriaGenerator">
+            <summary>
+                Microsoft Access QueryCriteria implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query based on the specified query criteria.
+            </summary>
+            <param name="criteria">QueryCriteria upon which the query is generated </param>
+            <returns>Sql Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a UPDATE SQL query
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a DELETE SQL query
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateWithJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                GENERATE a SELECT query with joins
+            </summary>
+            <param name="criteria"></param>
+            <remarks>Generste</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateWithoutJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a SELECT query
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessQueryCriteriaGenerator.GenerateCondition(System.String,voidsoft.DataBlock.CriteriaCondition[],System.Text.StringBuilder@,System.Collections.Generic.List{System.Data.IDataParameter}@)">
+            <summary>
+                Generates the sql query condition
+            </summary>
+            <param name="tableName">Name of the datbase table</param>
+            <param name="conditions">Criteria conditions </param>
+            <param name="sbSqlHeader">StringBuilder which contains the SELECT part of the sql query build so far</param>
+            <param name="listParameters">List with used parameters</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.ExecutionEngine">
+            <summary>
+                ExecutionEngine
+            </summary>
+            <summary>
+                ExecutionEngine
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.command">
+            <summary>
+                Database command.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.connection">
+            <summary>
+                Database connection.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.connectionString">
+            <summary>
+                Connection string used to connect to the database.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.database">
+            <summary>
+                Database server dataType.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.isContextSession">
+            <summary>
+                Flag used to know if the current instance is initialized using a Session.
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionEngine.isDisposed">
+            <summary>
+                Flag to know if the instance is disposed.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.#ctor">
+            <summary>
+                Constructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.CreateNewExecutionEngine">
+            <summary>
+                Creates the new execution engine.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.CreateNewExecutionEngine(voidsoft.DataBlock.DatabaseServer,System.String)">
+            <summary>
+                Creates a new instance of the ExecutionEngine.
+            </summary>
+            <param name="database">Database server</param>
+            <param name="connectionString"></param>
+            <returns>ExecutionEngine instance</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.CreateNewExecutionEngine(voidsoft.DataBlock.Session)">
+            <summary>
+                Creates a new instance of the ExecutionEngine.
+            </summary>
+            <param name="session">The session based on which the instance is created</param>
+            <returns>ExecutionEngine instance</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.Dispose">
+            <summary>
+                Dispose the class instance
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.Finalize">
+            <summary>
+                Finalizer
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a sql statement against the connection and returns the number
+                of rows affected.
+            </summary>
+            <param name="executableQuery">Sql command text which will be executed</param>
+            <returns>Number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes a sql statement against the connection and returns the number of rows affected.
+            </summary>
+            <param name="storedProcedureName">The name of the stores procedure which will be executed</param>
+            <param name="iparams">parameters associated with the stored procedure</param>
+            <returns>Number of affected row</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Execute all the queries into a transaction using the default configurable isolation level
+            </summary>
+            <param name="listQueries">List of queries to be executed</param>
+            <returns>The number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery},System.Data.IsolationLevel)">
+            <summary>
+                Execute the queries into a transaction using
+                the specified IsolationLevel
+            </summary>
+            <param name="listQueries">List of queries which will be executed</param>
+            <param name="isolationLevel">IsolationLevel for transaction</param>
+            <returns>The number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.ExecutionQuery,System.String,System.String,System.Object@)">
+            <summary>
+                ExecuteNonQuery overload which returns the last inserted Id
+            </summary>
+            <param name="executableQuery">SELECT query to be executed</param>
+            <param name="tableName">Name of the table</param>
+            <param name="primaryKeyFieldName">Name of the primary key field</param>
+            <param name="insertedPrimaryKeyValue">Reference to a object who's value will be updated with the value of the primary key</param>
+            <returns>Number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteReader(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a DataReader
+            </summary>
+            <param name="queryCommand">ExecutionQuery </param>
+            <returns>IDataReader instance</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteReader(voidsoft.DataBlock.ExecutionQuery,System.Data.CommandBehavior)">
+            <summary>
+                Executes a DataReader
+            </summary>
+            <param name="executableQuery">ExecutionQuery</param>
+            <param name="cmd">Command Behaviour for DataReader</param>
+            <returns>IDataReader instance</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteReader(System.String,System.Data.CommandBehavior,System.Data.IDataParameter[])">
+            <summary>
+                Executes a DataReader
+            </summary>
+            <param name="storedProcedureName">Stored procedure name</param>
+            <param name="commandBehaviour">DataReader CommandBehaviour</param>
+            <param name="iparam">List of parameters for stored procedure. In case you want to call a stored procedure without parameters you must pass null</param>
+            <returns>IDataReader instance</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Fills a dataset
+            </summary>
+            <param name="executableQuery">SELECT ExecutionQuery based on which data is selected</param>
+            <returns>Resulting DataSet</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(voidsoft.DataBlock.ExecutionQuery,System.Data.DataSet@)">
+            <summary>
+                Fills a dataset
+            </summary>
+            <param name="executableQuery">SELECT ExecutionQuery based on which data is selected</param>
+            <param name="ds">Resulting DataSet</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Fills a dataset
+            </summary>
+            <param name="storedProcedureName">The name of the stored procedure used to fills the dataset.</param>
+            <param name="iparams">The stored procedure parameters</param>
+            <returns>The dataset</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataTable(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Fills a DataTable
+            </summary>
+            <param name="executableQuery">SELECT ExecutionQuery based on which data is selected</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataTable(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Fills a DataTable
+            </summary>
+            <param name="storedProcedureName">The name of the stored procedure used to fills the DataTable</param>
+            <param name="iparams">The stored procedure parameters</param>
+            <returns>Resulting DataTable</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteScalar(voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes the query, and returns the first column of the first row  in the resultset returned by the query.
+                Extra columns or rows are  ignored.
+            </summary>
+            <param name="executableQuery">Query to be executed</param>
+            <returns>Returns the selected object</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteScalar(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes the query, and returns the first column of the first row in the resultset returned by the query.
+                Extra columns or rows are ignored.
+            </summary>
+            <param name="storedProcedureName">Name of the stored procedure</param>
+            <param name="iparam">Array of IDataParameters</param>
+            <returns>Returns the selected object</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.DisposeObjects(System.Data.IDbConnection@,System.Data.IDbCommand@)">
+            <summary>
+                Dispose the ADO.NET objects.
+            </summary>
+            <param name="icon">Database connection to be disposed</param>
+            <param name="icmd">Database command to be disposed </param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.DisposeObjects(System.Data.Common.DbConnection@,System.Data.Common.DbCommand@)">
+            <summary>
+                Disposes the ADO.NET objects
+            </summary>
+            <param name="con">Database connection to be disposed</param>
+            <param name="cmd">Database command to be disposed</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQueryConstrained(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbConnection@,System.Data.Common.DbCommand@,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Executes a constrained list of queries
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="connection">Connection object</param>
+            <param name="command">Command object</param>
+            <param name="listQueries">List of ExecutionQueries which must be executed</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQueryWithPrimaryKeyConstraints(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbConnection@,System.Data.Common.DbCommand@,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery},System.Collections.Generic.List{System.Object}@)">
+            <summary>
+                Executes the non query with primary key constraints.
+            </summary>
+            <param name="database">The database.</param>
+            <param name="connection">The connection.</param>
+            <param name="command">The command.</param>
+            <param name="listQueries">The list queries.</param>
+            <param name="listPrimaryKeyValues">The list primary key values.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteScalar(voidsoft.DataBlock.DatabaseServer,System.String,System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes the query, and returns the first column of the first row
+                in the result set returned by the query. Extra columns or rows are ignored.
+            </summary>
+            <param name="edt">Provider Type</param>
+            <param name="connectionString">Connection String</param>
+            <param name="storedProcedureName">The stored procedure's name</param>
+            <param name="iparams">Stored Procedure's parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteScalar(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Execute scalar method
+            </summary>
+            <param name="database">Database provider dataType</param>
+            <param name="connectionString">Connection string </param>
+            <param name="query">query command</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteScalar(voidsoft.DataBlock.DatabaseServer,System.String,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery},System.Object[]@)">
+            <summary>
+                ExecuteScalar method
+            </summary>
+            <param name="edt">Database provider dataType</param>
+            <param name="connectionString">Connection string</param>
+            <param name="queries">queries</param>
+            <param name="results">query results</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.DatabaseServer,System.String,System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes a query
+            </summary>
+            <param name="database">Database server</param>
+            <param name="connectionString">The connection string</param>
+            <param name="storedProcedureName">Name of the stored procedure</param>
+            <param name="iparams">Array of Parameters</param>
+            <returns>Number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a query
+            </summary>
+            <param name="database">Database provider Type</param>
+            <param name="connectionString">connection string</param>
+            <param name="executionQuery">query command</param>
+            <returns>Returns number of affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.DatabaseServer,System.String,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery},System.Data.IsolationLevel)">
+            <summary>
+                Executes multiple queries in a transaction.
+            </summary>
+            <param name="database">Database provider dataType</param>
+            <param name="connectionString">database connection string</param>
+            <param name="listQueries">List of queries to be executed</param>
+            <param name="isolationLevel">Transaction isolation level</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQuery(voidsoft.DataBlock.DatabaseServer,System.String,System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery},System.Data.IsolationLevel,System.Collections.Generic.List{System.Object}@)">
+            <summary>
+                Executes the  query.
+            </summary>
+            <param name="database">The database.</param>
+            <param name="connectionString">The connection string.</param>
+            <param name="listQueries">The list queries.</param>
+            <param name="isolationLevel">The isolation level.</param>
+            <param name="listPrimaryKeys">The list primary keys.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteXmlReader(System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                ExecuteXmlReader. Supported only by SQL Server 2000(5).
+            </summary>
+            <param name="connectionString">Connection string</param>
+            <param name="executableQuery">Query to be executed</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteReader(voidsoft.DataBlock.DatabaseServer,System.String,System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes a DataReader using the CommandBehaviour.CloseConnection
+            </summary>
+            <param name="edt">Database provider dataType</param>
+            <param name="connection">Connection strings</param>
+            <param name="storedProcedureName">Name of the stored procedure</param>
+            <param name="iparams">Stored PRocedure Parameters</param>
+            <returns>Resulting IDataReader</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteReader(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a DataReader using the CommandBehaviour.CloseConnection connection.
+            </summary>
+            <param name="edt">Database provider dataType</param>
+            <param name="connection">Connection string </param>
+            <param name="executableQuery">Query to be executed</param>
+            <returns>Resulting IDataReader</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(voidsoft.DataBlock.DatabaseServer,System.String,System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes a DataSet
+            </summary>
+            <param name="edt">Provider Type</param>
+            <param name="connectionString">Connection Strinng</param>
+            <param name="storedProcedure">Stored Procedure's name</param>
+            <param name="iparam">Stored Procedure Data Parameters</param>
+            <returns>Resulting DataSet</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery,System.Data.DataSet@)">
+            <summary>
+                Fills the specified dataset with a new DataTable called Table.
+            </summary>
+            <param name="edt">Database server type</param>
+            <param name="connectionString">Connection string used to connect to the database</param>
+            <param name="executableQuery">Query to be executed</param>
+            <param name="ds">The dataset which will be filled.</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataSet(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a DataSet
+            </summary>
+            <param name="edt">Database provider dataType</param>
+            <param name="connectionString">Connection string</param>
+            <param name="executableQuery">Query to be executed</param>
+            <returns>Resulting DataSet</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataTable(voidsoft.DataBlock.DatabaseServer,System.String,System.String,System.Data.IDataParameter[])">
+            <summary>
+                Executes a DataTable
+            </summary>
+            <param name="edt">Provider Type</param>
+            <param name="connectionString">Connection Strinng</param>
+            <param name="storedProcedure">Stored Procedure's name</param>
+            <param name="iparam">Stored Procedure Data Parameters</param>
+            <returns>DataSet</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteDataTable(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.ExecutionQuery)">
+            <summary>
+                Executes a DataSet.
+            </summary>
+            <param name="edt">Database provider dataType</param>
+            <param name="connectionString">Connection string</param>
+            <param name="executableQuery">Query to be executed</param>
+            <returns>DataSet</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ExecuteNonQueryWithPrimaryKey(voidsoft.DataBlock.DatabaseServer,System.Data.Common.DbConnection@,System.Data.Common.DbCommand@,voidsoft.DataBlock.ExecutionQuery,System.String,System.String,System.Object@)">
+            <summary>
+                Executes the query and returns the value of the primary key
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="connection">IDbConnection object</param>
+            <param name="command">IDbCommand object</param>
+            <param name="executableQuery">Query to be executed</param>
+            <param name="primaryKeyFieldName">Name of the primary key field</param>
+            <param name="tableName">Name of the table</param>
+            <param name="insertedPrimaryKeyValue">Value of the inserted primary key</param>
+            <returns>Returns the number of the affected rows</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.HasExecutionConstraints(System.Collections.Generic.List{voidsoft.DataBlock.ExecutionQuery})">
+            <summary>
+                Determines whether the specified queries has constraints.
+            </summary>
+            <param name="queries">The queries.</param>
+            <returns>
+                <c>true</c> if the specified queries has constraints; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionEngine.ReplaceForeignKeyValue(System.String@,System.String)">
+            <summary>
+                Replaces the substitute value with the value of the primary key.
+            </summary>
+            <param name="query"></param>
+            <param name="primaryKeyValue"></param>
+        </member>
+        <member name="T:voidsoft.DataBlock.ExecutionQuery">
+            <summary>
+                Represents the execution context of a query
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionQuery.Parameters">
+            <summary>
+                IDataParameters associated with the query
+            </summary>
+        </member>
+        <member name="F:voidsoft.DataBlock.ExecutionQuery.Query">
+            <summary>
+                SQL query to be executed
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionQuery.#ctor(System.String,System.Data.IDataParameter[])">
+            <summary>
+                Constructor
+            </summary>
+            <param name="query">The Sql query</param>
+            <param name="parameters">IDataParameters associated with the query</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.ExecutionQuery.ToString">
+            <summary>
+                Gets the ExecutionQuery details as a string.
+            </summary>
+            <returns>
+                A <see cref="T:System.String"></see> containing a fully qualified type name.
+            </returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.MySqlQueryCriteriaGenerator">
+            <summary>
+                MySql Query Criteria
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query based on the specified query criteria.
+            </summary>
+            <param name="criteria">QueryCriteria upon which the query is generated </param>
+            <returns>Sql Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateWithJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <remarks>Generste</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateWithoutJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlQueryCriteriaGenerator.GenerateCondition(System.String,voidsoft.DataBlock.CriteriaCondition[],System.Text.StringBuilder@,System.Collections.Generic.List{System.Data.IDataParameter}@)">
+            <summary>
+                Generates the sql query condition
+            </summary>
+            <param name="tableName">Name of the datbase table</param>
+            <param name="conditions">Criteria conditions </param>
+            <param name="sbSqlHeader">StringBuilder which contains the SELECT part of the sql query build so far</param>
+            <param name="listParameters">List with used parameters</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.OracleQueryCriteriaGenerator">
+            <summary>
+                Oracle Query Criteria Generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query based on the specified query criteria.
+            </summary>
+            <param name="criteria">QueryCriteria upon which the query is generated </param>
+            <returns>Sql Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a DELETE query based on the specified QueryCriteria.
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateWithJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query(including joins) based on the specified query criteria
+            </summary>
+            <param name="criteria">QueryCriteria based on which the QueryCriteria is generated</param>
+            <returns>Execution Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateWithoutJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleQueryCriteriaGenerator.GenerateCondition(System.String,voidsoft.DataBlock.CriteriaCondition[],System.Text.StringBuilder@,System.Collections.Generic.List{System.Data.IDataParameter}@)">
+            <summary>
+                Generates the sql query condition
+            </summary>
+            <param name="tableName">Name of the datbase table</param>
+            <param name="conditions">Criteria conditions </param>
+            <param name="sbSqlHeader">StringBuilder which contains the SELECT part of the sql query build so far</param>
+            <param name="listParameters">List with the IDataParameters used in the query</param>
+            <returns>The querie's condition </returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator">
+            <summary>
+                SqlServer Query Criteria Generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query based on the specified query criteria.
+            </summary>
+            <param name="criteria">QueryCriteria upon which the query is generated </param>
+            <returns>Sql Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a DELETE query based on the specified QueryCriteria.
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateWithJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query(including joins) based on the specified query criteria
+            </summary>
+            <param name="criteria">QueryCriteria based on which the QueryCriteria is generated</param>
+            <returns>Execution Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateWithoutJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlQueryCriteriaGenerator.GenerateCondition(System.String,voidsoft.DataBlock.CriteriaCondition[],System.Text.StringBuilder@,System.Collections.Generic.List{System.Data.IDataParameter}@)">
+            <summary>
+                Generates the sql query condition
+            </summary>
+            <param name="tableName">Name of the datbase table</param>
+            <param name="conditions">Criteria conditions </param>
+            <param name="sbSqlHeader">StringBuilder which contains the SELECT part of the sql query build so far</param>
+            <param name="listParameters">List with the IDataParameters used in the query</param>
+            <returns>The querie's condition </returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.QueryCriteriaGeneratorUtilities">
+            <summary>
+                QueryCriteria generator utilities
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.QueryCriteriaGeneratorUtilities.CheckForMalformedSql(System.String)">
+            <summary>
+                Checks for malformed SQL.
+            </summary>
+            <param name="query">The query.</param>
+            <returns></returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator">
+            <summary>
+                SqlServer Query Criteria Generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateSelect(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query based on the specified query criteria.
+            </summary>
+            <param name="criteria">QueryCriteria upon which the query is generated </param>
+            <returns>Sql Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateUpdate(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a UPDATE query based on the specified QueryCriteria
+            </summary>
+            <param name="criteria">QueryCriteria based upon which the query is generated</param>
+            <returns>The resulting ExecutionQuery</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateDelete(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a DELETE query based on the specified QueryCriteria.
+            </summary>
+            <param name="criteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateWithJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query(including joins) based on the specified query criteria
+            </summary>
+            <param name="criteria">QueryCriteria based on which the QueryCriteria is generated</param>
+            <returns>Execution Query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateWithoutJoin(voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates the query without a join
+            </summary>
+            <param name="criteria">The criteria.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerQueryCriteriaGenerator.GenerateCondition(System.String,voidsoft.DataBlock.CriteriaCondition[],System.Text.StringBuilder@,System.Collections.Generic.List{System.Data.IDataParameter}@)">
+            <summary>
+                Generates the sql query condition
+            </summary>
+            <param name="tableName">Name of the datbase table</param>
+            <param name="conditions">Criteria conditions </param>
+            <param name="sbSqlHeader">StringBuilder which contains the SELECT part of the sql query build so far</param>
+            <param name="listParameters">List with the IDataParameters used in the query</param>
+            <returns>The querie's condition </returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.Session">
+            <summary>
+                The session represents a database connection which supports chaining  multiple business objects operations
+                in transactions.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.#ctor">
+            <summary>
+                Constructor
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.Dispose">
+            <summary>
+                Dispose the current session
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.Close">
+            <summary>
+                Close the current session.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.CreateNewSession(voidsoft.DataBlock.DatabaseServer,System.String)">
+            <summary>
+                Creates a new session.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="connectionString">Database connection string</param>
+            <returns>Returns a new session</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.CreateNewSession">
+            <summary>
+                Creates a new session which used the default Configuration data.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+                Begins a new transaction.
+            </summary>
+            <param name="isolationLevel">Transaction isolation level</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.BeginTransaction">
+            <summary>
+                Begins a new transaction.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.Rollback">
+            <summary>
+                Rollback the current transaction
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.Session.Commit">
+            <summary>
+                Commits the current transaction.
+            </summary>
+        </member>
+        <member name="P:voidsoft.DataBlock.Session.Database">
+            <summary>
+                Database server type for which the current session
+                has been initialized.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.Session.ConnectionString">
+            <summary>
+                Connection string used to initialize this session
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.Session.DatabaseConnection">
+            <summary>
+                The underlying datbase connection used by this session
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.Session.IsInTransaction">
+            <summary>
+                Returns true if the current session is in a transaction
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:voidsoft.DataBlock.Session.Queries">
+            <summary>
+                Returns the list of pending queries for the current transaction
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:voidsoft.DataBlock.AccessGenerator">
+            <summary>
+                Microsoft Access generator implementation
+            </summary>
+        </member>
+        <member name="T:voidsoft.DataBlock.ISqlGenerator">
+            <summary>
+                Interface which defines operation that must be implemented by the
+                database specific SQL generators
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType.
+            </summary>
+            <param name="dataType"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along
+                with the attribution operator.
+            </summary>
+            <param name="dataType"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValueWithAttributionOperator(System.Data.IDataParameter)">
+            <summary>
+                Gets the value of the specified IDataParameter along with the
+                attribution operator
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Gets the value of the specified IDataParameter along with the
+                comparasion operator
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along with the
+                comparation operator.
+            </summary>
+            <param name="dataType"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.ISqlGenerator.GeneratePaginatedQuery(voidsoft.DataBlock.TableMetadata,System.Int32,System.Int32)">
+            <summary>
+                Generates a query using paging
+            </summary>
+            <param name="metadata">The metadata.</param>
+            <param name="numberOfItems">The number of items.</param>
+            <param name="pageNumber">The page number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType
+            </summary>
+            <param name="dataType"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns>Name of the parameter</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along
+                with the attribution operator.
+            </summary>
+            <param name="t">The data type</param>
+            <param name="value">The specified value</param>
+            <returns>Returns the value based on the type</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along
+                with the comparation operator.
+            </summary>
+            <param name="t">The data type</param>
+            <param name="value">The value</param>
+            <returns>Returns the value with the comparation operator</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.AccessGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="parameter">IDataParameter from which we return the value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Gets the value.
+            </summary>
+            <param name="t">The t.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns>Parameter's name</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along
+                with the attribution operator.
+            </summary>
+            <param name="t">Data type</param>
+            <param name="value">The value</param>
+            <returns>Returns the specified value</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Returns the value of the specified dataType along
+                with the comparation operator.
+            </summary>
+            <param name="t">Data type</param>
+            <param name="value">Value</param>
+            <returns>The value based on the type</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.MySqlGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="parameter">IDataParameter from which we return the value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.OracleGenerator">
+            <summary>
+                Sql Server generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns>Parameter's name</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the attribution operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.OracleGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="parameter">IDataParameter from which we return the value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.PostgreSqlGenerator">
+            <summary>
+                PostgreSql generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns>Parameter's name</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the attribution operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValueWithAttributionOperator(System.Data.IDataParameter)">
+            <summary>
+                Gets the value of the specified IDataParameter along with the
+                attribution operator
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.PostgreSqlGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="parameter">IDataParameter from which we return the value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.SqlServerGenerator">
+            <summary>
+                Sql Server generator implementation
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GetValue(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GetValue(System.Data.IDataParameter)">
+            <summary>
+                Gets the value from the specified IDataParameter
+            </summary>
+            <param name="param"></param>
+            <returns>Parameter's name</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GetValueWithAttributionOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the attribution operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GetValueWithComparationOperator(System.Data.DbType,System.Object)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="t">The type</param>
+            <param name="value">The value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GeneratePaginatedQuery(voidsoft.DataBlock.TableMetadata,System.Int32,System.Int32)">
+            <summary>
+                Generates a query using paging
+            </summary>
+            <param name="metadata">The metadata.</param>
+            <param name="numberOfItems">The number of items.</param>
+            <param name="pageNumber">The page number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlServerGenerator.GetValueWithComparationOperator(System.Data.IDataParameter)">
+            <summary>
+                Get the value based on the specified type with the comparasion operator
+            </summary>
+            <param name="parameter">IDataParameter from which we return the value</param>
+            <returns>The value in string format</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.GraphBuilder">
+            <summary>
+                Internal class which is used to create high level hierachical representations
+                of related TableMetadata objects
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.GraphBuilder.BuildGraphList(voidsoft.DataBlock.TableMetadata,System.Collections.Generic.List{System.Object}@,System.Collections.Generic.List{System.String}@)">
+            <summary>
+                Gets the graph list of a hierachical TableMetadata objects.
+                Also it adds the INSERT (FK) contraints into the hierachy.
+            </summary>
+            <param name="entity">Main TableMetadata which is the root of the graph</param>
+            <param name="list">List which contains the resulted data</param>
+            <param name="listTablesNames">List which contains the name of the tables</param>
+        </member>
+        <member name="M:voidsoft.DataBlock.GraphBuilder.GetAttachedDataBasedOnRelationType(voidsoft.DataBlock.TableMetadata,System.Boolean)">
+            <summary>
+                Returns the attached table metadata from the main table based on the
+                relation type.
+            </summary>
+            <param name="entity">Parent TableMetadata</param>
+            <param name="parentRelations">Boolean flag which signals that only </param>
+            <returns>List of the attached data</returns>
+        </member>
+        <member name="T:voidsoft.DataBlock.SqlGenerator">
+            <summary>
+                This is the SqlGenerator which generates sql queries for the specified
+                database server.
+            </summary>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.QueryCriteria)">
+            <summary>
+                Generates a query based on a QueryCriteria. This function generates only the
+                query header without the citeria
+            </summary>
+            <param name="database">Database type for which we generate the query</param>
+            <param name="criteria">QueryCriteria based on which the query is generated</param>
+            <returns>Generated ExecutionQuery</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,System.Boolean)">
+            <summary>
+                Generates a SELECT query
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="mainTable">TableMetadata based on which we generate the query</param>
+            <param name="generateConditionByPrimaryKey">Flag used to know if we generate a condition by the primary key field</param>
+            <returns>Returns the generated SELECT ExecutionQuery</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField[],System.Boolean)">
+            <summary>
+                Generates a SELECT query
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="tableName">Name of the table</param>
+            <param name="fields">List of DatabaseFields based on which we generate the condition</param>
+            <param name="generateConditionByPrimaryKey">Flag used to know if we generate a condition by the primary key field</param>
+            <returns>Returns the SELECT query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a SELECT query
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="mainTable">TableMetadata from which we generate the sql query</param>
+            <param name="conditionalFields">List of conditional DatbaseFields</param>
+            <returns>Returns the SELECT query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField[],voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a SELECT query
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="tableName">Table's name</param>
+            <param name="fields">DatabaseFields from which the query is generated</param>
+            <param name="conditionalFields">Fields from which the condition is generated</param>
+            <returns>Returns the SELECT query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a SELECT(*) query
+            </summary>
+            <param name="database">Database server dataType</param>
+            <param name="tableName">Name of the table</param>
+            <param name="conditionalFields">DatabaseFields from which the condition is generated</param>
+            <returns>Returns the SELECT query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateSelectPaginatedQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,System.Int32,System.Int32)">
+            <summary>
+                Generates the select paginated query.
+            </summary>
+            <param name="database">The database.</param>
+            <param name="metadata">The metadata.</param>
+            <param name="numberOfItems">The number of items.</param>
+            <param name="pageNumber">The page number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateInsertQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.DatabaseField[],System.String)">
+            <summary>
+                Generates a INSERT query for a single table
+            </summary>
+            <param name="database">Database server</param>
+            <param name="fields">Array of DatabaseFields from which the query is generated</param>
+            <param name="tableName">Name of the table</param>
+            <returns>The generated query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateInsertQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Generates a INSERT query for a single table
+            </summary>
+            <param name="database">Database server</param>
+            <param name="entity">TableMetadata from which the query is generated</param>
+            <returns>The generated query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateDeleteQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,System.Boolean)">
+            <summary>
+                Generates a DELETE query for a single table
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="table">TableMetadata from which we generate the statement</param>
+            <param name="generateConditionOnlyByPrimaryKey">Boolean flag to know if we generate the "WHERE" clause by the primary key or by all the fields </param>
+            <returns>Returns the DELETE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateDeleteQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a DELETE query for a single table
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="table">TableMetadata from which we generate the statement</param>
+            <param name="conditionalFields">DatabaseFields from which the condition is generated</param>
+            <returns>Returns the DELETE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateDeleteQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a DELETE query for a single table
+            </summary>
+            <param name="database">Database server type </param>
+            <param name="tableName">Name of the table</param>
+            <param name="conditionalField">DatabaseFields array from which we generate the statement</param>
+            <returns>Returns the DELETE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateUpdateQuery(voidsoft.DataBlock.DatabaseServer,System.String,voidsoft.DataBlock.DatabaseField[],System.Boolean)">
+            <summary>
+                Generates a UPDATE query for a single table
+            </summary>
+            <param name="database">Database server</param>
+            <param name="tableName">Name of the table</param>
+            <param name="fields">DatabaseField array from which the query is generated </param>
+            <param name="generateConditionByPrimaryKey">Boolean flag which signals if a "WHERE" condition is added based on the primary key</param>
+            <returns>The generated execution query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateUpdateQuery(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata,System.Boolean)">
+            <summary>
+                Generates a UPDATE query for a single table
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="table">TableMetadata from which we generate the statement.</param>
+            <param name="generateConditionByPrimaryKey">Flag used to know if a condition is generated using the primary key</param>
+            <returns>Returns the UPDATE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateUpdateQuery(voidsoft.DataBlock.DatabaseServer,System.String,System.Boolean,voidsoft.DataBlock.DatabaseField,voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a UPDATE query for a single table
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="tableName">Name of the table</param>
+            <param name="skipConditionalFieldsFromUpdateList">Flag used to determine if the conditional fields are included in the list of the updated fields</param>
+            <param name="conditionalField">DatabaseField from which the condition statement is generated</param>
+            <param name="updateFields">DatabaseFields which will be updated</param>
+            <returns>Returns the UPDATE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateUpdateQuery(voidsoft.DataBlock.DatabaseServer,System.String,System.Boolean,voidsoft.DataBlock.DatabaseField[],voidsoft.DataBlock.DatabaseField[])">
+            <summary>
+                Generates a UPDATE query for a single table
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="tableName">Name of the table</param>
+            <param name="skipConditionalFieldsFromUpdateList">Flag used to determine if the conditional fields are included in the list of the updated fields</param>
+            <param name="conditionalFields">Database fields from which the "WHERE" clause is generated</param>
+            <param name="updatedFields">DatabaseFields which will be updated.</param>
+            <returns>Returns the UPDATE query</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateMultipleDeleteQueries(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Generates DELETE queries for the parent table and her related tables.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="table">TableMetadata based on which we generate the query</param>
+            <returns>List containing the queries</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateMultipleInsertQueries(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Generates INSERT queries for the parent table and her related tables.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="mainTable">TableMetadata based on which we generate the query</param>
+            <returns>List containing the queries</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GenerateMultipleUpdateQueries(voidsoft.DataBlock.DatabaseServer,voidsoft.DataBlock.TableMetadata)">
+            <summary>
+                Generates syncronization queries for the parent table and her related tables.
+            </summary>
+            <param name="database">Database server type</param>
+            <param name="mainTable">TableMetadata based on which we generate the queries</param>
+            <returns>List containing the queries</returns>
+        </member>
+        <member name="M:voidsoft.DataBlock.SqlGenerator.GetTableName(voidsoft.DataBlock.DatabaseServer,System.String)">
+            <summary>
+                Returns the proper name for a table's name to be used in a query.
+                This is for used for table name's that have blank spaces in their names.
+            </summary>
+            <param name="database">Database server dataType for which we return the modified table name</param>
+            <param name="tableName">Table Name</param>
+            <returns>Returns the table's name</returns>
+        </member>
+    </members>
+</doc>

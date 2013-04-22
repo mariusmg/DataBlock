@@ -1,0 +1,3 @@
+table=dbo.Orders; type=ParentChild; cardinality=OneToMany; relatedTableName=dbo.OrdersProducts; FKFieldName=OrderId; cascadedeletechildren=false
+table=dbo.OrdersProducts; type=ChildParent; cardinality=OneToOne; relatedTableName=dbo.Orders; FKFieldName=OrderId; PKFieldName=OrderId;
+

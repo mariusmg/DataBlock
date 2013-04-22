@@ -1,0 +1,4 @@
+//sample relations
+
+table=Newsletter; type=ChildParent; cardinality=OneToOne; relatedTableName=Category; FKFieldName=NewsletterId; PKFieldName=Id
+

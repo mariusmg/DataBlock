@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C54D5501-FACC-422C-9FFE-991D0F4655D6}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>voidsoft.DataBlock</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>voidsoft.DataBlock</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\voidsoft.DataBlock.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>voidsoft.DataBlock.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DEMO|AnyCPU' ">
+    <OutputPath>bin\Demo\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>voidsoft.DataBlock.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExecutionEngine\ConstraintManager.cs" />
+    <Compile Include="ExecutionEngine\ExecutionEngineLogger.cs" />
+    <Compile Include="ExecutionEngine\PrimaryKeyConstraint.cs" />
+    <Compile Include="Mapping\MetadataManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExecutionEngine\ForeignKeyConstraint.cs" />
+    <Compile Include="DatabaseField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Log.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConvertor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseServer.cs" />
+    <Compile Include="DataBlockException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\TableRelationCardinality.cs" />
+    <Compile Include="Mapping\TableMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\TableRelations\ManyToManyTableRelation.cs" />
+    <Compile Include="Mapping\TableRelations\TableRelation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\TableRelationMode.cs" />
+    <Compile Include="Mapping\TableRelations\ChildTableRelation.cs" />
+    <Compile Include="Mapping\TableRelations\ParentTableRelation.cs" />
+    <Compile Include="Operation.cs" />
+    <Compile Include="Persistance\PersistentObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\CriteriaAlias.cs" />
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\CriteriaOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\CriteriaCondition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QueryCriteria\IQueryCriteriaGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\JoinCriteriaCondition.cs" />
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\JoinType.cs" />
+    <Compile Include="QueryCriteria\QueryCriteria.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QueryCriteria\QueryCriteria Internal Objects\QueryCriteriaGeneratorType.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGenerators\AccessQueryCriteriaGenerator.cs" />
+    <Compile Include="ExecutionEngine\ExecutionEngine.cs" />
+    <Compile Include="ExecutionEngine\ExecutionEngineStatic.cs" />
+    <Compile Include="ExecutionEngine\ExecutionQuery.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGenerators\MySqlQueryCriteriaGenerator.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGenerators\OracleQueryCriteriaGenerator.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGenerators\PostgreSqlQueryCriteriaGenerator.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGeneratorUtilities.cs" />
+    <Compile Include="QueryCriteria\QueryCriteriaGenerators\SqlServerQueryCriteriaGenerator.cs" />
+    <Compile Include="Session.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\AccessGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\MySqlGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\OracleGenerator.cs" />
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\PostgreSqlGenerator.cs" />
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\SqlServerGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlGenerator\GraphBuilder.cs" />
+    <Compile Include="SqlGenerator\Database Specific SqlGenerator\ISqlGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlGenerator\SqlGenerator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataBlock Class Diagram.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

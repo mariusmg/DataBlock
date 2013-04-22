@@ -1,0 +1,60 @@
+
+READ THIS CAREFULLY
+
+Please read this agreement carefully before installing DataBlock. By installing and using our software, you acknowledge that you have read this agreement, understand it and agree to be bound by its terms and conditions.
+
+This DataBlock End-User License Agreement ("Agreement") is a legal agreement between you (either an individual or a single entity known as "Customer") and voidsoft, which owns a proprietary computer software and "on-line" or electronic documentation (collectively known as "DataBlock" or "Software"). By installing, copying, or otherwise using the Software or any Software Updates, Customer agrees to be bound by the terms of this Agreement. If Customer does not agree to the terms of this Agreement, do not install, copy, or use the Software, including all Software Updates that Customer received as part of the Software (each, an "Update").
+
+1. Copyright
+
+All title and copyrights in and to the Software (including but not limited to any software components, product documentation and associated media, sample files, extension files, tools and utilities, miscellaneous technical information, collectively referred to herein as the "Software"), and any copies of the Software, are owned by voidsoft LLC. The Software is protected by romanian copyright laws and international treaty provisions. Therefore, you must treat the Software like any other copyrighted material, except that Customer may either (i) make one copy of the Software solely for backup or archival purposes, provided Customer reproduces and includes voidsoft's copyright and trademark notices contained on the original disk labels on such backup copy, or (ii) transfer the Software to a hard disk, provided Customer keeps the original solely for backup and archival purposes. The Software is licensed, not sold.
+
+
+2. Grant of License
+
+a. voidsoft LLC grants Customer use of the Software only if Customer has purchased an unlock code for the Software.
+
+b. voidsoft LLC grants Customer a non- exclusive license to use voidsoft's DataBlock computer software (the "Software")
+
+c. Acceptance: DataBlockshall be deemed accepted by Customer upon payment of the Software by Customer.
+
+
+3. Other Restrictions
+
+a. The Software is the sole and exclusive property of voidsoft LLC, including all applicable rights to patents, copyrights, trademarks and trade secrets and is provided for Customer's exclusive use for the purposes of this Agreement and will be held in confidence.
+
+b. Customer will not remove any designation mark from any supplied material that identifies such material as belonging to or developed by voidsoft LLC. Customer agrees not to disassemble, decompile, reverse engineer or otherwise reduce the Software to perceptible form.
+
+c. Customer may not rent, lease, or sub license the Software.
+
+d. Customer may not redistribute the evaluation version of the software or the generated files under any circumstances.
+You are however entitled to distibute the files however you see fit when you purchase a license.
+
+e. Customer may permanently transfer all of Customer's rights under this Agreement, provided Customer retains no copies, Customer transfers all of the Software (including all component parts, the media and printed materials, any upgrades, and this Agreement), Customer provides voidsoft LLC notice of Customer's name, company, and address and the name, company, and address of the person to whom Customer is transferring the rights granted herein, and the recipient agrees to the terms of this Agreement and pays to voidsoft LLC a transfer fee in an amount to be determined by voidsoft LLC and in effect at the time in question. If the Software is an upgrade, any transfer must include all prior versions of the Software. If the Software is received as part of a subscription, any transfer must include all prior deliverables of Software and all other subscription deliverables. Upon such transfer, Customer's license under this Agreement is automatically terminated.
+
+e. Customer may use or transfer the Updates to the Software only in conjunction with Customer's then-existing Software. The Software and all Updates are licensed as a single product and the Updates may not be separated from the Software for use at any time.
+
+f. Customer must be 18 years or older and an adult in his/her jurisdiction.
+
+g. We cannot guarantee that the Software will work for all times. 
+
+h. All title and intellectual property rights in and to the content which may be accessed through use of the Software are the property of the respective content owner and may be protected by applicable copyright or other intellectual property laws and treaties. This Agreement grants you no rights to use such content.
+
+h. All trademarks are owned by their respective holders.
+
+ 
+4. Termination
+
+Without prejudice to any other rights, voidsoft LLC may terminate this Agreement if Customer fails to comply with the terms and conditions of this Agreement. In such event, Customer must destroy all copies of the Software in any form and all of its component parts.
+
+
+5. Disclaimer of Warranty
+
+a. NO WARRANTIES. THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, voidsoft LLC DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AND ANY WARRANTY AGAINST INFRINGEMENT, WITH REGARD TO THE SOFTWARE. 
+
+b. NO LIABILITY FOR DAMAGES. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL voidsoft LLC BE LIABLE FOR ANY DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OR INABILITY TO USE THE SOFTWARE. 
+
+c. voidsoft LLC shall be relieved of any and all obligations with respect to this section for any portions of the Software that are revised, changed, modified, or maintained by anyone other than voidsoft LLC.
+
+
+Copyright © 2004-2005 voidsoft LLC - http://www.voidsoft.ro
