@@ -148,11 +148,14 @@ namespace voidsoft.DataBlock
 		{
 			StringBuilder builder = new StringBuilder();
 
+			SqlGenerator generator = new SqlGenerator();
+
+
 			//SELECT TOP 5 * FROM items WHERE intitemid NOT IN (SELECT TOP 10 intitemid FROM items ORDER BY intitemid) ORDER BY intitemid asc
 
 			DatabaseField field = metadata.GetPrimaryKeyField();
 
-			string tableName = SqlGenerator.GetTableName(DatabaseServer.SqlServer, metadata.TableName);
+			string tableName = generator.GetTableName(DatabaseServer.SqlServer, metadata.TableName);
 
 			builder.Append("SELECT TOP ");
 			builder.Append(numberOfItems.ToString());

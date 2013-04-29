@@ -81,7 +81,7 @@ namespace voidsoft.DataBlock
 			int modifiedRows = 0;
 
 			//log data
-			ExecutionEngineLogger.LogContext(listQueries);
+			(new ExecutionEngineLogger()).LogContext(listQueries);
 
 			for (int i = 0; i < listQueries.Count; i++)
 			{
@@ -247,7 +247,7 @@ namespace voidsoft.DataBlock
 				}
 
 
-				ExecutionEngineLogger.LogContext(storedProcedureName);
+				(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 				return (result = icmd.ExecuteScalar());
 			}
@@ -298,7 +298,7 @@ namespace voidsoft.DataBlock
 
 
 				//log data
-				ExecutionEngineLogger.LogContext(queries);
+				(new ExecutionEngineLogger()).LogContext(queries);
 
 				icon.ConnectionString = connectionString;
 				icmd.Connection = icon;
@@ -371,7 +371,7 @@ namespace voidsoft.DataBlock
 
 
 				//logs the message
-				ExecutionEngineLogger.LogContext(storedProcedureName);
+				(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 				return icmd.ExecuteNonQuery();
 			}
@@ -420,7 +420,7 @@ namespace voidsoft.DataBlock
 
 
 				//log query
-				ExecutionEngineLogger.LogContext(executionQuery);
+				(new ExecutionEngineLogger()).LogContext(executionQuery);
 
 				return icmd.ExecuteNonQuery();
 			}
@@ -556,7 +556,7 @@ namespace voidsoft.DataBlock
 
 
 			//log queries
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			icon.Open();
 
@@ -601,7 +601,7 @@ namespace voidsoft.DataBlock
 				}
 			}
 
-			ExecutionEngineLogger.LogContext(storedProcedureName);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 			icmd.Connection = icon;
 			iread = icmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -645,7 +645,7 @@ namespace voidsoft.DataBlock
 			icmd.CommandType = CommandType.Text;
 			icmd.CommandText = executableQuery.Query;
 
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			icon.Open();
 
@@ -692,7 +692,7 @@ namespace voidsoft.DataBlock
 					}
 				}
 
-				ExecutionEngineLogger.LogContext(storedProcedure);
+				(new ExecutionEngineLogger()).LogContext(storedProcedure);
 
 				icmd.CommandType = CommandType.StoredProcedure;
 				icmd.CommandText = storedProcedure;
@@ -749,7 +749,7 @@ namespace voidsoft.DataBlock
 				idap.SelectCommand = icmd;
 
 				//log the query
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				icon.Open();
 
@@ -802,7 +802,7 @@ namespace voidsoft.DataBlock
 				idap.SelectCommand = icmd;
 
 				//log the queries
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				icon.Open();
 
@@ -855,7 +855,7 @@ namespace voidsoft.DataBlock
 				}
 
 				//log the message
-				ExecutionEngineLogger.LogContext(storedProcedure);
+				(new ExecutionEngineLogger()).LogContext(storedProcedure);
 
 				icmd.CommandType = CommandType.StoredProcedure;
 				icmd.CommandText = storedProcedure;
@@ -913,7 +913,7 @@ namespace voidsoft.DataBlock
 				idap.SelectCommand = icmd;
 
 				//log the queries
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				icon.Open();
 
@@ -949,7 +949,7 @@ namespace voidsoft.DataBlock
 
 
 			//log data
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			command.Parameters.Clear();
 

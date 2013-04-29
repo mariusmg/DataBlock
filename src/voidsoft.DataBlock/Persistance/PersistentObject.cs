@@ -1,7 +1,7 @@
 /*
   	    
         file: PersistentObject class 
- description: Contains object persistance logic. This is the class upon which the BusinessObject are created.	 
+ description: Contains object persistence logic. This is the class upon which the BusinessObject are created.	 
      
 
   (c) 2004 - 2006 Marius Gheorghe. All rights reserved.
@@ -37,8 +37,6 @@ namespace voidsoft.DataBlock
 		///     The dataType of the database server.
 		/// </summary>
 		protected DatabaseServer database;
-
-		private bool disposed;
 
 		/// <summary>
 		///     Execution Engine instance.This is valid only when the PersistentObject is instantiated with a Session.
@@ -80,7 +78,8 @@ namespace voidsoft.DataBlock
 		///     Initialize a new PersistentObject
 		/// </summary>
 		/// <param name="mainTable"></param>
-		public PersistentObject(TableMetadata mainTable) : this(Configuration.DatabaseServerType, Configuration.ConnectionString, mainTable)
+		public PersistentObject(TableMetadata mainTable)
+			: this(Configuration.DatabaseServerType, Configuration.ConnectionString, mainTable)
 		{
 		}
 
@@ -110,34 +109,17 @@ namespace voidsoft.DataBlock
 			}
 		}
 
-		/// <summary>
-		///     Destructor
-		/// </summary>
-		~PersistentObject()
-		{
-			if (disposed)
-			{
-				GC.SuppressFinalize(this);
-			}
-		}
 
 		/// <summary>
 		///     Dispose
 		/// </summary>
 		public void Dispose()
 		{
-			if (!disposed)
+			if (execEngine != null)
 			{
-				if (execEngine != null)
-				{
-					execEngine.Dispose();
-				}
-
-				disposed = true;
+				execEngine.Dispose();
 			}
 		}
-
-
 
 		public object GetLastInsertedPK()
 		{
@@ -194,9 +176,12 @@ namespace voidsoft.DataBlock
 		{
 			DataTable dsTemp = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
+
 			try
 			{
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject, false);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject, false);
 
 				dsTemp = new DataTable();
 
@@ -215,7 +200,7 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -228,6 +213,8 @@ namespace voidsoft.DataBlock
 		{
 			DataTable ds = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				if (fields.Length == 0)
@@ -237,7 +224,7 @@ namespace voidsoft.DataBlock
 
 				ds = new DataTable();
 
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
 
 				if (contextSession != null)
 				{
@@ -253,7 +240,7 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -265,7 +252,9 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		public DataTable GetDataTablePaginated(int numberOfItems, int pageNumber)
 		{
-			ExecutionQuery query = SqlGenerator.GenerateSelectPaginatedQuery(database, mappedObject, numberOfItems, pageNumber);
+			SqlGenerator generator = new SqlGenerator();
+
+			ExecutionQuery query = generator.GenerateSelectPaginatedQuery(database, mappedObject, numberOfItems, pageNumber);
 
 			DataTable table;
 
@@ -325,10 +314,11 @@ namespace voidsoft.DataBlock
 		public DataSet GetDataSet()
 		{
 			DataSet dsTemp = null;
+			SqlGenerator generator = new SqlGenerator();
 
 			try
 			{
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject, false);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject, false);
 
 				dsTemp = new DataSet();
 
@@ -347,7 +337,7 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -360,6 +350,8 @@ namespace voidsoft.DataBlock
 		public DataSet GetDataSet(string relatedTableName, object foreignKeyValue)
 		{
 			DataSet ds = null;
+
+			SqlGenerator generator = new SqlGenerator();
 
 			try
 			{
@@ -381,18 +373,18 @@ namespace voidsoft.DataBlock
 							DatabaseField primaryKeyField = mappedObject.GetPrimaryKeyField();
 
 							//this is the parent so we select from the child table.
-							keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation) relations[i]).ForeignKeyName, false, false, foreignKeyValue);
+							keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation)relations[i]).ForeignKeyName, false, false, foreignKeyValue);
 						}
 						else
 						{
 							//child relation 
-							ChildTableRelation childRelation = (ChildTableRelation) relations[i];
+							ChildTableRelation childRelation = (ChildTableRelation)relations[i];
 
 							//this is the child so get data from the parent
 							keyField = new DatabaseField(mappedObject.GetPrimaryKeyField().fieldType, childRelation.RelatedTableKeyName, true, false, foreignKeyValue);
 						}
 
-						selectQuery = SqlGenerator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
+						selectQuery = generator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
 						break;
 					}
 				}
@@ -429,6 +421,8 @@ namespace voidsoft.DataBlock
 		public DataSet GetDataSet(params DatabaseField[] fields)
 		{
 			DataSet ds = null;
+			SqlGenerator generator = new SqlGenerator();
+
 
 			try
 			{
@@ -439,7 +433,7 @@ namespace voidsoft.DataBlock
 
 				ds = new DataSet();
 
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
 
 				if (contextSession != null)
 				{
@@ -496,7 +490,8 @@ namespace voidsoft.DataBlock
 		{
 			try
 			{
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject, false);
+				SqlGenerator generator = new SqlGenerator();
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject, false);
 				return GetTableMetadata(selectQuery);
 			}
 			catch (Exception ex)
@@ -526,7 +521,7 @@ namespace voidsoft.DataBlock
 
 				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
 
-				TableMetadata[] metadatas = (TableMetadata[]) GetTableMetadata(selectQuery);
+				TableMetadata[] metadatas = (TableMetadata[])GetTableMetadata(selectQuery);
 
 				return metadatas[0];
 			}
@@ -546,6 +541,8 @@ namespace voidsoft.DataBlock
 		{
 			ISqlGenerator isql = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				//generate select statement
@@ -561,20 +558,20 @@ namespace voidsoft.DataBlock
 				pkField.fieldValue = primaryKeyValue;
 
 				//generate select query
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, mappedObject.TableFields, pkField);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, mappedObject.TableFields, pkField);
 
-				TableMetadata table = (TableMetadata) Activator.CreateInstance(mappedObject.GetType());
+				TableMetadata table = (TableMetadata)Activator.CreateInstance(mappedObject.GetType());
 
 				ArrayList alList = MapDataReaderToTableMetadata(selectQuery, table);
 
-				table = (TableMetadata) alList[0];
+				table = (TableMetadata)alList[0];
 
 				return table;
 			}
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -589,6 +586,8 @@ namespace voidsoft.DataBlock
 		public Array GetTableMetadata(string relatedTableName, Type classType, object foreignKeyValue)
 		{
 			ArrayList alList = null;
+
+			SqlGenerator generator = new SqlGenerator();
 
 			try
 			{
@@ -611,18 +610,18 @@ namespace voidsoft.DataBlock
 							DatabaseField primaryKeyField = mappedObject.GetPrimaryKeyField();
 
 							//this is the parent so we select from the child table.
-							keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation) relations[i]).ForeignKeyName, false, false, foreignKeyValue);
+							keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation)relations[i]).ForeignKeyName, false, false, foreignKeyValue);
 						}
 						else
 						{
 							//child relation 
-							ChildTableRelation childRelation = (ChildTableRelation) relations[i];
+							ChildTableRelation childRelation = (ChildTableRelation)relations[i];
 
 							//this is the child so get data from the parent
 							keyField = new DatabaseField(mappedObject.GetPrimaryKeyField().fieldType, childRelation.RelatedTableKeyName, true, false, foreignKeyValue);
 						}
 
-						selectQuery = SqlGenerator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
+						selectQuery = generator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
 
 						break;
 					}
@@ -635,7 +634,7 @@ namespace voidsoft.DataBlock
 
 				object tableMetadata = Activator.CreateInstance(classType);
 
-				alList = MapDataReaderToTableMetadata(selectQuery, (TableMetadata) tableMetadata);
+				alList = MapDataReaderToTableMetadata(selectQuery, (TableMetadata)tableMetadata);
 
 				Array array = Array.CreateInstance(classType, alList.Count);
 
@@ -721,11 +720,13 @@ namespace voidsoft.DataBlock
 			IDataReader iread = null;
 			ArrayList alData = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				alData = new ArrayList();
 
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, new DatabaseField[1] {field}, null);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, new DatabaseField[1] { field }, null);
 
 				if (contextSession != null)
 				{
@@ -770,13 +771,15 @@ namespace voidsoft.DataBlock
 			IDataReader iread = null;
 			SortedList scData = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				DatabaseField[] fields = new DatabaseField[2];
 				fields[0] = idField;
 				fields[1] = descriptionField;
 
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
 
 				scData = new SortedList();
 
@@ -860,6 +863,8 @@ namespace voidsoft.DataBlock
 		/// <returns>Returns true if a field with the specified fieldValue is found</returns>
 		public bool IsUnique(DatabaseField field, object value)
 		{
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				//TODO: implement this with count
@@ -868,7 +873,7 @@ namespace voidsoft.DataBlock
 				field.fieldValue = value; //set the new fieldValue to the field
 
 				//get the execution query
-				ExecutionQuery selectQuery = SqlGenerator.GenerateSelectQuery(database, mappedObject.TableName, field);
+				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, field);
 
 				object resultValue = null;
 
@@ -919,7 +924,7 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		public object GetMax(DatabaseField field)
 		{
-			return (int) RunIntrinsecFunction(CriteriaOperator.Max, field);
+			return (int)RunIntrinsecFunction(CriteriaOperator.Max, field);
 		}
 
 		/// <summary>
@@ -929,7 +934,7 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		public object GetMin(DatabaseField field)
 		{
-			return (int) RunIntrinsecFunction(CriteriaOperator.Min, field);
+			return (int)RunIntrinsecFunction(CriteriaOperator.Min, field);
 		}
 
 		/// <summary>
@@ -938,7 +943,7 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		public int GetCount()
 		{
-			return (int) RunIntrinsecFunction(CriteriaOperator.Count, mappedObject[0]);
+			return (int)RunIntrinsecFunction(CriteriaOperator.Count, mappedObject[0]);
 		}
 
 		/// <summary>
@@ -953,6 +958,8 @@ namespace voidsoft.DataBlock
 
 			DatabaseField field = metaTable.GetPrimaryKeyField();
 
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				listQueries = new List<ExecutionQuery>();
@@ -965,7 +972,7 @@ namespace voidsoft.DataBlock
 				if (attachedData.Length == 0)
 				{
 					//generate the sql command
-					ExecutionQuery insertQuery = SqlGenerator.GenerateInsertQuery(database, metaTable);
+					ExecutionQuery insertQuery = generator.GenerateInsertQuery(database, metaTable);
 
 					//add PK constraint if necessary
 					if (field.isValueAutogenerated)
@@ -978,7 +985,7 @@ namespace voidsoft.DataBlock
 				else
 				{
 					//generate the multiple table's insert.
-					List<ExecutionQuery> multipleQueries = SqlGenerator.GenerateMultipleInsertQueries(database, metaTable);
+					List<ExecutionQuery> multipleQueries = generator.GenerateMultipleInsertQueries(database, metaTable);
 					// containsSpecialModifications = true;
 
 					//add the queries to the 
@@ -1021,7 +1028,7 @@ namespace voidsoft.DataBlock
 						List<object> listPrimaryKeysValues = new List<object>();
 
 						resultCounter = ExecutionEngine.ExecuteNonQuery(database, connectionString, listQueries, Configuration.DefaultTransactionIsolationLevel,
-						                                                out listPrimaryKeysValues);
+																		out listPrimaryKeysValues);
 
 						if (listPrimaryKeysValues.Count > 0)
 						{
@@ -1041,7 +1048,7 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -1053,13 +1060,15 @@ namespace voidsoft.DataBlock
 		{
 			List<ExecutionQuery> scQueries = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			int resultCounter = 0;
 
 			try
 			{
 				scQueries = new List<ExecutionQuery>();
 
-				List<ExecutionQuery> listQueries = SqlGenerator.GenerateMultipleUpdateQueries(database, mainTable);
+				List<ExecutionQuery> listQueries = generator.GenerateMultipleUpdateQueries(database, mainTable);
 
 				foreach (ExecutionQuery var in listQueries)
 				{
@@ -1093,7 +1102,7 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw;
 			}
 		}
 
@@ -1232,10 +1241,12 @@ namespace voidsoft.DataBlock
 		/// <param name="mainTable">TableMetadata to be deleted</param>
 		public int Delete(TableMetadata mainTable)
 		{
+			SqlGenerator generator = new SqlGenerator();
+
 			try
 			{
 				//generated sql command to delete data from the parent table.
-				List<ExecutionQuery> listQueries = SqlGenerator.GenerateMultipleDeleteQueries(database, mainTable);
+				List<ExecutionQuery> listQueries = generator.GenerateMultipleDeleteQueries(database, mainTable);
 
 				int affectedRows = 0;
 
@@ -1353,7 +1364,7 @@ namespace voidsoft.DataBlock
 				while (iread.Read())
 				{
 					//create a instance of the table metadata
-					TableMetadata tempTable = (TableMetadata) Activator.CreateInstance(table.GetType());
+					TableMetadata tempTable = (TableMetadata)Activator.CreateInstance(table.GetType());
 
 					//set the field's fieldValue
 					for (int i = 0; i < columnCount; i++)

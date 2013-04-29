@@ -20,7 +20,7 @@ namespace voidsoft.DataBlock
 	/// <summary>
 	///     Contains conversion methods
 	/// </summary>
-	public static class DataConvertor
+	public class DataConvertor
 	{
 		//const used to generate unique names for the IDataParameters.
 		private const string PARAMETER_NAME_ENDING = "Next";
@@ -31,8 +31,7 @@ namespace voidsoft.DataBlock
 		/// <param name="database">Database server type</param>
 		/// <param name="mainTable">TableMetadata from which the conversion is made</param>
 		/// <returns>IDataParameter array </returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static IDataParameter[] ConvertToDataParameter(DatabaseServer database, TableMetadata mainTable)
+		public IDataParameter[] ConvertToDataParameter(DatabaseServer database, TableMetadata mainTable)
 		{
 			IDataParameter[] parameters = new IDataParameter[mainTable.TableFields.Length];
 
@@ -56,8 +55,7 @@ namespace voidsoft.DataBlock
 		/// <param name="database">Database server type</param>
 		/// <param name="fields">Fields to be converted</param>
 		/// <returns>Array of IDataParameter</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static IDataParameter[] ConvertToDataParameter(DatabaseServer database, params DatabaseField[] fields)
+		public IDataParameter[] ConvertToDataParameter(DatabaseServer database, params DatabaseField[] fields)
 		{
 			if (fields == null || fields.Length == 0)
 			{
@@ -100,13 +98,14 @@ namespace voidsoft.DataBlock
 		/// <param name="tableName">Name of the database table</param>
 		/// <param name="field">Field to be converted</param>
 		/// <returns>The IDataParameter</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static IDataParameter ConvertToDataParameter(DatabaseServer database, string tableName, DatabaseField field)
+		public IDataParameter ConvertToDataParameter(DatabaseServer database, string tableName, DatabaseField field)
 		{
 			IDataParameter parameter = null;
 			DataFactory.InitializeDataParameter(database, ref parameter);
 
-			parameter.ParameterName = DataFactory.GetParameterChar(database).ToString() + SqlGenerator.GetTableName(tableName) + field.fieldName;
+			SqlGenerator generator = new SqlGenerator();
+
+			parameter.ParameterName = DataFactory.GetParameterChar(database).ToString() + generator.GetTableName(tableName) + field.fieldName;
 			parameter.SourceColumn = field.fieldName;
 
 			if (field.fieldValue == null)
@@ -132,14 +131,15 @@ namespace voidsoft.DataBlock
 		/// <param name="field">DatabaseField which will be converted</param>
 		/// <param name="listUsedParameterNames">List with used names of a parameter. When the name of the parameter is given it is checked against the values in this list. If the name if found then it is changed to be unique</param>
 		/// <returns>The IDataParameter</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static IDataParameter ConvertToDataParameter(DatabaseServer database, string tableName, DatabaseField field, ref List<string> listUsedParameterNames)
+		public IDataParameter ConvertToDataParameter(DatabaseServer database, string tableName, DatabaseField field, ref List<string> listUsedParameterNames)
 		{
 			IDataParameter parameter = null;
 
+			SqlGenerator generator = new SqlGenerator();
+
 			DataFactory.InitializeDataParameter(database, ref parameter);
 
-			string parameterName = DataFactory.GetParameterChar(database) + SqlGenerator.GetTableName(tableName) + field.fieldName;
+			string parameterName = DataFactory.GetParameterChar(database) + generator.GetTableName(tableName) + field.fieldName;
 
 			while (listUsedParameterNames.Contains(parameterName))
 			{
@@ -172,8 +172,7 @@ namespace voidsoft.DataBlock
 		/// <typeparam name="T"></typeparam>
 		/// <param name="t">The t.</param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static TableMetadata ConvertTypeToTableMetadata<T>(T t)
+		public TableMetadata ConvertTypeToTableMetadata<T>(T t)
 		{
 			TableMetadata metadata = new TableMetadata();
 
@@ -216,8 +215,7 @@ namespace voidsoft.DataBlock
 		/// <param name="table">DataTable which contains the data </param>
 		/// <param name="metadata">Type of TableMetadata</param>
 		/// <returns>TableMetadata array which holds the converted items</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static Array ConvertToTableMatadata(DataTable table, TableMetadata metadata)
+		public Array ConvertToTableMatadata(DataTable table, TableMetadata metadata)
 		{
 			Array arr = Array.CreateInstance(metadata.GetType(), table.Rows.Count);
 
@@ -242,8 +240,7 @@ namespace voidsoft.DataBlock
 		/// <param name="rowIndex">Index of the row</param>
 		/// <param name="table">DataTable</param>
 		/// <param name="mainTable">TableMetadata on which we map the contents of the specified DataTable</param>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static void ConvertToTableMetadata(int rowIndex, DataTable table, TableMetadata mainTable)
+		public void ConvertToTableMetadata(int rowIndex, DataTable table, TableMetadata mainTable)
 		{
 			if (rowIndex < 0 || rowIndex >= table.Rows.Count)
 			{
@@ -263,7 +260,7 @@ namespace voidsoft.DataBlock
 		/// <param name="table">Data source</param>
 		/// <param name="rowIndex">Index of the row</param>
 		/// <returns>The value</returns>
-		internal static object GetValue(string fieldName, DataTable table, int rowIndex)
+		internal object GetValue(string fieldName, DataTable table, int rowIndex)
 		{
 			return table.Rows[rowIndex][fieldName];
 		}
@@ -274,7 +271,7 @@ namespace voidsoft.DataBlock
 		/// <typeparam name="T"></typeparam>
 		/// <param name="t">The t.</param>
 		/// <returns></returns>
-		public static DataTable ConvertTypeToDataTable<T>(T[] t, params string[] objectProperties)
+		public DataTable ConvertTypeToDataTable<T>(T[] t, params string[] objectProperties)
 		{
 			if (t.Length == 0)
 			{
@@ -343,8 +340,7 @@ namespace voidsoft.DataBlock
 		/// </summary>
 		/// <param name="data">TableMetadata array from which the conversion is made</param>
 		/// <returns>Resulting DataTable</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static DataTable ConvertToDataTable(TableMetadata[] data)
+		public DataTable ConvertToDataTable(TableMetadata[] data)
 		{
 			DataTable table = new DataTable();
 
@@ -380,8 +376,7 @@ namespace voidsoft.DataBlock
 		/// <param name="data">TableMetadata array from which the conversion is made</param>
 		/// <param name="fields">List of fields to be included</param>
 		/// <returns>Resulting DataTable</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static DataTable ConvertToDataTable(TableMetadata[] data, params DatabaseField[] fields)
+		public DataTable ConvertToDataTable(TableMetadata[] data, params DatabaseField[] fields)
 		{
 			DataTable table = new DataTable();
 
@@ -416,8 +411,7 @@ namespace voidsoft.DataBlock
 		/// <param name="keyField">First field. This will be the key in the hashtable</param>
 		/// <param name="valueField">Second field. This will be the value in the hashtable</param>
 		/// <returns>Resulting hashtable</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static Hashtable ConvertToHashtable(TableMetadata[] data, DatabaseField keyField, DatabaseField valueField)
+		public Hashtable ConvertToHashtable(TableMetadata[] data, DatabaseField keyField, DatabaseField valueField)
 		{
 			Hashtable htData = new Hashtable();
 
@@ -446,8 +440,7 @@ namespace voidsoft.DataBlock
 		/// <param name="keyColumnIndex">Index of the key column</param>
 		/// <param name="valueColumnIndex">Index of the value column</param>
 		/// <returns>Resulting hashtable</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static Hashtable ConvertToHashtable(DataTable table, int keyColumnIndex, int valueColumnIndex)
+		public Hashtable ConvertToHashtable(DataTable table, int keyColumnIndex, int valueColumnIndex)
 		{
 			Hashtable htData = null;
 
@@ -477,8 +470,7 @@ namespace voidsoft.DataBlock
 		/// <param name="data">TableMetdata array from which we make the conversion</param>
 		/// <param name="field">The database field which is added to the string collection</param>
 		/// <returns>String Collection</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static StringCollection ConvertToStringCollection(TableMetadata[] data, DatabaseField field)
+		public StringCollection ConvertToStringCollection(TableMetadata[] data, DatabaseField field)
 		{
 			StringCollection scData = new StringCollection();
 
@@ -495,7 +487,7 @@ namespace voidsoft.DataBlock
 		/// <param name="table">DataTable from which we read data</param>
 		/// <param name="columnIndex">DataTable column index</param>
 		/// <returns>String Collection</returns>
-		public static StringCollection ConvertToStringCollection(DataTable table, int columnIndex)
+		public StringCollection ConvertToStringCollection(DataTable table, int columnIndex)
 		{
 			StringCollection scData = null;
 
@@ -520,8 +512,7 @@ namespace voidsoft.DataBlock
 		/// <param name="table">DataTable from which we read the values</param>
 		/// <param name="columnIndex">Index of the DataColumn</param>
 		/// <returns>ArrayList which contains the items read from data table</returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static ArrayList ConvertToArrayList(DataTable table, int columnIndex)
+		public ArrayList ConvertToArrayList(DataTable table, int columnIndex)
 		{
 			ArrayList scData = null;
 
@@ -546,8 +537,7 @@ namespace voidsoft.DataBlock
 		/// <param name="table">The table.</param>
 		/// <param name="columnIndex">Index of the column.</param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static List<string> ConvertToList(DataTable table, int columnIndex)
+		public List<string> ConvertToList(DataTable table, int columnIndex)
 		{
 			if (columnIndex < 0 || columnIndex > table.Rows.Count)
 			{
@@ -564,8 +554,7 @@ namespace voidsoft.DataBlock
 			return list;
 		}
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		private static DbType GetMappedType(Type tp)
+		private DbType GetMappedType(Type tp)
 		{
 			if (tp == typeof (Boolean))
 			{

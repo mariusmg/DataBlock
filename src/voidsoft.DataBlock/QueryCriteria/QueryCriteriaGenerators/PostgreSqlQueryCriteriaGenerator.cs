@@ -105,6 +105,8 @@ namespace voidsoft.DataBlock
 
 			ExecutionQuery execQuery;
 			List<IDataParameter> listParameters = null;
+			
+			SqlGenerator generator = new SqlGenerator();
 
 			try
 			{
@@ -114,7 +116,7 @@ namespace voidsoft.DataBlock
 
 				//we'll used this temporary structure (tempQuery) and pass it around
 				//to the generator functions.
-				execQuery = SqlGenerator.GenerateSelectQuery(DatabaseServer.PostgreSql, criteria);
+				execQuery = generator.GenerateSelectQuery(DatabaseServer.PostgreSql, criteria);
 
 				//add from the head query to the temporary objects.
 				sbuild.Append(execQuery.Query);
@@ -144,10 +146,10 @@ namespace voidsoft.DataBlock
 							break;
 					}
 
-					sbuild.Append(SqlGenerator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].ForeignKeyFieldTableName) + " ON " +
-					              SqlGenerator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].PrimaryKeyFieldTableName) + "." +
+					sbuild.Append(generator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].ForeignKeyFieldTableName) + " ON " +
+					              generator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].PrimaryKeyFieldTableName) + "." +
 					              criteria.JoinCriteriaConditions[i].PrimaryKey.fieldName + "=" +
-					              SqlGenerator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].Criteria.TableName) + "." +
+					              generator.GetTableName(DatabaseServer.PostgreSql, criteria.JoinCriteriaConditions[i].Criteria.TableName) + "." +
 					              criteria.JoinCriteriaConditions[i].ForeignKey.fieldName);
 				}
 
@@ -171,14 +173,11 @@ namespace voidsoft.DataBlock
 					{
 						if (sbuild.ToString().EndsWith("WHERE "))
 						{
-							sbuild.Append(GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,
-							                                ref sbuild, ref listParameters));
+							sbuild.Append(GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions, ref sbuild, ref listParameters));
 						}
 						else
 						{
-							sbuild.Append(" AND " +
-							              GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,
-							                                ref sbuild, ref listParameters));
+							sbuild.Append(" AND " + GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,ref sbuild, ref listParameters));
 						}
 					}
 				}
@@ -195,10 +194,6 @@ namespace voidsoft.DataBlock
 				execQuery.Parameters = pmc;
 
 				return execQuery;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
 			}
 			finally
 			{
@@ -220,6 +215,9 @@ namespace voidsoft.DataBlock
 			List<IDataParameter> listParameters = null;
 			ExecutionQuery execQuery;
 
+			SqlGenerator generator = new SqlGenerator();
+
+
 			try
 			{
 				listParameters = new List<IDataParameter>();
@@ -229,15 +227,15 @@ namespace voidsoft.DataBlock
 
 				if (generatorType == QueryCriteriaGeneratorType.Select)
 				{
-					execQuery = SqlGenerator.GenerateSelectQuery(DatabaseServer.PostgreSql, criteria);
+					execQuery = generator.GenerateSelectQuery(DatabaseServer.PostgreSql, criteria);
 				}
 				else if (generatorType == QueryCriteriaGeneratorType.Update)
 				{
-					execQuery = SqlGenerator.GenerateUpdateQuery(DatabaseServer.PostgreSql, criteria.TableName, criteria.Fields, false);
+					execQuery = generator.GenerateUpdateQuery(DatabaseServer.PostgreSql, criteria.TableName, criteria.Fields, false);
 				}
 				else if (generatorType == QueryCriteriaGeneratorType.Delete)
 				{
-					execQuery = SqlGenerator.GenerateDeleteQuery(DatabaseServer.PostgreSql, criteria.TableName);
+					execQuery = generator.GenerateDeleteQuery(DatabaseServer.PostgreSql, criteria.TableName);
 				}
 
 				//add to the intermediary objects
@@ -324,6 +322,10 @@ namespace voidsoft.DataBlock
 			int index = -1;
 			string tempString = string.Empty;
 
+			SqlGenerator generator = new SqlGenerator();
+
+			DataConvertor converter = new DataConvertor();
+
 			try
 			{
 				listParameterNames = new List<string>();
@@ -352,8 +354,8 @@ namespace voidsoft.DataBlock
 							//here we must have 2 parameters with two diffferent values and name. These
 							//parameters must be generated based on a single name.
 
-							IDataParameter paramBetweenFirst = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
-							IDataParameter paramBetweenSecond = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramBetweenFirst = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramBetweenSecond = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 
 							paramBetweenFirst.ParameterName = paramBetweenFirst.ParameterName + "First";
 							paramBetweenSecond.ParameterName = paramBetweenSecond.ParameterName + "Second";
@@ -362,7 +364,7 @@ namespace voidsoft.DataBlock
 							paramBetweenFirst.Value = conditions[i].Values[0];
 							listParameters.Add(paramBetweenFirst);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + " BETWEEN " +
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + " BETWEEN " +
 							              isql.GetValue(paramBetweenFirst));
 							sbuild.Append(" AND ");
 
@@ -379,49 +381,49 @@ namespace voidsoft.DataBlock
 
 						case CriteriaOperator.Different:
 							field.fieldValue = conditions[i].Values[0];
-							IDataParameter paramDifferent = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramDifferent = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramDifferent);
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + "<>" + isql.GetValue(paramDifferent));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + "<>" + isql.GetValue(paramDifferent));
 							break;
 
 						case CriteriaOperator.Like:
 							field.fieldValue = "%" + conditions[i].Values[0] + "%";
 
-							IDataParameter paramLike = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramLike = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramLike);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLike));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLike));
 							break;
 
 						case CriteriaOperator.LikeEnd:
 							field.fieldValue = "%" + conditions[i].Values[0];
-							IDataParameter paramLikeEnd = DataConvertor.ConvertToDataParameter(DatabaseServer.Access, tableName, field, ref listParameterNames);
+							IDataParameter paramLikeEnd = converter.ConvertToDataParameter(DatabaseServer.Access, tableName, field, ref listParameterNames);
 							listParameters.Add(paramLikeEnd);
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.Access, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLikeEnd));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.Access, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLikeEnd));
 							break;
 
 						case CriteriaOperator.LikeStart:
 							field.fieldValue = conditions[i].Values[0] + "%";
-							IDataParameter paramLikeStart = DataConvertor.ConvertToDataParameter(DatabaseServer.Access, tableName, field, ref listParameterNames);
+							IDataParameter paramLikeStart = converter.ConvertToDataParameter(DatabaseServer.Access, tableName, field, ref listParameterNames);
 							listParameters.Add(paramLikeStart);
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.Access, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLikeStart));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.Access, tableName) + "." + field.fieldName + " LIKE " + isql.GetValue(paramLikeStart));
 							break;
 
 						case CriteriaOperator.Equality:
 							field.fieldValue = conditions[i].Values[0];
 
-							IDataParameter paramEquality = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramEquality = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramEquality);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + "=" + isql.GetValue(paramEquality));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + "=" + isql.GetValue(paramEquality));
 							break;
 
 						case CriteriaOperator.IsNull:
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " is null");
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " is null");
 							break;
 
 						case CriteriaOperator.IsNotNull:
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " is not null");
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " is not null");
 							break;
 
 						case CriteriaOperator.Or:
@@ -431,50 +433,49 @@ namespace voidsoft.DataBlock
 						case CriteriaOperator.Smaller:
 							field.fieldValue = conditions[i].Values[0];
 
-							IDataParameter paramSmaller = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramSmaller = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramSmaller);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " < " + isql.GetValue(paramSmaller));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " < " + isql.GetValue(paramSmaller));
 							break;
 
 						case CriteriaOperator.SmallerOrEqual:
 							field.fieldValue = conditions[i].Values[0];
 
-							IDataParameter paramSmallerOrEqual = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramSmallerOrEqual = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramSmallerOrEqual);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " <= " + isql.GetValue(paramSmallerOrEqual));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " <= " + isql.GetValue(paramSmallerOrEqual));
 							break;
 
 						case CriteriaOperator.Higher:
 							field.fieldValue = conditions[i].Values[0];
 
-							IDataParameter paramHigher = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramHigher = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramHigher);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " > " + isql.GetValue(paramHigher));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " > " + isql.GetValue(paramHigher));
 							break;
 
 						case CriteriaOperator.HigherOrEqual:
 							field.fieldValue = conditions[i].Values[0];
 
-							IDataParameter paramHigherOrEqual = DataConvertor.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
+							IDataParameter paramHigherOrEqual = converter.ConvertToDataParameter(DatabaseServer.PostgreSql, tableName, field, ref listParameterNames);
 							listParameters.Add(paramHigherOrEqual);
 
-							sbuild.Append(" " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " >= " + isql.GetValue(paramHigherOrEqual));
+							sbuild.Append(" " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " >= " + isql.GetValue(paramHigherOrEqual));
 							break;
 
 						case CriteriaOperator.OrderBy:
 							if (sbOrderByCriteria.Length == 0)
 							{
 								//add the operator for the first criteria
-								sbOrderByCriteria.Append("ORDER BY " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " " +
-								                         conditions[i].Values[0]);
+								sbOrderByCriteria.Append("ORDER BY " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " " + conditions[i].Values[0]);
 							}
 							else
 							{
 								//add "," for the subsequent criterias
-								sbOrderByCriteria.Append(", " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " " + conditions[i].Values[0]);
+								sbOrderByCriteria.Append(", " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + field.fieldName + " " + conditions[i].Values[0]);
 							}
 							break;
 
@@ -484,7 +485,7 @@ namespace voidsoft.DataBlock
 						case CriteriaOperator.Distinct:
 
 							//get the field
-							fieldName = SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName;
+							fieldName = generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName;
 
 							//we have the field name now search for it in the fields list
 							index = sbSqlHeader.ToString().IndexOf(fieldName);
@@ -500,8 +501,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH,
-							                               " distinct " + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName);
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " distinct " + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName);
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);
@@ -510,7 +510,7 @@ namespace voidsoft.DataBlock
 							//NOTE: MAX fields must be after SELECT statement
 						case CriteriaOperator.Max:
 							//get the field
-							fieldName = SqlGenerator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
+							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
 
 							//we have the field name now search for it in the fields list
 							index = sbSqlHeader.ToString().IndexOf(fieldName);
@@ -526,8 +526,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH,
-							                               " max(" + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH," max(" + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);
@@ -536,7 +535,7 @@ namespace voidsoft.DataBlock
 							//NOTE: MIN fields must be after SELECT statement
 						case CriteriaOperator.Min:
 							//get the field
-							fieldName = SqlGenerator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
+							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
 
 							//we have the field name now search for it in the fields list
 							index = sbSqlHeader.ToString().IndexOf(fieldName);
@@ -552,8 +551,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH,
-							                               " min(" + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " min(" + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);
@@ -562,7 +560,7 @@ namespace voidsoft.DataBlock
 							//NOTE: COUNT fields must be after SELECT statement
 						case CriteriaOperator.Count:
 							//get the field
-							fieldName = SqlGenerator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
+							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
 
 							//we have the field name now search for it in the fields list
 							index = sbSqlHeader.ToString().IndexOf(fieldName);
@@ -578,8 +576,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH,
-							                               " count(" + SqlGenerator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " count(" + generator.GetTableName(DatabaseServer.PostgreSql, tableName) + "." + conditions[i].Field.fieldName + ")");
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);

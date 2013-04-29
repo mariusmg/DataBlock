@@ -184,7 +184,7 @@ namespace voidsoft.DataBlock
 			command.CommandText = executableQuery.Query;
 
 			//log the ExecutionQuery
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			return command.ExecuteNonQuery();
 		}
@@ -210,7 +210,7 @@ namespace voidsoft.DataBlock
 			}
 
 			//log the stored procedure
-			ExecutionEngineLogger.LogContext(storedProcedureName, iparams);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName, iparams);
 
 			return (command.ExecuteNonQuery());
 		}
@@ -256,7 +256,7 @@ namespace voidsoft.DataBlock
 					itrans.Rollback();
 				}
 
-				ExecutionEngineLogger.LogContext(ex.Message + ex.StackTrace);
+				(new ExecutionEngineLogger()).LogContext(ex.Message + ex.StackTrace);
 				throw;
 			}
 			finally
@@ -321,7 +321,7 @@ namespace voidsoft.DataBlock
 			command.CommandText = executableQuery.Query;
 
 			//log the execution query
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			iread = command.ExecuteReader(cmd);
 			return iread;
@@ -351,7 +351,7 @@ namespace voidsoft.DataBlock
 			}
 
 			//log the stored procedure
-			ExecutionEngineLogger.LogContext(storedProcedureName, iparam);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName, iparam);
 
 			return iread = command.ExecuteReader(commandBehaviour);
 		}
@@ -383,7 +383,7 @@ namespace voidsoft.DataBlock
 					}
 				}
 
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				idap.Fill(dset);
 
@@ -423,7 +423,7 @@ namespace voidsoft.DataBlock
 					}
 				}
 
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				idap.Fill(ds);
 			}
@@ -462,7 +462,7 @@ namespace voidsoft.DataBlock
 
 			ds = new DataSet();
 
-			ExecutionEngineLogger.LogContext(storedProcedureName);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 			idap.Fill(ds);
 			return ds;
@@ -496,7 +496,7 @@ namespace voidsoft.DataBlock
 				}
 
 				//log data
-				ExecutionEngineLogger.LogContext(executableQuery);
+				(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 				idap.Fill(table);
 
@@ -539,7 +539,7 @@ namespace voidsoft.DataBlock
 			table = new DataTable();
 
 			//log the name
-			ExecutionEngineLogger.LogContext(storedProcedureName);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 			idap.Fill(table);
 
@@ -568,7 +568,7 @@ namespace voidsoft.DataBlock
 			command.CommandText = executableQuery.Query;
 
 			//log data
-			ExecutionEngineLogger.LogContext(executableQuery);
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
 
 			return command.ExecuteScalar();
 		}
@@ -595,7 +595,7 @@ namespace voidsoft.DataBlock
 			}
 
 			//log data
-			ExecutionEngineLogger.LogContext(storedProcedureName);
+			(new ExecutionEngineLogger()).LogContext(storedProcedureName);
 
 			return command.ExecuteScalar();
 		}

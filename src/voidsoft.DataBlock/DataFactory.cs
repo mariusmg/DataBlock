@@ -74,47 +74,47 @@ namespace voidsoft.DataBlock
 				{
 					AppSettingsReader reader = new AppSettingsReader();
 
-					//mysql support
-					try
-					{
-						string mySqlProviderAssembly = (string) reader.GetValue("ProviderMySql", typeof (string));
-						char mySqlCommandParameterChar = (char) reader.GetValue("ProviderMySqlParameterChar", typeof (char));
-						loadedProviders.Add("mysql", mySqlProviderAssembly);
+					////mysql support
+					//try
+					//{
+					//	string mySqlProviderAssembly = (string) reader.GetValue("ProviderMySql", typeof (string));
+					//	char mySqlCommandParameterChar = (char) reader.GetValue("ProviderMySqlParameterChar", typeof (char));
+					//	loadedProviders.Add("mysql", mySqlProviderAssembly);
 
-						mySqlParameterChar = mySqlCommandParameterChar;
-					}
-					catch
-					{
-						//no provider data. Ignore exception
-					}
+					//	mySqlParameterChar = mySqlCommandParameterChar;
+					//}
+					//catch
+					//{
+					//	//no provider data. Ignore exception
+					//}
 
-					//postgresql support
-					try
-					{
-						string postgreSqlProviderAssembly = (string) reader.GetValue("ProviderPostgreSql", typeof (string));
-						char postgreSqlCommandParameterChar = (char) reader.GetValue("ProviderPostgreSqlParameterChar", typeof (char));
-						loadedProviders.Add("postgresql", postgreSqlProviderAssembly);
+					////postgresql support
+					//try
+					//{
+					//	string postgreSqlProviderAssembly = (string) reader.GetValue("ProviderPostgreSql", typeof (string));
+					//	char postgreSqlCommandParameterChar = (char) reader.GetValue("ProviderPostgreSqlParameterChar", typeof (char));
+					//	loadedProviders.Add("postgresql", postgreSqlProviderAssembly);
 
-						postgreSqlParameterChar = postgreSqlCommandParameterChar;
-					}
-					catch
-					{
-						//no provider data. Ignore exception
-					}
+					//	postgreSqlParameterChar = postgreSqlCommandParameterChar;
+					//}
+					//catch
+					//{
+					//	//no provider data. Ignore exception
+					//}
 
-					//access support
-					try
-					{
-						string accessProviderAssembly = (string) reader.GetValue("ProviderAccess", typeof (string));
-						char accessCommandParameterChar = (char) reader.GetValue("ProviderAccessParameterChar", typeof (char));
+					////access support
+					//try
+					//{
+					//	string accessProviderAssembly = (string) reader.GetValue("ProviderAccess", typeof (string));
+					//	char accessCommandParameterChar = (char) reader.GetValue("ProviderAccessParameterChar", typeof (char));
 
-						loadedProviders.Add("access", accessProviderAssembly);
-						accessParameterChar = accessCommandParameterChar;
-					}
-					catch
-					{
-						//no provider data. Ignore exception
-					}
+					//	loadedProviders.Add("access", accessProviderAssembly);
+					//	accessParameterChar = accessCommandParameterChar;
+					//}
+					//catch
+					//{
+					//	//no provider data. Ignore exception
+					//}
 
 					//sqlserver support
 					try
@@ -134,7 +134,6 @@ namespace voidsoft.DataBlock
 			catch (Exception ex)
 			{
 				Log.LogMessage(ex);
-
 				throw;
 			}
 		}
