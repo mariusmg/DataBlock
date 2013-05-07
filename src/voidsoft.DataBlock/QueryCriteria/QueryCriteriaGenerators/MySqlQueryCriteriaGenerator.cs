@@ -143,10 +143,10 @@ namespace voidsoft.DataBlock
 					}
 
 					sbuild.Append(generator.GetTableName(DatabaseServer.MySQL, criteria.JoinCriteriaConditions[i].ForeignKeyFieldTableName) + " ON " +
-					              generator.GetTableName(DatabaseServer.MySQL, criteria.JoinCriteriaConditions[i].PrimaryKeyFieldTableName) + "." +
-					              criteria.JoinCriteriaConditions[i].PrimaryKey.fieldName + "=" +
-					              generator.GetTableName(DatabaseServer.MySQL, criteria.JoinCriteriaConditions[i].Criteria.TableName) + "." +
-					              criteria.JoinCriteriaConditions[i].ForeignKey.fieldName);
+								  generator.GetTableName(DatabaseServer.MySQL, criteria.JoinCriteriaConditions[i].PrimaryKeyFieldTableName) + "." +
+								  criteria.JoinCriteriaConditions[i].PrimaryKey.fieldName + "=" +
+								  generator.GetTableName(DatabaseServer.MySQL, criteria.JoinCriteriaConditions[i].Criteria.TableName) + "." +
+								  criteria.JoinCriteriaConditions[i].ForeignKey.fieldName);
 				}
 
 				//add conditions
@@ -171,13 +171,13 @@ namespace voidsoft.DataBlock
 						if (sbuild.ToString().EndsWith("WHERE "))
 						{
 							sbuild.Append(GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,
-							                                ref sbuild, ref listParameters));
+															ref sbuild, ref listParameters));
 						}
 						else
 						{
 							sbuild.Append(" AND " +
-							              GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,
-							                                ref sbuild, ref listParameters));
+										  GenerateCondition(criteria.JoinCriteriaConditions[i].Criteria.TableName, criteria.JoinCriteriaConditions[i].Criteria.CriteriaConditions,
+															ref sbuild, ref listParameters));
 						}
 					}
 				}
@@ -216,89 +216,77 @@ namespace voidsoft.DataBlock
 		internal ExecutionQuery GenerateWithoutJoin(QueryCriteria criteria)
 		{
 			ISqlGenerator isql = null;
-			List<IDataParameter> listParameters = null;
-			ExecutionQuery execQuery;
 
+			ExecutionQuery execQuery;
+	
 			SqlGenerator generator = new SqlGenerator();
 
+			DataFactory factory = new DataFactory();
 
-			try
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+
+			execQuery = new ExecutionQuery();
+			
+			if (generatorType == QueryCriteriaGeneratorType.Select)
 			{
-				listParameters = new List<IDataParameter>();
+				execQuery = generator.GenerateSelectQuery(DatabaseServer.MySQL, criteria);
+			}
+			else if (generatorType == QueryCriteriaGeneratorType.Update)
+			{
+				execQuery = generator.GenerateUpdateQuery(DatabaseServer.MySQL, criteria.TableName, criteria.Fields, false);
+			}
+			else if (generatorType == QueryCriteriaGeneratorType.Delete)
+			{
+				execQuery = generator.GenerateDeleteQuery(DatabaseServer.MySQL, criteria.TableName);
+			}
 
-				StringBuilder sbuild = new StringBuilder();
-
-				execQuery = new ExecutionQuery();
-				if (generatorType == QueryCriteriaGeneratorType.Select)
+			//add to the intermediary objects
+			if (execQuery.Parameters != null)
+			{
+				foreach (IDataParameter var in execQuery.Parameters)
 				{
-					execQuery = generator.GenerateSelectQuery(DatabaseServer.MySQL, criteria);
+					listParameters.Add(var);
 				}
-				else if (generatorType == QueryCriteriaGeneratorType.Update)
-				{
-					execQuery = generator.GenerateUpdateQuery(DatabaseServer.MySQL, criteria.TableName, criteria.Fields, false);
-				}
-				else if (generatorType == QueryCriteriaGeneratorType.Delete)
-				{
-					execQuery = generator.GenerateDeleteQuery(DatabaseServer.MySQL, criteria.TableName);
-				}
+			}
+			sbuild.Append(execQuery.Query);
 
-				//add to the intermediary objects
-				if (execQuery.Parameters != null)
-				{
-					foreach (IDataParameter var in execQuery.Parameters)
-					{
-						listParameters.Add(var);
-					}
-				}
-				sbuild.Append(execQuery.Query);
+			//initialize generator
+			isql = factory.InitializeSqlGenerator(DatabaseServer.MySQL);
 
-				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.MySQL);
+			//append where clause
+			sbuild.Append(" WHERE ");
 
-				//append where clause
-				sbuild.Append(" WHERE ");
+			//generate the condition based on criteria
+			string condition = GenerateCondition(criteria.TableName, criteria.CriteriaConditions, ref sbuild, ref listParameters);
 
-				//generate the condition based on criteria
-				string condition = GenerateCondition(criteria.TableName, criteria.CriteriaConditions, ref sbuild, ref listParameters);
+			//more checks
 
-				//more checks
-
-				if (sbuild.ToString().EndsWith(" WHERE ") && condition.StartsWith(" ORDER BY "))
-				{
-					if (condition.StartsWith(" ORDER BY"))
-					{
-						sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
-					}
-				}
-
-				sbuild.Append(condition);
-
-				//last check to prevent invalid sql queries
-				if (sbuild.ToString().EndsWith(" WHERE "))
+			if (sbuild.ToString().EndsWith(" WHERE ") && condition.StartsWith(" ORDER BY "))
+			{
+				if (condition.StartsWith(" ORDER BY"))
 				{
 					sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
 				}
+			}
 
-				execQuery = new ExecutionQuery();
-				execQuery.Query = sbuild.ToString();
-				IDataParameter[] pmc = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(pmc);
-				execQuery.Parameters = pmc;
+			sbuild.Append(condition);
 
-				return execQuery;
-			}
-			catch (Exception ex)
+			//last check to prevent invalid sql queries
+			if (sbuild.ToString().EndsWith(" WHERE "))
 			{
-				throw ex;
+				sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
 			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-					listParameters = null;
-				}
-			}
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+			IDataParameter[] pmc = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(pmc);
+			execQuery.Parameters = pmc;
+
+			return execQuery;
+
 		}
 
 		/// <summary>
@@ -327,12 +315,15 @@ namespace voidsoft.DataBlock
 			int index = -1;
 			string tempString = string.Empty;
 
+
+			DataFactory factory = new DataFactory();
+			
 			try
 			{
 				listParameterNames = new List<string>();
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.MySQL);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.MySQL);
 
 				//generate conditions
 				for (int i = 0; i < conditions.Length; i++)
@@ -341,7 +332,7 @@ namespace voidsoft.DataBlock
 					if (i > 0)
 					{
 						if ((conditions[i].CriteriaOperator != CriteriaOperator.OrderBy) && (conditions[i].CriteriaOperator != CriteriaOperator.Or) &&
-						    (conditions[i - 1].CriteriaOperator != CriteriaOperator.Or) && (conditions[i - 1].CriteriaOperator != CriteriaOperator.Not))
+							(conditions[i - 1].CriteriaOperator != CriteriaOperator.Or) && (conditions[i - 1].CriteriaOperator != CriteriaOperator.Not))
 						{
 							sbuild.Append(" AND ");
 						}
@@ -366,7 +357,7 @@ namespace voidsoft.DataBlock
 							listParameters.Add(paramBetweenFirst);
 
 							sbuild.Append(" " + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName + " BETWEEN " +
-							              isql.GetValue(paramBetweenFirst));
+										  isql.GetValue(paramBetweenFirst));
 							sbuild.Append(" AND ");
 
 							//set the  value of the second parameter
@@ -480,9 +471,9 @@ namespace voidsoft.DataBlock
 							}
 							break;
 
-							//NOTE :  DISTICT requires modification of the sql header. Also
-							// DISTINCT clause requires that the distinct field should be 
-							// the first one in the list.
+						//NOTE :  DISTICT requires modification of the sql header. Also
+						// DISTINCT clause requires that the distinct field should be 
+						// the first one in the list.
 						case CriteriaOperator.Distinct:
 
 							//get the field
@@ -502,13 +493,13 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH," distinct " + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName);
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " distinct " + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName);
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);
 							break;
 
-							//NOTE: MAX fields must be after SELECT statement
+						//NOTE: MAX fields must be after SELECT statement
 						case CriteriaOperator.Max:
 							//get the field
 							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
@@ -527,13 +518,13 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH," max(" + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName + ")");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " max(" + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName + ")");
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);
 							break;
 
-							//NOTE: MIN fields must be after SELECT statement
+						//NOTE: MIN fields must be after SELECT statement
 						case CriteriaOperator.Min:
 							//get the field
 							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
@@ -558,7 +549,7 @@ namespace voidsoft.DataBlock
 							sbSqlHeader.Append(tempString);
 							break;
 
-							//NOTE: COUNT fields must be after SELECT statement
+						//NOTE: COUNT fields must be after SELECT statement
 						case CriteriaOperator.Count:
 							//get the field
 							fieldName = generator.GetTableName(DatabaseServer.Access, tableName) + "." + conditions[i].Field.fieldName;
@@ -577,7 +568,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH," count(" + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName + ")");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " count(" + generator.GetTableName(DatabaseServer.MySQL, tableName) + "." + conditions[i].Field.fieldName + ")");
 
 							sbSqlHeader.Remove(0, sbSqlHeader.Length);
 							sbSqlHeader.Append(tempString);

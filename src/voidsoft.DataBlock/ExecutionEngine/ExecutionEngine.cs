@@ -5,7 +5,7 @@ description: DataBlock's DAL. This contains operation with the database.
              The ExecutionEngine operates in 2 modes:
             
              - disconnected mode : in this mode an operation with the database opens a 
-                                   conection and then it closes it.  This mode is accessed using
+                                   connection and then it closes it.  This mode is accessed using
                                    the static methods of the class.
         
              - connected mode : is accessed by creating an instanced of the class. In this mode 
@@ -23,144 +23,151 @@ using System.Data.Common;
 
 namespace voidsoft.DataBlock
 {
-	/// <summary>
-	///     ExecutionEngine
-	/// </summary>
 	[Serializable]
 	public partial class ExecutionEngine : IDisposable
 	{
 		//private consts
 		private const int SLASHES_LENGTH = 2;
 		private const int LINE_LENGTH = 1;
-		private static object lockedDispose = new object();
 
-		/// <summary>
 		///     Database command.
-		/// </summary>
 		private DbCommand command;
 
-		/// <summary>
 		///     Database connection.
-		/// </summary>
 		private DbConnection connection;
 
-		/// <summary>
 		///     Connection string used to connect to the database.
-		/// </summary>
 		private string connectionString;
 
-		/// <summary>
 		///     Database server dataType.
-		/// </summary>
 		private DatabaseServer database;
 
-		/// <summary>
 		///     Flag used to know if the current instance is initialized using a Session.
-		/// </summary>
 		private bool isContextSession;
 
-		/// <summary>
-		///     Flag to know if the instance is disposed.
-		/// </summary>
-		private bool isDisposed;
+		
 
-		/// <summary>
-		///     Constructor
-		/// </summary>
-		private ExecutionEngine()
+		public ExecutionEngine()
 		{
+			this.database = Configuration.DatabaseServerType;
+			this.connectionString = Configuration.ConnectionString;
+
+			DataFactory factory = new DataFactory();
+
+			factory.InitializeDbConnection(Configuration.DatabaseServerType, ref connection);
+			factory.InitializeDbCommand(Configuration.DatabaseServerType, ref command);
+			this.command.Connection = connection;
+			this.connection.ConnectionString = connectionString;
+			this.connection.Open();
 		}
 
-		/// <summary>
-		///     Creates the new execution engine.
-		/// </summary>
-		/// <returns></returns>
-		public static ExecutionEngine CreateNewExecutionEngine()
+
+		public ExecutionEngine (DatabaseServer database, string connectionString)
 		{
-			ExecutionEngine dal = new ExecutionEngine();
+			this.database = database;
+			this.connectionString = connectionString;
 
-			dal.database = Configuration.DatabaseServerType;
-			dal.connectionString = Configuration.ConnectionString;
+			DataFactory factory = new DataFactory();
 
-			DataFactory.InitializeDbConnection(Configuration.DatabaseServerType, ref dal.connection);
-			DataFactory.InitializeDbCommand(Configuration.DatabaseServerType, ref dal.command);
-			dal.command.Connection = dal.connection;
-			dal.connection.ConnectionString = dal.connectionString;
-			dal.connection.Open();
-
-			return dal;
+			factory.InitializeDbConnection(database, ref connection);
+			factory.InitializeDbCommand(database, ref command);
+			this.command.Connection = this.connection;
+			this.connection.ConnectionString = this.connectionString;
+			this.connection.Open();
 		}
 
-		/// <summary>
-		///     Creates a new instance of the ExecutionEngine.
-		/// </summary>
-		/// <param name="database">Database server</param>
-		/// <param name="connectionString"></param>
-		/// <returns>ExecutionEngine instance</returns>
-		public static ExecutionEngine CreateNewExecutionEngine(DatabaseServer database, string connectionString)
+		public ExecutionEngine (Session session)
 		{
-			ExecutionEngine dal = new ExecutionEngine();
-
-			dal.database = database;
-			dal.connectionString = connectionString;
-
-			DataFactory.InitializeDbConnection(database, ref dal.connection);
-			DataFactory.InitializeDbCommand(database, ref dal.command);
-			dal.command.Connection = dal.connection;
-			dal.connection.ConnectionString = dal.connectionString;
-			dal.connection.Open();
-
-			return dal;
+			
+			this.isContextSession = true;
+			this.connection = session.DatabaseConnection;
+			this.database = session.Database;
+			this.connectionString = session.ConnectionString;
+			(new DataFactory()).InitializeDbCommand(database, ref command);
+			this.command.Connection = session.DatabaseConnection;
 		}
 
-		/// <summary>
-		///     Creates a new instance of the ExecutionEngine.
-		/// </summary>
-		/// <param name="session">The session based on which the instance is created</param>
-		/// <returns>ExecutionEngine instance</returns>
-		public static ExecutionEngine CreateNewExecutionEngine(Session session)
-		{
-			ExecutionEngine dal = new ExecutionEngine();
-			dal.isContextSession = true;
-			dal.connection = session.DatabaseConnection;
-			dal.database = session.Database;
-			dal.connectionString = session.ConnectionString;
-			DataFactory.InitializeDbCommand(dal.database, ref dal.command);
-			dal.command.Connection = session.DatabaseConnection;
 
-			return dal;
-		}
+		///// <summary>
+		/////     Creates the new execution engine.
+		///// </summary>
+		///// <returns></returns>
+		//public static ExecutionEngine CreateNewExecutionEngine()
+		//{
+		//	ExecutionEngine dal = new ExecutionEngine();
+
+		//	dal.database = Configuration.DatabaseServerType;
+		//	dal.connectionString = Configuration.ConnectionString;
+			
+		//	DataFactory factory = new DataFactory();
+
+		//	factory.InitializeDbConnection(Configuration.DatabaseServerType, ref dal.connection);
+		//	factory.InitializeDbCommand(Configuration.DatabaseServerType, ref dal.command);
+		//	dal.command.Connection = dal.connection;
+		//	dal.connection.ConnectionString = dal.connectionString;
+		//	dal.connection.Open();
+
+		//	return dal;
+		//}
+
+		///// <summary>
+		/////     Creates a new instance of the ExecutionEngine.
+		///// </summary>
+		///// <param name="database">Database server</param>
+		///// <param name="connectionString"></param>
+		///// <returns>ExecutionEngine instance</returns>
+		//public static ExecutionEngine CreateNewExecutionEngine(DatabaseServer database, string connectionString)
+		//{
+		//	ExecutionEngine dal = new ExecutionEngine();
+
+		//	dal.database = database;
+		//	dal.connectionString = connectionString;
+
+		//	DataFactory factory = new DataFactory();
+
+		//	factory.InitializeDbConnection(database, ref dal.connection);
+		//	factory.InitializeDbCommand(database, ref dal.command);
+		//	dal.command.Connection = dal.connection;
+		//	dal.connection.ConnectionString = dal.connectionString;
+		//	dal.connection.Open();
+
+		//	return dal;
+		//}
+
+		///// <summary>
+		/////     Creates a new instance of the ExecutionEngine.
+		///// </summary>
+		///// <param name="session">The session based on which the instance is created</param>
+		///// <returns>ExecutionEngine instance</returns>
+		//public static ExecutionEngine CreateNewExecutionEngine(Session session)
+		//{
+		//	ExecutionEngine dal = new ExecutionEngine();
+		//	dal.isContextSession = true;
+		//	dal.connection = session.DatabaseConnection;
+		//	dal.database = session.Database;
+		//	dal.connectionString = session.ConnectionString;
+		//	(new DataFactory()).InitializeDbCommand(dal.database, ref dal.command);
+		//	dal.command.Connection = session.DatabaseConnection;
+
+		//	return dal;
+		//}
 
 		/// <summary>
 		///     Dispose the class instance
 		/// </summary>
 		public void Dispose()
 		{
-			if (!isDisposed)
+			if (!isContextSession)
 			{
-				if (!isContextSession)
+				if (connection.State != ConnectionState.Closed)
 				{
-					if (connection.State != ConnectionState.Closed)
-					{
-						connection.Close();
-					}
+					connection.Close();
 				}
-
-				command.Dispose();
-
-				GC.SuppressFinalize(this);
-
-				isDisposed = true;
 			}
+
+			command.Dispose();
 		}
 
-		/// <summary>
-		///     Finalizer
-		/// </summary>
-		~ExecutionEngine()
-		{
-			Dispose();
-		}
 
 		/// <summary>
 		///     Executes a sql statement against the connection and returns the number
@@ -243,7 +250,7 @@ namespace voidsoft.DataBlock
 				command.Transaction = itrans;
 				command.CommandType = CommandType.Text;
 
-				affectedRows = ExecuteNonQueryConstrained(database, ref connection, ref command, listQueries);
+				affectedRows = ExecuteNonQueryConstrained(ref connection, ref command, listQueries);
 
 				itrans.Commit();
 
@@ -365,37 +372,31 @@ namespace voidsoft.DataBlock
 		{
 			DataSet dset = null;
 			IDbDataAdapter idap = null;
+			DataFactory factory = new DataFactory();
 
-			try
+			factory.InitializeDataAdapter(database, ref idap, command);
+
+			dset = new DataSet();
+
+			command.CommandType = CommandType.Text;
+
+			command.CommandText = executableQuery.Query;
+
+			command.Parameters.Clear();
+
+			if (executableQuery.Parameters != null)
 			{
-				DataFactory.InitializeDataAdapter(database, ref idap, command);
-				dset = new DataSet();
-				command.CommandType = CommandType.Text;
-				command.CommandText = executableQuery.Query;
-
-				command.Parameters.Clear();
-
-				if (executableQuery.Parameters != null)
+				foreach (IDataParameter var in executableQuery.Parameters)
 				{
-					foreach (IDataParameter var in executableQuery.Parameters)
-					{
-						command.Parameters.Add(var);
-					}
-				}
-
-				(new ExecutionEngineLogger()).LogContext(executableQuery);
-
-				idap.Fill(dset);
-
-				return dset;
-			}
-			finally
-			{
-				if (idap != null)
-				{
-					idap = null;
+					command.Parameters.Add(var);
 				}
 			}
+
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
+
+			idap.Fill(dset);
+
+			return dset;
 		}
 
 		/// <summary>
@@ -407,33 +408,25 @@ namespace voidsoft.DataBlock
 		{
 			IDbDataAdapter idap = null;
 
-			try
+			DataFactory factory = new DataFactory();
+
+			factory.InitializeDataAdapter(database, ref idap, command);
+			command.CommandType = CommandType.Text;
+			command.CommandText = executableQuery.Query;
+
+			command.Parameters.Clear();
+
+			if (executableQuery.Parameters != null)
 			{
-				DataFactory.InitializeDataAdapter(database, ref idap, command);
-				command.CommandType = CommandType.Text;
-				command.CommandText = executableQuery.Query;
-
-				command.Parameters.Clear();
-
-				if (executableQuery.Parameters != null)
+				foreach (IDataParameter var in executableQuery.Parameters)
 				{
-					foreach (IDataParameter var in executableQuery.Parameters)
-					{
-						command.Parameters.Add(var);
-					}
-				}
-
-				(new ExecutionEngineLogger()).LogContext(executableQuery);
-
-				idap.Fill(ds);
-			}
-			finally
-			{
-				if (idap != null)
-				{
-					idap = null;
+					command.Parameters.Add(var);
 				}
 			}
+
+			(new ExecutionEngineLogger()).LogContext(executableQuery);
+
+			idap.Fill(ds);
 		}
 
 		/// <summary>
@@ -447,7 +440,7 @@ namespace voidsoft.DataBlock
 			DataSet ds = null;
 			IDbDataAdapter idap = null;
 
-			DataFactory.InitializeDataAdapter(database, ref idap, command);
+			(new DataFactory()).InitializeDataAdapter(database, ref idap, command);
 			command.CommandType = CommandType.StoredProcedure;
 			command.CommandText = storedProcedureName;
 			command.Parameters.Clear();
@@ -480,7 +473,7 @@ namespace voidsoft.DataBlock
 
 			try
 			{
-				DataFactory.InitializeDbDataAdapter(database, ref idap, command);
+				(new DataFactory()).InitializeDbDataAdapter(database, ref idap, command);
 				table = new DataTable();
 				command.CommandType = CommandType.Text;
 				command.CommandText = executableQuery.Query;
@@ -506,7 +499,7 @@ namespace voidsoft.DataBlock
 			{
 				if (idap != null)
 				{
-					idap = null;
+					idap.Dispose();
 				}
 			}
 		}
@@ -522,7 +515,7 @@ namespace voidsoft.DataBlock
 			DataTable table = null;
 			DbDataAdapter idap = null;
 
-			DataFactory.InitializeDbDataAdapter(database, ref idap, command);
+			(new DataFactory()).InitializeDbDataAdapter(database, ref idap, command);
 
 			command.CommandType = CommandType.StoredProcedure;
 			command.CommandText = storedProcedureName;
@@ -601,44 +594,20 @@ namespace voidsoft.DataBlock
 		}
 
 		/// <summary>
-		///     Dispose the ADO.NET objects.
-		/// </summary>
-		/// <param name="icon">Database connection to be disposed</param>
-		/// <param name="icmd">Database command to be disposed </param>
-		internal static void DisposeObjects(ref IDbConnection icon, ref IDbCommand icmd)
-		{
-			lock (lockedDispose)
-			{
-				if (icon != null)
-				{
-					icon.Close();
-				}
-
-				if (icmd != null)
-				{
-					icmd.Dispose();
-				}
-			}
-		}
-
-		/// <summary>
 		///     Disposes the ADO.NET objects
 		/// </summary>
 		/// <param name="con">Database connection to be disposed</param>
 		/// <param name="cmd">Database command to be disposed</param>
-		internal static void DisposeObjects(ref DbConnection con, ref DbCommand cmd)
+		private void DisposeObjects(ref DbConnection con, ref DbCommand cmd)
 		{
-			lock (lockedDispose)
+			if (con != null)
 			{
-				if (con != null)
-				{
-					con.Close();
-				}
+				con.Close();
+			}
 
-				if (cmd != null)
-				{
-					cmd.Dispose();
-				}
+			if (cmd != null)
+			{
+				cmd.Dispose();
 			}
 		}
 	}

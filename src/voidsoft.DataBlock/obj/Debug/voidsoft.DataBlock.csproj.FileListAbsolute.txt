@@ -3,3 +3,8 @@ c:\9\dblock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.dll
 c:\9\dblock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.pdb
 c:\9\dblock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.dll
 c:\9\dblock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.pdb
+C:\oss\DataBlock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.XML
+C:\oss\DataBlock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.dll
+C:\oss\DataBlock\src\voidsoft.DataBlock\bin\Debug\voidsoft.DataBlock.pdb
+C:\oss\DataBlock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.dll
+C:\oss\DataBlock\src\voidsoft.DataBlock\obj\Debug\voidsoft.DataBlock.pdb

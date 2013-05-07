@@ -73,7 +73,7 @@ namespace voidsoft.DataBlock
 		}
 
 		/// <summary>
-		///     The underlying datbase connection used by this session
+		///     The underlying database connection used by this session
 		/// </summary>
 		/// <value></value>
 		public DbConnection DatabaseConnection
@@ -134,33 +134,25 @@ namespace voidsoft.DataBlock
 		/// <param name="connectionString">Database connection string</param>
 		/// <returns>Returns a new session</returns>
 		public static Session CreateNewSession(DatabaseServer database, string connectionString)
-
 		{
 			lock (typeof (Session))
 			{
-				try
-				{
-					Session newSession = new Session();
+				Session newSession = new Session();
 
-					newSession.listQueries = new List<ExecutionQuery>();
+				newSession.listQueries = new List<ExecutionQuery>();
 
-					newSession.connectionString = connectionString;
+				newSession.connectionString = connectionString;
 
-					newSession.database = database;
+				newSession.database = database;
 
-					DataFactory.InitializeConnection(newSession.database, ref newSession.icon);
+				(new DataFactory()).InitializeConnection(newSession.database, ref newSession.icon);
 
-					newSession.icon.ConnectionString = connectionString;
+				newSession.icon.ConnectionString = connectionString;
 
-					//open the connection.
-					newSession.icon.Open();
+				//open the connection.
+				newSession.icon.Open();
 
-					return newSession;
-				}
-				catch
-				{
-					throw;
-				}
+				return newSession;
 			}
 		}
 
@@ -172,29 +164,22 @@ namespace voidsoft.DataBlock
 		{
 			lock (typeof (Session))
 			{
-				try
-				{
-					Session newSession = new Session();
+				Session newSession = new Session();
 
-					newSession.listQueries = new List<ExecutionQuery>();
+				newSession.listQueries = new List<ExecutionQuery>();
 
-					newSession.connectionString = Configuration.ConnectionString;
+				newSession.connectionString = Configuration.ConnectionString;
 
-					newSession.database = Configuration.DatabaseServerType;
+				newSession.database = Configuration.DatabaseServerType;
 
-					DataFactory.InitializeConnection(newSession.database, ref newSession.icon);
+				(new DataFactory()).InitializeConnection(newSession.database, ref newSession.icon);
 
-					newSession.icon.ConnectionString = Configuration.ConnectionString;
+				newSession.icon.ConnectionString = Configuration.ConnectionString;
 
-					//open the connection
-					newSession.icon.Open();
+				//open the connection
+				newSession.icon.Open();
 
-					return newSession;
-				}
-				catch
-				{
-					throw;
-				}
+				return newSession;
 			}
 		}
 
@@ -236,6 +221,8 @@ namespace voidsoft.DataBlock
 
 			int affectedRows = 0;
 
+			ExecutionEngine exec = null;
+
 			try
 			{
 				//check if the current session is in a transaction
@@ -249,12 +236,14 @@ namespace voidsoft.DataBlock
 				connection = DatabaseConnection;
 
 				//initialize the ADO.NET objects and set the active transaction.
-				DataFactory.InitializeDbCommand(Database, ref icmd);
+				(new DataFactory()).InitializeDbCommand(Database, ref icmd);
 				icmd.Connection = connection;
 				itrans = connection.BeginTransaction(isolationLevel);
 				icmd.Transaction = itrans;
 
-				affectedRows = ExecutionEngine.ExecuteNonQueryConstrained(database, ref connection, ref icmd, listQueries);
+				exec = new ExecutionEngine(this);
+
+				affectedRows = exec.ExecuteNonQueryConstrained(ref connection, ref icmd, listQueries);
 
 				//commit the transaction
 				itrans.Commit();
@@ -266,7 +255,6 @@ namespace voidsoft.DataBlock
 			}
 			finally
 			{
-				listQueries.Clear();
 				isInTransaction = false;
 			}
 		}

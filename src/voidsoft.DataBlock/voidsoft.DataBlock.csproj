@@ -168,7 +168,7 @@
     <Compile Include="QueryCriteria\QueryCriteria Internal Objects\QueryCriteriaGeneratorType.cs" />
     <Compile Include="QueryCriteria\QueryCriteriaGenerators\AccessQueryCriteriaGenerator.cs" />
     <Compile Include="ExecutionEngine\ExecutionEngine.cs" />
-    <Compile Include="ExecutionEngine\ExecutionEngineStatic.cs" />
+    <Compile Include="ExecutionEngine\ExecutionEngineExtended.cs" />
     <Compile Include="ExecutionEngine\ExecutionQuery.cs" />
     <Compile Include="QueryCriteria\QueryCriteriaGenerators\MySqlQueryCriteriaGenerator.cs" />
     <Compile Include="QueryCriteria\QueryCriteriaGenerators\OracleQueryCriteriaGenerator.cs" />

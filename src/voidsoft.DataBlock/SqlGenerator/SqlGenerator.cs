@@ -32,13 +32,11 @@ namespace voidsoft.DataBlock
 		/// <returns>Generated ExecutionQuery</returns>
 		public ExecutionQuery GenerateSelectQuery(DatabaseServer database, QueryCriteria criteria)
 		{
-			ISqlGenerator isql = null;
-			StringBuilder sqlBuilder = null;
-			ExecutionQuery execQuery;
+			StringBuilder sqlBuilder = new StringBuilder();
 
-			sqlBuilder = new StringBuilder();
+			DataFactory factory = new DataFactory();
 
-			isql = DataFactory.InitializeSqlGenerator(database);
+			ISqlGenerator isql = factory.InitializeSqlGenerator(database);
 
 			sqlBuilder.Append(" SELECT ");
 
@@ -107,7 +105,7 @@ namespace voidsoft.DataBlock
 
 			sqlBuilder.Append(" FROM " + GetTableName(database, criteria.TableName));
 
-			execQuery = new ExecutionQuery();
+			ExecutionQuery execQuery = new ExecutionQuery();
 			execQuery.Query = sqlBuilder.ToString();
 			return execQuery;
 		}
@@ -134,111 +132,95 @@ namespace voidsoft.DataBlock
 		/// <returns>Returns the SELECT query</returns>
 		public ExecutionQuery GenerateSelectQuery(DatabaseServer database, string tableName, DatabaseField[] fields, bool generateConditionByPrimaryKey)
 		{
-			ISqlGenerator isql = null;
-			List<IDataParameter> listParameter = null;
 			ExecutionQuery execQuery;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			List<IDataParameter> listParameter = new List<IDataParameter>();
+
+			ISqlGenerator isql = factory.InitializeSqlGenerator(database);
+
+			StringBuilder sbuild = new StringBuilder();
+
+			sbuild.Append("SELECT ");
+
+			//separate code paths for code generation depending on the "WHERE" condition
+
+			//generate condition by primary key
+			if (generateConditionByPrimaryKey)
 			{
-				listParameter = new List<IDataParameter>();
 
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				StringBuilder sbuild = new StringBuilder();
-				sbuild.Append("SELECT ");
-
-				//separate code paths for code generation depending on the "WHERE" condition
-
-				//generate condition by primary key
-				if (generateConditionByPrimaryKey)
+				for (int i = 0; i < fields.Length; i++)
 				{
-					#region SELECT with PK condition
-
-					for (int i = 0; i < fields.Length; i++)
-					{
-						if (!fields[i].isPrimaryKey)
-						{
-							if (i == fields.Length - 1)
-							{
-								sbuild.Append(GetTableName(database, tableName) + "." + fields[i].fieldName);
-							}
-							else
-							{
-								sbuild.Append(GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
-							}
-						}
-					}
-					sbuild.Append(" FROM " + GetTableName(database, tableName));
-
-					//generate "where" condition
-					bool isFirst = true;
-
-					for (int i = 0; i < fields.Length; i++)
-					{
-						if (fields[i].isPrimaryKey)
-						{
-							IDataParameter param = converter.ConvertToDataParameter(database, GetTableName(database, tableName), fields[i]);
-
-							if (isFirst)
-							{
-								sbuild.Append(" WHERE " + GetTableName(database, tableName) + "." + fields[i].fieldName + isql.GetValueWithComparationOperator(param));
-								isFirst = false;
-								listParameter.Add(param);
-							}
-							else
-							{
-								sbuild.Append(" AND " + GetTableName(database, tableName) + "." + fields[i].fieldName + isql.GetValueWithComparationOperator(param));
-								listParameter.Add(param);
-							}
-						}
-					}
-
-					execQuery = new ExecutionQuery();
-					execQuery.Query = sbuild.ToString();
-					IDataParameter[] pmc = new IDataParameter[listParameter.Count];
-					listParameter.CopyTo(pmc);
-
-					return execQuery;
-
-					#endregion
-				}
-				else
-				{
-					#region SELECT without condition
-
-					for (int i = 0; i < fields.Length; i++)
+					if (!fields[i].isPrimaryKey)
 					{
 						if (i == fields.Length - 1)
 						{
-							sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName);
+							sbuild.Append(GetTableName(database, tableName) + "." + fields[i].fieldName);
 						}
 						else
 						{
-							sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
+							sbuild.Append(GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
 						}
 					}
+				}
+				sbuild.Append(" FROM " + GetTableName(database, tableName));
 
-					sbuild.Append(" FROM " + tableName);
+				//generate "where" condition
+				bool isFirst = true;
+
+				for (int i = 0; i < fields.Length; i++)
+				{
+					if (fields[i].isPrimaryKey)
+					{
+						IDataParameter param = converter.ConvertToDataParameter(database, GetTableName(database, tableName), fields[i]);
+
+						if (isFirst)
+						{
+							sbuild.Append(" WHERE " + GetTableName(database, tableName) + "." + fields[i].fieldName + isql.GetValueWithComparationOperator(param));
+							isFirst = false;
+							listParameter.Add(param);
+						}
+						else
+						{
+							sbuild.Append(" AND " + GetTableName(database, tableName) + "." + fields[i].fieldName + isql.GetValueWithComparationOperator(param));
+							listParameter.Add(param);
+						}
+					}
 				}
 
 				execQuery = new ExecutionQuery();
 				execQuery.Query = sbuild.ToString();
-				IDataParameter[] pmca = new IDataParameter[listParameter.Count];
-				listParameter.CopyTo(pmca);
+				IDataParameter[] pmc = new IDataParameter[listParameter.Count];
+				listParameter.CopyTo(pmc);
 
 				return execQuery;
-
-					#endregion
 			}
-			finally
+
+
+			for (int i = 0; i < fields.Length; i++)
 			{
-				if (listParameter != null)
+				if (i == fields.Length - 1)
 				{
-					listParameter.Clear();
+					sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName);
+				}
+				else
+				{
+					sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
 				}
 			}
+
+			sbuild.Append(" FROM " + tableName);
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+			IDataParameter[] pmca = new IDataParameter[listParameter.Count];
+			listParameter.CopyTo(pmca);
+
+			return execQuery;
+
 		}
 
 		/// <summary>
@@ -264,80 +246,71 @@ namespace voidsoft.DataBlock
 		public ExecutionQuery GenerateSelectQuery(DatabaseServer database, string tableName, DatabaseField[] fields, params DatabaseField[] conditionalFields)
 		{
 			ISqlGenerator isql = null;
+
 			StringBuilder sbuild = null;
 
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
-			{
-				listParameters = new List<IDataParameter>();
+			DataFactory factory = new DataFactory();
 
-				if (conditionalFields != null && conditionalFields.Length == 0)
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			if (conditionalFields != null && conditionalFields.Length == 0)
+			{
+				return GenerateSelectQuery(database, tableName, fields, false);
+			}
+
+
+			sbuild = new StringBuilder();
+			isql = factory.InitializeSqlGenerator(database);
+
+			sbuild.Append(" SELECT ");
+
+			for (int i = 0; i < fields.Length; i++)
+			{
+				if (i == fields.Length - 1)
 				{
-					return GenerateSelectQuery(database, tableName, fields, false);
+					sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName);
 				}
 				else
 				{
-					sbuild = new StringBuilder();
-					isql = DataFactory.InitializeSqlGenerator(database);
-
-					sbuild.Append(" SELECT ");
-
-					for (int i = 0; i < fields.Length; i++)
-					{
-						if (i == fields.Length - 1)
-						{
-							sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName);
-						}
-						else
-						{
-							sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
-						}
-					}
-
-					sbuild.Append(" FROM " + GetTableName(database, tableName));
-
-					if (conditionalFields != null)
-					{
-						sbuild.Append(" WHERE ");
-
-						//generate conditions
-						for (int i = 0; i < conditionalFields.Length; i++)
-						{
-							IDataParameter param = converter.ConvertToDataParameter(database, tableName, conditionalFields[i]);
-
-							if (i == conditionalFields.Length - 1)
-							{
-								sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(param));
-							}
-							else
-							{
-								sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(param) + " AND ");
-							}
-
-							listParameters.Add(param);
-						}
-					}
-
-					execQuery = new ExecutionQuery();
-
-					execQuery.Query = sbuild.ToString();
-					IDataParameter[] pmca = new IDataParameter[listParameters.Count];
-					listParameters.CopyTo(pmca);
-					execQuery.Parameters = pmca;
-					return execQuery;
+					sbuild.Append(" " + GetTableName(database, tableName) + "." + fields[i].fieldName + ",");
 				}
 			}
-			finally
+
+			sbuild.Append(" FROM " + GetTableName(database, tableName));
+
+			if (conditionalFields != null)
 			{
-				if (listParameters != null)
+				sbuild.Append(" WHERE ");
+
+				//generate conditions
+				for (int i = 0; i < conditionalFields.Length; i++)
 				{
-					listParameters.Clear();
+					IDataParameter param = converter.ConvertToDataParameter(database, tableName, conditionalFields[i]);
+
+					if (i == conditionalFields.Length - 1)
+					{
+						sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(param));
+					}
+					else
+					{
+						sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(param) + " AND ");
+					}
+
+					listParameters.Add(param);
 				}
 			}
+
+			execQuery = new ExecutionQuery();
+
+			execQuery.Query = sbuild.ToString();
+			IDataParameter[] pmca = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(pmca);
+			execQuery.Parameters = pmca;
+			return execQuery;
 		}
 
 		/// <summary>
@@ -351,64 +324,55 @@ namespace voidsoft.DataBlock
 		{
 			ISqlGenerator isql = null;
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
-
+			
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			List<IDataParameter>  listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+			sbuild.Append(" SELECT * FROM " + GetTableName(database, tableName));
+
+			if (conditionalFields.Length > 0)
 			{
-				listParameters = new List<IDataParameter>();
-
-				StringBuilder sbuild = new StringBuilder();
-				sbuild.Append(" SELECT * FROM " + GetTableName(database, tableName));
-
-				if (conditionalFields.Length > 0)
-				{
-					sbuild.Append(" WHERE ");
-				}
-				else
-				{
-					execQuery = new ExecutionQuery();
-					execQuery.Query = sbuild.ToString();
-
-					return execQuery;
-				}
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				if (conditionalFields != null)
-				{
-					for (int i = 0; i < conditionalFields.Length; i++)
-					{
-						IDataParameter param = converter.ConvertToDataParameter(database, tableName, conditionalFields[i]);
-
-						if (i == conditionalFields.Length - 1)
-						{
-							sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithAttributionOperator(param));
-						}
-						else
-						{
-							sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithAttributionOperator(param) + ",");
-						}
-
-						listParameters.Add(param);
-					}
-				}
-
+				sbuild.Append(" WHERE ");
+			}
+			else
+			{
 				execQuery = new ExecutionQuery();
 				execQuery.Query = sbuild.ToString();
-				IDataParameter[] pmca = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(pmca);
-				execQuery.Parameters = pmca;
+
 				return execQuery;
 			}
-			finally
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			if (conditionalFields != null)
 			{
-				if (listParameters != null)
+				for (int i = 0; i < conditionalFields.Length; i++)
 				{
-					listParameters.Clear();
+					IDataParameter param = converter.ConvertToDataParameter(database, tableName, conditionalFields[i]);
+
+					if (i == conditionalFields.Length - 1)
+					{
+						sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithAttributionOperator(param));
+					}
+					else
+					{
+						sbuild.Append(GetTableName(database, tableName) + "." + conditionalFields[i].fieldName + isql.GetValueWithAttributionOperator(param) + ",");
+					}
+
+					listParameters.Add(param);
 				}
 			}
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+			IDataParameter[] pmca = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(pmca);
+			execQuery.Parameters = pmca;
+			return execQuery;
 		}
 
 		/// <summary>
@@ -421,7 +385,9 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		public ExecutionQuery GenerateSelectPaginatedQuery(DatabaseServer database, TableMetadata metadata, int numberOfItems, int pageNumber)
 		{
-			ISqlGenerator isql = DataFactory.InitializeSqlGenerator(database);
+
+			DataFactory factory = new DataFactory();
+			ISqlGenerator isql = factory.InitializeSqlGenerator(database);
 			string result = isql.GeneratePaginatedQuery(metadata, numberOfItems, pageNumber);
 
 			return new ExecutionQuery(result, new IDataParameter[0]);
@@ -439,106 +405,96 @@ namespace voidsoft.DataBlock
 			ISqlGenerator isql = null;
 
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			sbuild.Append("INSERT INTO " + GetTableName(database, tableName) + "(");
+
+			for (int i = 0; i < fields.Length; i++)
 			{
-				listParameters = new List<IDataParameter>();
-
-				StringBuilder sbuild = new StringBuilder();
-
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				sbuild.Append("INSERT INTO " + GetTableName(database, tableName) + "(");
-
-				for (int i = 0; i < fields.Length; i++)
+				//skip the PK field if is autogenerated.
+				if (fields[i].isPrimaryKey && fields[i].isValueAutogenerated)
 				{
-					//skip the PK field if is autogenerated.
-					if (fields[i].isPrimaryKey && fields[i].isValueAutogenerated)
-					{
-						continue;
-					}
+					continue;
+				}
 
-					//check if this is the last field
-					if (i == fields.Length - 1)
+				//check if this is the last field
+				if (i == fields.Length - 1)
+				{
+					sbuild.Append(fields[i].fieldName);
+				}
+				else
+				{
+					sbuild.Append(fields[i].fieldName + ",");
+				}
+			}
+
+			sbuild.Append(") VALUES(");
+
+			//generate the execution query
+
+			for (int i = 0; i < fields.Length; i++)
+			{
+				//skip the PK field if is autogenerated.
+				if (fields[i].isPrimaryKey && fields[i].isValueAutogenerated)
+				{
+					continue;
+				}
+
+				//check if this is the last field
+				if (i == fields.Length - 1)
+				{
+					//check for PK placeholder
+					if (fields[i].fieldValue != null && fields[i].fieldValue.ToString() == FOREIGN_KEY_PLACEHOLDER_VALUE)
 					{
-						sbuild.Append(fields[i].fieldName);
+						sbuild.Append(isql.GetValue(fields[i].fieldType, fields[i].fieldValue) + ")");
 					}
 					else
 					{
-						sbuild.Append(fields[i].fieldName + ",");
+						//add the name of the field
+						sbuild.Append(factory.GetParameterChar(database) + fields[i].fieldName + ")");
+
+						//add the corresponding parameter.
+						IDataParameter[] iparams = converter.ConvertToDataParameter(database, fields[i]);
+						listParameters.Add(iparams[0]);
 					}
 				}
-
-				sbuild.Append(") VALUES(");
-
-				//generate the execution query
-
-				for (int i = 0; i < fields.Length; i++)
+				else
 				{
-					//skip the PK field if is autogenerated.
-					if (fields[i].isPrimaryKey && fields[i].isValueAutogenerated)
+					//check for PK placeholder
+					if (fields[i].fieldValue != null && fields[i].fieldValue.ToString() == FOREIGN_KEY_PLACEHOLDER_VALUE)
 					{
-						continue;
-					}
-
-					//check if this is the last field
-					if (i == fields.Length - 1)
-					{
-						//check for PK placeholder
-						if (fields[i].fieldValue != null && fields[i].fieldValue.ToString() == FOREIGN_KEY_PLACEHOLDER_VALUE)
-						{
-							sbuild.Append(isql.GetValue(fields[i].fieldType, fields[i].fieldValue) + ")");
-						}
-						else
-						{
-							//add the name of the field
-							sbuild.Append(DataFactory.GetParameterChar(database) + fields[i].fieldName + ")");
-
-							//add the coresponding parameter.
-							IDataParameter[] iparams = converter.ConvertToDataParameter(database, fields[i]);
-							listParameters.Add(iparams[0]);
-						}
+						sbuild.Append(isql.GetValue(fields[i].fieldType, fields[i].fieldValue) + ",");
 					}
 					else
 					{
-						//check for PK placeholder
-						if (fields[i].fieldValue != null && fields[i].fieldValue.ToString() == FOREIGN_KEY_PLACEHOLDER_VALUE)
-						{
-							sbuild.Append(isql.GetValue(fields[i].fieldType, fields[i].fieldValue) + ",");
-						}
-						else
-						{
-							//add the name of the field
-							sbuild.Append(DataFactory.GetParameterChar(database) + fields[i].fieldName + ",");
+						//add the name of the field
+						sbuild.Append(factory.GetParameterChar(database) + fields[i].fieldName + ",");
 
-							//add the coresponding parameter.
-							IDataParameter[] iparams = converter.ConvertToDataParameter(database, fields[i]);
-							listParameters.Add(iparams[0]);
-						}
+						//add the coresponding parameter.
+						IDataParameter[] iparams = converter.ConvertToDataParameter(database, fields[i]);
+						listParameters.Add(iparams[0]);
 					}
 				}
-
-
-				execQuery = new ExecutionQuery();
-
-				IDataParameter[] par = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(par);
-				execQuery.Parameters = par;
-				execQuery.Query = sbuild.ToString();
-
-				return execQuery;
 			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
-			}
+
+
+			execQuery = new ExecutionQuery();
+
+			IDataParameter[] par = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(par);
+			execQuery.Parameters = par;
+			execQuery.Query = sbuild.ToString();
+
+			return execQuery;
 		}
 
 		/// <summary>
@@ -582,71 +538,61 @@ namespace voidsoft.DataBlock
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			//generate condition by all the DatabaseFields.
+			if (!generateConditionOnlyByPrimaryKey)
 			{
-				//generate condition by all the DatabaseFields.
-				if (!generateConditionOnlyByPrimaryKey)
+				return GenerateDeleteQuery(database, table.TableName, table.TableFields);
+			}
+
+
+			//generate conditions by all the fields.
+			listParameters = new List<IDataParameter>();
+			sbuild = new StringBuilder();
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			sbuild.Append(" DELETE ");
+
+			if (database == DatabaseServer.Access)
+			{
+				sbuild.Append(" * ");
+			}
+
+			sbuild.Append(" FROM " + GetTableName(database, table.TableName) + " WHERE ");
+
+			//flag used if we have multiple primary keys
+			bool isFirst = true;
+
+			for (int i = 0; i < table.TableFields.Length; i++)
+			{
+				if (table.TableFields[i].isPrimaryKey)
 				{
-					return GenerateDeleteQuery(database, table.TableName, table.TableFields);
-				}
-				else
-				{
-					//generate conditions by all the fields.
-					listParameters = new List<IDataParameter>();
-					sbuild = new StringBuilder();
+					IDataParameter[] parameter = converter.ConvertToDataParameter(database, table.TableFields[i]);
+					listParameters.Add(parameter[0]);
 
-
-					isql = DataFactory.InitializeSqlGenerator(database);
-
-					sbuild.Append(" DELETE ");
-
-					if (database == DatabaseServer.Access)
+					if (isFirst)
 					{
-						sbuild.Append(" * ");
+						sbuild.Append(table.TableFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
+						isFirst = false;
 					}
-
-					sbuild.Append(" FROM " + GetTableName(database, table.TableName) + " WHERE ");
-
-					//flag used if we have multiple primary keys
-					bool isFirst = true;
-
-					for (int i = 0; i < table.TableFields.Length; i++)
+					else
 					{
-						if (table.TableFields[i].isPrimaryKey)
-						{
-							IDataParameter[] parameter = converter.ConvertToDataParameter(database, table.TableFields[i]);
-							listParameters.Add(parameter[0]);
-
-							if (isFirst)
-							{
-								sbuild.Append(table.TableFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-								isFirst = false;
-							}
-							else
-							{
-								sbuild.Append(" AND " + table.TableFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-							}
-						}
+						sbuild.Append(" AND " + table.TableFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
 					}
-
-
-					execQuery = new ExecutionQuery();
-
-					IDataParameter[] par = new IDataParameter[listParameters.Count];
-					listParameters.CopyTo(par);
-					execQuery.Parameters = par;
-					execQuery.Query = sbuild.ToString();
-
-					return execQuery;
 				}
 			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
-			}
+
+
+			execQuery = new ExecutionQuery();
+
+			IDataParameter[] par = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(par);
+			execQuery.Parameters = par;
+			execQuery.Query = sbuild.ToString();
+
+			return execQuery;
 		}
 
 		/// <summary>
@@ -673,71 +619,57 @@ namespace voidsoft.DataBlock
 			ISqlGenerator isql = null;
 
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			sbuild.Append(" DELETE ");
+
+			if (database == DatabaseServer.Access)
 			{
-				listParameters = new List<IDataParameter>();
+				sbuild.Append(" * ");
+			}
 
-				StringBuilder sbuild = new StringBuilder();
+			sbuild.Append(" FROM " + GetTableName(database, tableName)); // + " WHERE ");
 
+			bool isFirst = true;
 
-				isql = DataFactory.InitializeSqlGenerator(database);
+			if (conditionalField.Length > 0)
+			{
+				sbuild.Append(" WHERE ");
 
-				sbuild.Append(" DELETE ");
-
-				if (database == DatabaseServer.Access)
+				for (int i = 0; i < conditionalField.Length; i++)
 				{
-					sbuild.Append(" * ");
-				}
+					IDataParameter[] parameter = converter.ConvertToDataParameter(database, conditionalField[i]);
+					listParameters.Add(parameter[0]);
 
-				sbuild.Append(" FROM " + GetTableName(database, tableName)); // + " WHERE ");
-
-				bool isFirst = true;
-
-				if (conditionalField.Length > 0)
-				{
-					sbuild.Append(" WHERE ");
-
-					for (int i = 0; i < conditionalField.Length; i++)
+					if (isFirst)
 					{
-						IDataParameter[] parameter = converter.ConvertToDataParameter(database, conditionalField[i]);
-						listParameters.Add(parameter[0]);
-
-						if (isFirst)
-						{
-							sbuild.Append(conditionalField[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-							isFirst = false;
-						}
-						else
-						{
-							sbuild.Append(" AND " + conditionalField[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-						}
+						sbuild.Append(conditionalField[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
+						isFirst = false;
+					}
+					else
+					{
+						sbuild.Append(" AND " + conditionalField[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
 					}
 				}
+			}
 
 
-				execQuery = new ExecutionQuery();
-				IDataParameter[] par = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(par);
-				execQuery.Parameters = par;
-				execQuery.Query = sbuild.ToString();
+			execQuery = new ExecutionQuery();
+			IDataParameter[] par = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(par);
+			execQuery.Parameters = par;
+			execQuery.Query = sbuild.ToString();
 
-				return execQuery;
-			}
-			catch
-			{
-				throw;
-			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
-			}
+			return execQuery;
 		}
 
 		/// <summary>
@@ -752,89 +684,80 @@ namespace voidsoft.DataBlock
 		{
 			ISqlGenerator isql = null;
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			sbuild.Append(" UPDATE " + GetTableName(database, tableName) + " SET ");
+
+			//generate update fields
+			for (int i = 0; i < fields.Length; i++)
 			{
-				listParameters = new List<IDataParameter>();
-
-				StringBuilder sbuild = new StringBuilder();
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				sbuild.Append(" UPDATE " + GetTableName(database, tableName) + " SET ");
-
-				//generate update fields
-				for (int i = 0; i < fields.Length; i++)
+				if (fields[i].isPrimaryKey)
 				{
-					if (fields[i].isPrimaryKey)
-					{
-						continue;
-					}
-
-					if (i == fields.Length - 1)
-					{
-						IDataParameter[] parameters = converter.ConvertToDataParameter(database, fields[i]);
-						sbuild.Append(" " + fields[i].fieldName + isql.GetValueWithAttributionOperator(parameters[0]));
-						listParameters.Add(parameters[0]);
-					}
-					else
-					{
-						IDataParameter[] parameter = converter.ConvertToDataParameter(database, fields[i]);
-						sbuild.Append(" " + fields[i].fieldName + isql.GetValueWithAttributionOperator(parameter[0]) + ",");
-						listParameters.Add(parameter[0]);
-					}
+					continue;
 				}
 
-				//flag used if we have more than a primary key field
-				bool isFirst = true;
-
-				//check if we generate condition by the primary key
-				if (generateConditionByPrimaryKey)
+				if (i == fields.Length - 1)
 				{
-					//generate condition
-					sbuild.Append(" WHERE ");
+					IDataParameter[] parameters = converter.ConvertToDataParameter(database, fields[i]);
+					sbuild.Append(" " + fields[i].fieldName + isql.GetValueWithAttributionOperator(parameters[0]));
+					listParameters.Add(parameters[0]);
+				}
+				else
+				{
+					IDataParameter[] parameter = converter.ConvertToDataParameter(database, fields[i]);
+					sbuild.Append(" " + fields[i].fieldName + isql.GetValueWithAttributionOperator(parameter[0]) + ",");
+					listParameters.Add(parameter[0]);
+				}
+			}
 
-					for (int i = 0; i < fields.Length; i++)
+			//flag used if we have more than a primary key field
+			bool isFirst = true;
+
+			//check if we generate condition by the primary key
+			if (generateConditionByPrimaryKey)
+			{
+				//generate condition
+				sbuild.Append(" WHERE ");
+
+				for (int i = 0; i < fields.Length; i++)
+				{
+					//check if this is the first primary key
+					if (fields[i].isPrimaryKey)
 					{
-						//check if this is the first primary key
-						if (fields[i].isPrimaryKey)
-						{
-							IDataParameter[] parameter = converter.ConvertToDataParameter(database, fields[i]);
-							listParameters.Add(parameter[0]);
+						IDataParameter[] parameter = converter.ConvertToDataParameter(database, fields[i]);
+						listParameters.Add(parameter[0]);
 
-							if (isFirst)
-							{
-								sbuild.Append(fields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-								isFirst = false;
-							}
-							else
-							{
-								sbuild.Append("," + fields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-							}
+						if (isFirst)
+						{
+							sbuild.Append(fields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
+							isFirst = false;
+						}
+						else
+						{
+							sbuild.Append("," + fields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
 						}
 					}
 				}
-
-
-				execQuery = new ExecutionQuery();
-				execQuery.Query = sbuild.ToString();
-
-				IDataParameter[] prm = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(prm);
-				execQuery.Parameters = prm;
-
-				return execQuery;
 			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
-			}
+
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+
+			IDataParameter[] prm = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(prm);
+			execQuery.Parameters = prm;
+
+			return execQuery;
 		}
 
 		/// <summary>
@@ -878,100 +801,92 @@ namespace voidsoft.DataBlock
 		{
 			ISqlGenerator isql = null;
 			ExecutionQuery execQuery;
-			List<IDataParameter> listParameters = null;
 
 			DataConvertor converter = new DataConvertor();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			//check params
+			if (updatedFields.Length == 0)
 			{
-				//check params
-				if (updatedFields.Length == 0)
+				throw new ArgumentException("Invalid fields to update");
+			}
+
+			List<IDataParameter> listParameters = new List<IDataParameter>();
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			StringBuilder sbuild = new StringBuilder();
+			sbuild.Append("UPDATE " + GetTableName(database, tableName) + " SET ");
+
+			bool isConditionalField = false;
+
+
+			isql = factory.InitializeSqlGenerator(database);
+
+			for (int i = 0; i < updatedFields.Length; i++)
+			{
+				//skip conditional fields.
+				if (skipConditionalFieldsFromUpdateList)
 				{
-					throw new ArgumentException("Invalid fields to update");
-				}
+					isConditionalField = false;
+					//check if this is a conditional field. If it is skip it...
 
-				listParameters = new List<IDataParameter>();
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				StringBuilder sbuild = new StringBuilder();
-				sbuild.Append("UPDATE " + GetTableName(database, tableName) + " SET ");
-
-				bool isConditionalField = false;
-
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				for (int i = 0; i < updatedFields.Length; i++)
-				{
-					//skip conditional fields.
-					if (skipConditionalFieldsFromUpdateList)
+					for (int j = 0; j < conditionalFields.Length; j++)
 					{
-						isConditionalField = false;
-						//check if this is a conditional field. If it is skip it...
-
-						for (int j = 0; j < conditionalFields.Length; j++)
+						//check if it's the same field
+						if (updatedFields[i].Equals(conditionalFields[j]))
 						{
-							//check if it's the same field
-							if (updatedFields[i].Equals(conditionalFields[j]))
-							{
-								isConditionalField = true;
-								break;
-							}
-						}
-
-						if (isConditionalField)
-						{
-							continue;
+							isConditionalField = true;
+							break;
 						}
 					}
 
-					IDataParameter[] parameter = converter.ConvertToDataParameter(database, updatedFields[i]);
-					sbuild.Append("  " + updatedFields[i].fieldName + isql.GetValueWithAttributionOperator(parameter[0]) + " , ");
+					if (isConditionalField)
+					{
+						continue;
+					}
+				}
+
+				IDataParameter[] parameter = converter.ConvertToDataParameter(database, updatedFields[i]);
+				sbuild.Append("  " + updatedFields[i].fieldName + isql.GetValueWithAttributionOperator(parameter[0]) + " , ");
+				listParameters.Add(parameter[0]);
+			}
+
+			//remove trailing
+			sbuild.Remove(sbuild.Length - 2, 1);
+
+			if (conditionalFields != null)
+			{
+				//generate conditon
+				sbuild.Append(" WHERE ");
+
+				for (int i = 0; i < conditionalFields.Length; i++)
+				{
+					IDataParameter[] parameter = converter.ConvertToDataParameter(database, conditionalFields[i]);
 					listParameters.Add(parameter[0]);
-				}
 
-				//remove trailing
-				sbuild.Remove(sbuild.Length - 2, 1);
-
-				if (conditionalFields != null)
-				{
-					//generate conditon
-					sbuild.Append(" WHERE ");
-
-					for (int i = 0; i < conditionalFields.Length; i++)
+					if (i == conditionalFields.Length - 1)
 					{
-						IDataParameter[] parameter = converter.ConvertToDataParameter(database, conditionalFields[i]);
-						listParameters.Add(parameter[0]);
-
-						if (i == conditionalFields.Length - 1)
-						{
-							sbuild.Append(conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
-						}
-						else
-						{
-							sbuild.Append(conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]) + " AND ");
-						}
+						sbuild.Append(conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]));
+					}
+					else
+					{
+						sbuild.Append(conditionalFields[i].fieldName + isql.GetValueWithComparationOperator(parameter[0]) + " AND ");
 					}
 				}
-
-
-				execQuery = new ExecutionQuery();
-				execQuery.Query = sbuild.ToString();
-
-				IDataParameter[] prm = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(prm);
-				execQuery.Parameters = prm;
-
-				return execQuery;
 			}
-			finally
-			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
-			}
+
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+
+			IDataParameter[] prm = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(prm);
+			execQuery.Parameters = prm;
+
+			return execQuery;
+
 		}
 
 		/// <summary>

@@ -70,7 +70,7 @@ namespace voidsoft.DataBlock
 		{
 			this.contextSession = contextSession;
 			mappedObject = mainTable;
-			execEngine = ExecutionEngine.CreateNewExecutionEngine(this.contextSession);
+			execEngine = new ExecutionEngine(this.contextSession);
 			database = contextSession.Database;
 		}
 
@@ -109,7 +109,6 @@ namespace voidsoft.DataBlock
 			}
 		}
 
-
 		/// <summary>
 		///     Dispose
 		/// </summary>
@@ -123,12 +122,18 @@ namespace voidsoft.DataBlock
 
 		public object GetLastInsertedPK()
 		{
-			return ExecutionEngine.ExecuteScalar(this.database, this.connectionString, new ExecutionQuery("SELECT IDENT_CURRENT ('" + this.mappedObject.TableName + "') AS Id", new IDataParameter[0]));
+			using (ExecutionEngine e = new ExecutionEngine())
+			{
+				return e.ExecuteScalar(new ExecutionQuery("SELECT IDENT_CURRENT ('" + mappedObject.TableName + "') AS Id", new IDataParameter[0]));
+			}
 		}
 
 		public object GetLastInsertedPK(string tableName)
 		{
-			return ExecutionEngine.ExecuteScalar(this.database, this.connectionString, new ExecutionQuery("SELECT IDENT_CURRENT ('" + tableName + "') AS Id", new IDataParameter[0]));
+			using (ExecutionEngine e = new ExecutionEngine())
+			{
+				return e.ExecuteScalar(new ExecutionQuery("SELECT IDENT_CURRENT ('" + tableName + "') AS Id", new IDataParameter[0]));
+			}
 		}
 
 		/// <summary>
@@ -139,33 +144,30 @@ namespace voidsoft.DataBlock
 		public DataTable GetDataTable(QueryCriteria criteria)
 		{
 			IQueryCriteriaGenerator iql = null;
+
+			DataFactory factory = new DataFactory();
+
+			iql = factory.InitializeQueryCriteriaGenerator(database);
+
 			DataTable table = null;
 
-			try
+			ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
+
+			//check for session
+			if (contextSession != null)
 			{
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
-				table = new DataTable();
-
-				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
-
-				//check for session
-				if (contextSession != null)
-				{
-					table = execEngine.ExecuteDataTable(selectQuery);
-				}
-				else
+				table = execEngine.ExecuteDataTable(selectQuery);
+			}
+			else
+			{
+				using (ExecutionEngine e = new ExecutionEngine())
 				{
 					//no session 
-					table = ExecutionEngine.ExecuteDataTable(database, connectionString, selectQuery);
+					table = e.ExecuteDataTable(selectQuery);
 				}
+			}
 
-				return table;
-			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
+			return table;
 		}
 
 		/// <summary>
@@ -178,30 +180,22 @@ namespace voidsoft.DataBlock
 
 			SqlGenerator generator = new SqlGenerator();
 
+			ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject, false);
 
-			try
+			//check for session
+			if (contextSession != null)
 			{
-				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject, false);
-
-				dsTemp = new DataTable();
-
-				//check for session
-				if (contextSession != null)
-				{
-					dsTemp = execEngine.ExecuteDataTable(selectQuery);
-				}
-				else
-				{
-					dsTemp = ExecutionEngine.ExecuteDataTable(database, connectionString, selectQuery);
-				}
-
-				return dsTemp;
+				dsTemp = execEngine.ExecuteDataTable(selectQuery);
 			}
-			catch (Exception ex)
+			else
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw;
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					dsTemp = e.ExecuteDataTable(selectQuery);
+				}
 			}
+
+			return dsTemp;
 		}
 
 		/// <summary>
@@ -214,34 +208,28 @@ namespace voidsoft.DataBlock
 			DataTable ds = null;
 
 			SqlGenerator generator = new SqlGenerator();
-
-			try
+			if (fields.Length == 0)
 			{
-				if (fields.Length == 0)
-				{
-					throw new ArgumentException("Invalid fields number");
-				}
-
-				ds = new DataTable();
-
-				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
-
-				if (contextSession != null)
-				{
-					ds = execEngine.ExecuteDataTable(selectQuery);
-				}
-				else
-				{
-					ds = ExecutionEngine.ExecuteDataTable(database, connectionString, selectQuery);
-				}
-
-				return ds;
+				throw new ArgumentException("Invalid fields number");
 			}
-			catch (Exception ex)
+
+			ds = new DataTable();
+
+			ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
+
+			if (contextSession != null)
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw;
+				ds = execEngine.ExecuteDataTable(selectQuery);
 			}
+			else
+			{
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					ds = e.ExecuteDataTable(selectQuery);
+				}
+			}
+
+			return ds;
 		}
 
 		/// <summary>
@@ -256,7 +244,7 @@ namespace voidsoft.DataBlock
 
 			ExecutionQuery query = generator.GenerateSelectPaginatedQuery(database, mappedObject, numberOfItems, pageNumber);
 
-			DataTable table;
+			DataTable table = null;
 
 			if (contextSession != null)
 			{
@@ -264,7 +252,10 @@ namespace voidsoft.DataBlock
 			}
 			else
 			{
-				table = ExecutionEngine.ExecuteDataTable(database, connectionString, query);
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					table = e.ExecuteDataTable(query);
+				}
 			}
 
 			return table;
@@ -278,33 +269,29 @@ namespace voidsoft.DataBlock
 		public DataSet GetDataSet(QueryCriteria criteria)
 		{
 			IQueryCriteriaGenerator iql = null;
+
+			DataFactory factory = new DataFactory();
+
+			iql = factory.InitializeQueryCriteriaGenerator(database);
+
 			DataSet dsTemp = null;
 
-			try
+			ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
+
+			//check for session
+			if (contextSession != null)
 			{
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
-				dsTemp = new DataSet();
-
-				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
-
-				//check for session
-				if (contextSession != null)
-				{
-					dsTemp = execEngine.ExecuteDataSet(selectQuery);
-				}
-				else
-				{
-					//no session 
-					dsTemp = ExecutionEngine.ExecuteDataSet(database, connectionString, selectQuery);
-				}
-
-				return dsTemp;
+				dsTemp = execEngine.ExecuteDataSet(selectQuery);
 			}
-			catch (Exception ex)
+			else
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					dsTemp = e.ExecuteDataSet(database, connectionString, selectQuery);
+				}
 			}
+
+			return dsTemp;
 		}
 
 		/// <summary>
@@ -314,6 +301,7 @@ namespace voidsoft.DataBlock
 		public DataSet GetDataSet()
 		{
 			DataSet dsTemp = null;
+
 			SqlGenerator generator = new SqlGenerator();
 
 			try
@@ -329,7 +317,10 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					dsTemp = ExecutionEngine.ExecuteDataSet(database, connectionString, selectQuery);
+					using (ExecutionEngine e = new ExecutionEngine())
+					{
+						dsTemp = e.ExecuteDataSet(database, connectionString, selectQuery);
+					}
 				}
 
 				return dsTemp;
@@ -349,68 +340,61 @@ namespace voidsoft.DataBlock
 		/// <returns>DataSet containing data from the related table</returns>
 		public DataSet GetDataSet(string relatedTableName, object foreignKeyValue)
 		{
-			DataSet ds = null;
-
 			SqlGenerator generator = new SqlGenerator();
 
-			try
+			DataSet ds = new DataSet();
+
+			ExecutionQuery selectQuery = new ExecutionQuery();
+
+			TableRelation[] relations = mappedObject.Relations;
+
+			for (int i = 0; i < relations.Length; i++)
 			{
-				ds = new DataSet();
-
-				ExecutionQuery selectQuery = new ExecutionQuery();
-
-				TableRelation[] relations = mappedObject.Relations;
-
-				for (int i = 0; i < relations.Length; i++)
+				if (relations[i].RelatedTableName == relatedTableName.Trim())
 				{
-					if (relations[i].RelatedTableName == relatedTableName.Trim())
+					DatabaseField keyField;
+
+					//check if we have a ParentRelation or a ChildRelation
+					if (relations[i] is ParentTableRelation)
 					{
-						DatabaseField keyField;
+						DatabaseField primaryKeyField = mappedObject.GetPrimaryKeyField();
 
-						//check if we habe a ParentRelation or a ChildRelation
-						if (relations[i] is ParentTableRelation)
-						{
-							DatabaseField primaryKeyField = mappedObject.GetPrimaryKeyField();
-
-							//this is the parent so we select from the child table.
-							keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation)relations[i]).ForeignKeyName, false, false, foreignKeyValue);
-						}
-						else
-						{
-							//child relation 
-							ChildTableRelation childRelation = (ChildTableRelation)relations[i];
-
-							//this is the child so get data from the parent
-							keyField = new DatabaseField(mappedObject.GetPrimaryKeyField().fieldType, childRelation.RelatedTableKeyName, true, false, foreignKeyValue);
-						}
-
-						selectQuery = generator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
-						break;
+						//this is the parent so we select from the child table.
+						keyField = new DatabaseField(primaryKeyField.fieldType, ((ParentTableRelation)relations[i]).ForeignKeyName, false, false, foreignKeyValue);
 					}
-				}
+					else
+					{
+						//child relation 
+						ChildTableRelation childRelation = (ChildTableRelation)relations[i];
 
-				if (selectQuery.Query == string.Empty)
-				{
-					throw new ArgumentException("Invalid relation name");
-				}
+						//this is the child so get data from the parent
+						keyField = new DatabaseField(mappedObject.GetPrimaryKeyField().fieldType, childRelation.RelatedTableKeyName, true, false, foreignKeyValue);
+					}
 
-				//run the query in the associated context
-				if (contextSession != null)
-				{
-					ds = execEngine.ExecuteDataSet(selectQuery);
+					selectQuery = generator.GenerateSelectQuery(database, relations[i].RelatedTableName, keyField);
+					break;
 				}
-				else
-				{
-					ds = ExecutionEngine.ExecuteDataSet(database, connectionString, selectQuery);
-				}
-
-				return ds;
 			}
-			catch (Exception ex)
+
+			if (selectQuery.Query == string.Empty)
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				throw new ArgumentException("Invalid relation name");
 			}
+
+			//run the query in the associated context
+			if (contextSession != null)
+			{
+				ds = execEngine.ExecuteDataSet(selectQuery);
+			}
+			else
+			{
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					ds = e.ExecuteDataSet(selectQuery);
+				}
+			}
+
+			return ds;
 		}
 
 		/// <summary>
@@ -423,34 +407,28 @@ namespace voidsoft.DataBlock
 			DataSet ds = null;
 			SqlGenerator generator = new SqlGenerator();
 
-
-			try
+			if (fields.Length == 0)
 			{
-				if (fields.Length == 0)
-				{
-					throw new ArgumentException("Invalid fields number");
-				}
-
-				ds = new DataSet();
-
-				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
-
-				if (contextSession != null)
-				{
-					ds = execEngine.ExecuteDataSet(selectQuery);
-				}
-				else
-				{
-					ds = ExecutionEngine.ExecuteDataSet(database, connectionString, selectQuery);
-				}
-
-				return ds;
+				throw new ArgumentException("Invalid fields number");
 			}
-			catch (Exception ex)
+
+			ds = new DataSet();
+
+			ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, fields, null);
+
+			if (contextSession != null)
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				ds = execEngine.ExecuteDataSet(selectQuery);
 			}
+			else
+			{
+				using (ExecutionEngine e = new ExecutionEngine())
+				{
+					ds = e.ExecuteDataSet(selectQuery);
+				}
+			}
+
+			return ds;
 		}
 
 		/// <summary>
@@ -465,21 +443,13 @@ namespace voidsoft.DataBlock
 				throw new ArgumentException("Invalid criteria query. Must be the same as current table metadata");
 			}
 
-			IQueryCriteriaGenerator iql = null;
+			DataFactory factory = new DataFactory();
 
-			try
-			{
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+			IQueryCriteriaGenerator iql = factory.InitializeQueryCriteriaGenerator(database);
 
-				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
+			ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
 
-				return GetTableMetadata(selectQuery);
-			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
+			return GetTableMetadata(selectQuery);
 		}
 
 		/// <summary>
@@ -513,23 +483,15 @@ namespace voidsoft.DataBlock
 				throw new ArgumentException("Invalid criteria query. Must be the same as current table metadata");
 			}
 
-			IQueryCriteriaGenerator iql = null;
+			DataFactory factory = new DataFactory();
 
-			try
-			{
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+			IQueryCriteriaGenerator iql = factory.InitializeQueryCriteriaGenerator(database);
 
-				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
+			ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
 
-				TableMetadata[] metadatas = (TableMetadata[])GetTableMetadata(selectQuery);
+			TableMetadata[] metadatas = (TableMetadata[])GetTableMetadata(selectQuery);
 
-				return metadatas[0];
-			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
+			return metadatas[0];
 		}
 
 		/// <summary>
@@ -539,40 +501,32 @@ namespace voidsoft.DataBlock
 		/// <returns>The selected TableMetadata </returns>
 		public TableMetadata GetTableMetadata(object primaryKeyValue)
 		{
-			ISqlGenerator isql = null;
-
 			SqlGenerator generator = new SqlGenerator();
 
-			try
+			DataFactory factory = new DataFactory();
+
+			//generate select statement
+			if (primaryKeyValue == null)
 			{
-				//generate select statement
-				if (primaryKeyValue == null)
-				{
-					throw new ArgumentException("Invalid fieldValue for primary key");
-				}
-
-				isql = DataFactory.InitializeSqlGenerator(database);
-
-				DatabaseField pkField = mappedObject.GetPrimaryKeyField();
-
-				pkField.fieldValue = primaryKeyValue;
-
-				//generate select query
-				ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, mappedObject.TableFields, pkField);
-
-				TableMetadata table = (TableMetadata)Activator.CreateInstance(mappedObject.GetType());
-
-				ArrayList alList = MapDataReaderToTableMetadata(selectQuery, table);
-
-				table = (TableMetadata)alList[0];
-
-				return table;
+				throw new ArgumentException("Invalid fieldValue for primary key");
 			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw;
-			}
+
+			ISqlGenerator isql = factory.InitializeSqlGenerator(database);
+
+			DatabaseField pkField = mappedObject.GetPrimaryKeyField();
+
+			pkField.fieldValue = primaryKeyValue;
+
+			//generate select query
+			ExecutionQuery selectQuery = generator.GenerateSelectQuery(database, mappedObject.TableName, mappedObject.TableFields, pkField);
+
+			TableMetadata table = (TableMetadata)Activator.CreateInstance(mappedObject.GetType());
+
+			ArrayList alList = MapDataReaderToTableMetadata(selectQuery, table);
+
+			table = (TableMetadata)alList[0];
+
+			return table;
 		}
 
 		/// <summary>
@@ -642,11 +596,6 @@ namespace voidsoft.DataBlock
 
 				return array;
 			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
 			finally
 			{
 				if (alList != null)
@@ -667,6 +616,8 @@ namespace voidsoft.DataBlock
 			IDataReader iread = null;
 			ArrayList scData = null;
 
+			ExecutionEngine exec = null;
+
 			try
 			{
 				if (criteria.Fields.Length > 1)
@@ -676,7 +627,10 @@ namespace voidsoft.DataBlock
 
 				scData = new ArrayList();
 
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+				DataFactory factory = new DataFactory();
+
+				iql = factory.InitializeQueryCriteriaGenerator(database);
+
 				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
 
 				if (contextSession != null)
@@ -685,7 +639,9 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					iread = ExecutionEngine.ExecuteReader(database, connectionString, selectQuery);
+					exec = new ExecutionEngine(database, connectionString);
+
+					iread = exec.ExecuteReader(selectQuery);
 				}
 
 				while (iread.Read())
@@ -697,15 +653,16 @@ namespace voidsoft.DataBlock
 
 				return scData;
 			}
-			catch (Exception ex)
-			{
-				throw new DataBlockException(ex.Message, ex);
-			}
 			finally
 			{
 				if (iread != null)
 				{
 					iread.Close();
+				}
+
+				if (exec != null)
+				{
+					exec.Dispose();
 				}
 			}
 		}
@@ -722,6 +679,8 @@ namespace voidsoft.DataBlock
 
 			SqlGenerator generator = new SqlGenerator();
 
+			ExecutionEngine exec = null;
+
 			try
 			{
 				alData = new ArrayList();
@@ -734,7 +693,9 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					iread = ExecutionEngine.ExecuteReader(database, connectionString, selectQuery);
+					exec = new ExecutionEngine();
+
+					iread = exec.ExecuteReader(database, connectionString, selectQuery);
 				}
 
 				while (iread.Read())
@@ -746,16 +707,16 @@ namespace voidsoft.DataBlock
 
 				return alData;
 			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
 			finally
 			{
 				if (iread != null)
 				{
 					iread.Close();
+				}
+
+				if (exec != null)
+				{
+					exec.Dispose();
 				}
 			}
 		}
@@ -773,6 +734,8 @@ namespace voidsoft.DataBlock
 
 			SqlGenerator generator = new SqlGenerator();
 
+			ExecutionEngine exec = null;
+
 			try
 			{
 				DatabaseField[] fields = new DatabaseField[2];
@@ -789,7 +752,9 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					iread = ExecutionEngine.ExecuteReader(database, connectionString, selectQuery);
+					exec = new ExecutionEngine(database, connectionString);
+
+					iread = exec.ExecuteReader(database, connectionString, selectQuery);
 				}
 
 				while (iread.Read())
@@ -801,19 +766,20 @@ namespace voidsoft.DataBlock
 
 				return scData;
 			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
 			finally
 			{
 				if (iread != null)
 				{
 					iread.Close();
 				}
+
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
+
 
 		/// <summary>
 		///     Returns a single value from the database using the specified QueryCriteria
@@ -823,7 +789,10 @@ namespace voidsoft.DataBlock
 		public object GetValue(QueryCriteria criteria)
 		{
 			IQueryCriteriaGenerator iql = null;
+
 			object result = null;
+
+			ExecutionEngine exec = null;
 
 			try
 			{
@@ -832,7 +801,9 @@ namespace voidsoft.DataBlock
 					throw new ArgumentException("Invalid fields length. Must have only one field");
 				}
 
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+				DataFactory factory = new DataFactory();
+
+				iql = factory.InitializeQueryCriteriaGenerator(database);
 
 				ExecutionQuery selectQuery = iql.GenerateSelect(criteria);
 
@@ -842,15 +813,19 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					result = ExecutionEngine.ExecuteScalar(database, connectionString, selectQuery);
+					exec = new ExecutionEngine();
+
+					result = exec.ExecuteScalar(selectQuery);
 				}
 
 				return result;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -864,6 +839,8 @@ namespace voidsoft.DataBlock
 		public bool IsUnique(DatabaseField field, object value)
 		{
 			SqlGenerator generator = new SqlGenerator();
+
+			ExecutionEngine exec = null;
 
 			try
 			{
@@ -888,32 +865,30 @@ namespace voidsoft.DataBlock
 					{
 						return true;
 					}
-					else
-					{
-						return false;
-					}
+
+					return false;
 				}
-				else
+
+				exec = new ExecutionEngine();
+
+				resultValue = exec.ExecuteScalar(database, connectionString, selectQuery);
+
+				//set the original fieldValue back
+				field.fieldValue = oldValue;
+
+				if (resultValue == null)
 				{
-					resultValue = ExecutionEngine.ExecuteScalar(database, connectionString, selectQuery);
-
-					//set the original fieldValue back
-					field.fieldValue = oldValue;
-
-					if (resultValue == null)
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
+					return true;
 				}
+
+				return false;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -952,13 +927,16 @@ namespace voidsoft.DataBlock
 		/// <param name="metaTable">TableMatadata from which the object is created</param>
 		public int Create(TableMetadata metaTable)
 		{
-			//collection of queries which will be runned.
+			//collection of queries which will be executed
 			List<ExecutionQuery> listQueries = null;
+
 			int resultCounter = 0;
 
 			DatabaseField field = metaTable.GetPrimaryKeyField();
 
 			SqlGenerator generator = new SqlGenerator();
+
+			ExecutionEngine exec = null;
 
 			try
 			{
@@ -998,8 +976,6 @@ namespace voidsoft.DataBlock
 				//run in the  current session 
 				if (contextSession != null)
 				{
-					#region run in session
-
 					//the context is in a transaction so just cache the inserts.
 					if (contextSession.IsInTransaction)
 					{
@@ -1012,23 +988,20 @@ namespace voidsoft.DataBlock
 					{
 						resultCounter = execEngine.ExecuteNonQuery(listQueries);
 					}
-
-					#endregion
 				}
 				else
 				{
-					#region run in normal context
-
 					//
 					BeforeExecutingQueries(Operation.Create, ref listQueries);
+
+					exec = new ExecutionEngine();
 
 					//check if we need the PK or not
 					if (field.isValueAutogenerated && listQueries.Count == 1)
 					{
 						List<object> listPrimaryKeysValues = new List<object>();
 
-						resultCounter = ExecutionEngine.ExecuteNonQuery(database, connectionString, listQueries, Configuration.DefaultTransactionIsolationLevel,
-																		out listPrimaryKeysValues);
+						resultCounter = exec.ExecuteNonQuery(listQueries, Configuration.DefaultTransactionIsolationLevel, out listPrimaryKeysValues);
 
 						if (listPrimaryKeysValues.Count > 0)
 						{
@@ -1037,18 +1010,18 @@ namespace voidsoft.DataBlock
 					}
 					else
 					{
-						resultCounter = ExecutionEngine.ExecuteNonQuery(database, connectionString, listQueries, Configuration.DefaultTransactionIsolationLevel);
+						resultCounter = exec.ExecuteNonQuery(listQueries, Configuration.DefaultTransactionIsolationLevel);
 					}
-
-					#endregion
 				}
 
 				return resultCounter;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw;
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1061,6 +1034,8 @@ namespace voidsoft.DataBlock
 			List<ExecutionQuery> scQueries = null;
 
 			SqlGenerator generator = new SqlGenerator();
+
+			ExecutionEngine exec = null;
 
 			int resultCounter = 0;
 
@@ -1094,15 +1069,19 @@ namespace voidsoft.DataBlock
 				{
 					BeforeExecutingQueries(Operation.Update, ref scQueries);
 
-					resultCounter = ExecutionEngine.ExecuteNonQuery(database, connectionString, scQueries, Configuration.DefaultTransactionIsolationLevel);
+					exec = new ExecutionEngine();
+
+					resultCounter = exec.ExecuteNonQuery(scQueries, Configuration.DefaultTransactionIsolationLevel);
 				}
 
 				return resultCounter;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw;
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1113,11 +1092,13 @@ namespace voidsoft.DataBlock
 		/// <returns>Number of affected rows</returns>
 		public int Update(QueryCriteria criteria)
 		{
-			IQueryCriteriaGenerator iql = null;
+			DataFactory factory = new DataFactory();
+
+			ExecutionEngine exec = null;
 
 			try
 			{
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+				IQueryCriteriaGenerator iql = factory.InitializeQueryCriteriaGenerator(database);
 
 				ExecutionQuery query = iql.GenerateUpdate(criteria);
 
@@ -1128,20 +1109,21 @@ namespace voidsoft.DataBlock
 						contextSession.Queries.Add(query);
 						return 0;
 					}
-					else
-					{
-						return execEngine.ExecuteNonQuery(query);
-					}
+
+					return execEngine.ExecuteNonQuery(query);
 				}
-				else
-				{
-					return ExecutionEngine.ExecuteNonQuery(database, connectionString, query);
-				}
+
+
+				exec = new ExecutionEngine();
+
+				return exec.ExecuteNonQuery(query);
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1154,11 +1136,15 @@ namespace voidsoft.DataBlock
 		{
 			IQueryCriteriaGenerator queryCriteriaGenerator = null;
 
+			DataFactory factory = new DataFactory();
+
+			int affectedRows = 0;
+
+			ExecutionEngine exec = null;
+
 			try
 			{
-				int affectedRows = 0;
-
-				queryCriteriaGenerator = DataFactory.InitializeQueryCriteriaGenerator(database);
+				queryCriteriaGenerator = factory.InitializeQueryCriteriaGenerator(database);
 
 				DatabaseField field = mappedObject.GetPrimaryKeyField();
 
@@ -1183,14 +1169,19 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					affectedRows = ExecutionEngine.ExecuteNonQuery(database, connectionString, query);
+					exec = new ExecutionEngine();
+
+					affectedRows = exec.ExecuteNonQuery(query);
 				}
 
 				return affectedRows;
 			}
-			catch (Exception ex)
+			finally
 			{
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1200,13 +1191,16 @@ namespace voidsoft.DataBlock
 		/// <param name="criteria">QueryCriteria based on which data is deleted</param>
 		public int Delete(QueryCriteria criteria)
 		{
-			IQueryCriteriaGenerator iql = null;
+			int affectedRows = 0;
+
+			DataFactory factory = new DataFactory();
+
+			ExecutionEngine exec = null;
 
 			try
 			{
-				int affectedRows = 0;
 
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
+				IQueryCriteriaGenerator iql = factory.InitializeQueryCriteriaGenerator(database);
 
 				ExecutionQuery query = iql.GenerateDelete(criteria);
 
@@ -1223,15 +1217,19 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					affectedRows = ExecutionEngine.ExecuteNonQuery(database, connectionString, query);
+					exec = new ExecutionEngine();
+
+					affectedRows = exec.ExecuteNonQuery(query);
 				}
 
 				return affectedRows;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1242,6 +1240,8 @@ namespace voidsoft.DataBlock
 		public int Delete(TableMetadata mainTable)
 		{
 			SqlGenerator generator = new SqlGenerator();
+
+			ExecutionEngine exec = null;
 
 			try
 			{
@@ -1272,16 +1272,61 @@ namespace voidsoft.DataBlock
 				{
 					BeforeExecutingQueries(Operation.Delete, ref listQueries);
 
+					exec = new ExecutionEngine();
+
 					//run everything in a local transaction
-					affectedRows = ExecutionEngine.ExecuteNonQuery(database, connectionString, listQueries, Configuration.DefaultTransactionIsolationLevel);
+					affectedRows = exec.ExecuteNonQuery(listQueries, Configuration.DefaultTransactionIsolationLevel);
 				}
 
 				return affectedRows;
 			}
-			catch (Exception ex)
+			finally
 			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
+			}
+		}
+
+
+		private object RunIntrinsecFunction(CriteriaOperator criteria, DatabaseField field)
+		{
+			IQueryCriteriaGenerator iql = null;
+
+			object result;
+
+			ExecutionEngine exec = null;
+
+			try
+			{
+				QueryCriteria qc = new QueryCriteria(mappedObject.TableName, field);
+				qc.Add(criteria, field);
+
+				DataFactory factory = new DataFactory();
+
+				iql = factory.InitializeQueryCriteriaGenerator(database);
+
+				ExecutionQuery query = iql.GenerateSelect(qc);
+
+				if (contextSession != null)
+				{
+					result = execEngine.ExecuteScalar(query);
+				}
+				else
+				{
+					exec = new ExecutionEngine();
+					result = exec.ExecuteScalar(database, connectionString, query);
+				}
+
+				return result;
+			}
+			finally
+			{
+				if (exec != null)
+				{
+					exec.Dispose();
+				}
 			}
 		}
 
@@ -1297,44 +1342,6 @@ namespace voidsoft.DataBlock
 		}
 
 		/// <summary>
-		///     Executes a intrinsec function.
-		/// </summary>
-		/// <param name="criteria">The criteria.</param>
-		/// <param name="field">The field.</param>
-		/// <returns></returns>
-		private object RunIntrinsecFunction(CriteriaOperator criteria, DatabaseField field)
-		{
-			IQueryCriteriaGenerator iql = null;
-			object result;
-
-			try
-			{
-				QueryCriteria qc = new QueryCriteria(mappedObject.TableName, field);
-				qc.Add(criteria, field);
-
-				iql = DataFactory.InitializeQueryCriteriaGenerator(database);
-
-				ExecutionQuery query = iql.GenerateSelect(qc);
-
-				if (contextSession != null)
-				{
-					result = execEngine.ExecuteScalar(query);
-				}
-				else
-				{
-					result = ExecutionEngine.ExecuteScalar(database, connectionString, query);
-				}
-
-				return result;
-			}
-			catch (Exception ex)
-			{
-				Log.LogMessage(ex.Message + ex.StackTrace);
-				throw new DataBlockException(ex.Message, ex);
-			}
-		}
-
-		/// <summary>
 		///     Maps a DataReader to a TableMetadata implementation.
 		/// </summary>
 		/// <param name="selectQuery">The ExecutionQuery</param>
@@ -1344,6 +1351,8 @@ namespace voidsoft.DataBlock
 		{
 			IDataReader iread = null;
 			ArrayList alTables = null;
+
+			ExecutionEngine exec = null;
 
 			try
 			{
@@ -1356,7 +1365,8 @@ namespace voidsoft.DataBlock
 				}
 				else
 				{
-					iread = ExecutionEngine.ExecuteReader(database, connectionString, selectQuery);
+					exec = new ExecutionEngine();
+					iread = exec.ExecuteReader(database, connectionString, selectQuery);
 				}
 
 				int columnCount = iread.FieldCount;
@@ -1385,6 +1395,11 @@ namespace voidsoft.DataBlock
 				if (iread != null && iread.IsClosed == false)
 				{
 					iread.Close();
+				}
+
+				if (exec != null)
+				{
+					exec.Dispose();
 				}
 			}
 		}

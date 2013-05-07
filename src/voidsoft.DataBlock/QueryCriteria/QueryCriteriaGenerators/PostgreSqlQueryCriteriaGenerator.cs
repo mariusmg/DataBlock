@@ -217,6 +217,7 @@ namespace voidsoft.DataBlock
 
 			SqlGenerator generator = new SqlGenerator();
 
+			DataFactory  factory = new DataFactory();
 
 			try
 			{
@@ -249,7 +250,7 @@ namespace voidsoft.DataBlock
 				sbuild.Append(execQuery.Query);
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.PostgreSql);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.PostgreSql);
 
 				//append where clause
 				sbuild.Append(" WHERE ");
@@ -326,12 +327,14 @@ namespace voidsoft.DataBlock
 
 			DataConvertor converter = new DataConvertor();
 
+			DataFactory factory = new DataFactory(); 	
+
 			try
 			{
 				listParameterNames = new List<string>();
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.PostgreSql);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.PostgreSql);
 
 				//generate conditions
 				for (int i = 0; i < conditions.Length; i++)

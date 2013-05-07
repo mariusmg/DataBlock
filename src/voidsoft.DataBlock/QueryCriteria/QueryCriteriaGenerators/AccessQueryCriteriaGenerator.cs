@@ -257,6 +257,7 @@ namespace voidsoft.DataBlock
 			ExecutionQuery execQuery;
 			SqlGenerator generator = new SqlGenerator();
 
+			DataFactory factory = new DataFactory();
 
 			try
 			{
@@ -289,7 +290,7 @@ namespace voidsoft.DataBlock
 				sbuild.Append(execQuery.Query);
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.Access);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.Access);
 
 				//append where clause
 				sbuild.Append(" WHERE ");
@@ -364,12 +365,14 @@ namespace voidsoft.DataBlock
 
 			List<string> listParameterNames = null;
 
+			DataFactory factory = new DataFactory();
+
 			try
 			{
 				listParameterNames = new List<string>();
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.Access);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.Access);
 
 				//generate conditions
 				for (int i = 0; i < conditions.Length; i++)

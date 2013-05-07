@@ -198,85 +198,77 @@ namespace voidsoft.DataBlock
 		/// <returns></returns>
 		internal ExecutionQuery GenerateWithoutJoin(QueryCriteria criteria)
 		{
-			ISqlGenerator isql = null;
 			List<IDataParameter> listParameters = null;
-			ExecutionQuery execQuery;
+
+			ExecutionQuery execQuery = new ExecutionQuery();
 
 			SqlGenerator generator = new SqlGenerator();
 
-			try
+			listParameters = new List<IDataParameter>();
+
+			StringBuilder sbuild = new StringBuilder();
+
+			DataFactory factory = new DataFactory();
+
+			
+			if (generatorType == QueryCriteriaGeneratorType.Select)
 			{
-				listParameters = new List<IDataParameter>();
-				StringBuilder sbuild = new StringBuilder();
+				execQuery = generator.GenerateSelectQuery(DatabaseServer.SqlServer, criteria);
+			}
+			else if (generatorType == QueryCriteriaGeneratorType.Update)
+			{
+				execQuery = generator.GenerateUpdateQuery(DatabaseServer.SqlServer, criteria.TableName, criteria.Fields, false);
+			}
+			else if (generatorType == QueryCriteriaGeneratorType.Delete)
+			{
+				execQuery = generator.GenerateDeleteQuery(DatabaseServer.SqlServer, criteria.TableName);
+			}
 
-				execQuery = new ExecutionQuery();
-
-				if (generatorType == QueryCriteriaGeneratorType.Select)
+			//add to the intermediary objects
+			if (execQuery.Parameters != null)
+			{
+				foreach (IDataParameter var in execQuery.Parameters)
 				{
-					execQuery = generator.GenerateSelectQuery(DatabaseServer.SqlServer, criteria);
+					listParameters.Add(var);
 				}
-				else if (generatorType == QueryCriteriaGeneratorType.Update)
-				{
-					execQuery = generator.GenerateUpdateQuery(DatabaseServer.SqlServer, criteria.TableName, criteria.Fields, false);
-				}
-				else if (generatorType == QueryCriteriaGeneratorType.Delete)
-				{
-					execQuery = generator.GenerateDeleteQuery(DatabaseServer.SqlServer, criteria.TableName);
-				}
+			}
+			sbuild.Append(execQuery.Query);
 
-				//add to the intermediary objects
-				if (execQuery.Parameters != null)
-				{
-					foreach (IDataParameter var in execQuery.Parameters)
-					{
-						listParameters.Add(var);
-					}
-				}
-				sbuild.Append(execQuery.Query);
+			//initialize generator
+			ISqlGenerator isql = factory.InitializeSqlGenerator(DatabaseServer.SqlServer);
 
-				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.SqlServer);
+			//append where clause
+			sbuild.Append(WHERE_KEYWORD);
 
-				//append where clause
-				sbuild.Append(WHERE_KEYWORD);
+			//generate the condition based on criteria
+			string condition = GenerateCondition(generator.GetTableName(DatabaseServer.SqlServer, criteria.TableName), criteria.CriteriaConditions, ref sbuild,
+												 ref listParameters);
 
-				//generate the condition based on criteria
-				string condition = GenerateCondition(generator.GetTableName(DatabaseServer.SqlServer, criteria.TableName), criteria.CriteriaConditions, ref sbuild,
-													 ref listParameters);
+			//more checks
 
-				//more checks
-
-				if (sbuild.ToString().EndsWith(WHERE_KEYWORD) && condition.StartsWith(" ORDER BY "))
-				{
-					if (condition.StartsWith(" ORDER BY"))
-					{
-						sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
-					}
-				}
-
-				sbuild.Append(condition);
-
-				//last check to prevent invalid sql queries
-				if (sbuild.ToString().EndsWith(WHERE_KEYWORD))
+			if (sbuild.ToString().EndsWith(WHERE_KEYWORD) && condition.StartsWith(" ORDER BY "))
+			{
+				if (condition.StartsWith(" ORDER BY"))
 				{
 					sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
 				}
-
-				execQuery = new ExecutionQuery();
-				execQuery.Query = sbuild.ToString();
-				IDataParameter[] pmc = new IDataParameter[listParameters.Count];
-				listParameters.CopyTo(pmc);
-				execQuery.Parameters = pmc;
-
-				return execQuery;
 			}
-			finally
+
+			sbuild.Append(condition);
+
+			//last check to prevent invalid sql queries
+			if (sbuild.ToString().EndsWith(WHERE_KEYWORD))
 			{
-				if (listParameters != null)
-				{
-					listParameters.Clear();
-				}
+				sbuild.Remove(sbuild.Length - WHERE_FIELD_LENGTH, WHERE_FIELD_LENGTH);
 			}
+
+			execQuery = new ExecutionQuery();
+			execQuery.Query = sbuild.ToString();
+			IDataParameter[] pmc = new IDataParameter[listParameters.Count];
+			listParameters.CopyTo(pmc);
+			execQuery.Parameters = pmc;
+
+			return execQuery;
 		}
 
 		/// <summary>
@@ -308,12 +300,14 @@ namespace voidsoft.DataBlock
 
 			DataConvertor converter = new DataConvertor();
 
+			DataFactory factory = new DataFactory();
+
 			try
 			{
 				listParameterNames = new List<string>();
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.SqlServer);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.SqlServer);
 
 				//generate conditions
 				for (int i = 0; i < conditions.Length; i++)
@@ -511,7 +505,7 @@ namespace voidsoft.DataBlock
 							tempString = tempString.Remove(index, fieldName.Length + comaLength);
 
 							//add it at the beginning of the select
-							tempString = tempString.Insert(SELECT_FIELD_LENGTH," distinct " + generator.GetTableName(DatabaseServer.SqlServer, tableName) + "." + conditions[i].Field.fieldName + ",");
+							tempString = tempString.Insert(SELECT_FIELD_LENGTH, " distinct " + generator.GetTableName(DatabaseServer.SqlServer, tableName) + "." + conditions[i].Field.fieldName + ",");
 
 							//remove the "," before "FROM" if it's the case
 							int iix = tempString.IndexOf("FROM");

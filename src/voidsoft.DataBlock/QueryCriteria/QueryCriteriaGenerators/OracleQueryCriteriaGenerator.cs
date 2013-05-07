@@ -224,6 +224,8 @@ namespace voidsoft.DataBlock
 			ExecutionQuery execQuery;
 			SqlGenerator generator = new SqlGenerator();
 
+			DataFactory factory = new DataFactory();
+
 			try
 			{
 				listParameters = new List<IDataParameter>();
@@ -255,7 +257,7 @@ namespace voidsoft.DataBlock
 				sbuild.Append(execQuery.Query);
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.Oracle);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.Oracle);
 
 				//append where clause
 				sbuild.Append(" WHERE ");
@@ -331,12 +333,14 @@ namespace voidsoft.DataBlock
 			int index = -1;
 			string tempString = string.Empty;
 
+			DataFactory factory = new DataFactory();
+
 			try
 			{
 				listParameterNames = new List<string>();
 
 				//initialize generator
-				isql = DataFactory.InitializeSqlGenerator(DatabaseServer.Oracle);
+				isql = factory.InitializeSqlGenerator(DatabaseServer.Oracle);
 
 				//generate conditions
 				for (int i = 0; i < conditions.Length; i++)
